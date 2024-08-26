@@ -1,7 +1,24 @@
+import { BrowserRouter, Route, Router,  Routes } from 'react-router-dom'
+
 import React from 'react'
+import Home from './pages/Home'
+import ContactUs from './pages/ContactUs'
+import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
+import About from './pages/About'
+import Project from './pages/Project'
 
 export default function App() {
   return (
-    <div className='text-3xl text-cyan-300'>App</div>
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact-us" element={<ContactUs />} />
+      <Route path="/sign-in" element={<SignIn />} />  
+      <Route path="/sign-up" element={<SignUp />} />
+      <Route path="/project" element={<Project />} />
+    </Routes>
+    </BrowserRouter>
   )
 }
