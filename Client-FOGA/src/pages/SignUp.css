@@ -1,0 +1,10 @@
+@media (max-width: 768px) {
+    .logo {
+      width: 135px; /* Reduce width by half */
+      height: 99px; /* Reduce height by half */
+    }
+  }
+  
+  
+  
+    

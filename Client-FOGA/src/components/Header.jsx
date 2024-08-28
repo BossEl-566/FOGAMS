@@ -13,9 +13,9 @@ export default function Header() {
       <Link to='/' className='self-center whitespace-nowrap'>
         <div className='flex items-center'>
           <img src='/src/assets/assembliesOfGodLogo.png' alt='Assemblies of God Logo' width='30' height='20' />
-          <div className='w-px h-8 bg-black ml-1 dark:bg-white'></div>
-          <div className='ml-1 hidden md:block md:text-sm lg:text-base font-semibold dark:text-white'>Fellowship of Grace A/G</div>
-          <div className='ml-1 block md:hidden font-bold dark:text-white'>FOGA</div>
+          <div className='w-px h-8 bg-blue-950 ml-1 dark:bg-white'></div>
+          <div className='ml-1 hidden md:block md:text-sm lg:text-base font-semibold dark:text-white text-blue-950'>Fellowship of Grace A/G</div>
+          <div className='ml-1 block md:hidden font-bold dark:text-white text-blue-950'>FOGA</div>
         </div>
       </Link>
       <form>
