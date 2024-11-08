@@ -65,6 +65,13 @@ export default function Header() {
         Project
         </Navbar.Link>
         </Link>
+
+          
+        <Link to='/ministries'>
+        <Navbar.Link active={path === "/ministries"} as={'div'}>
+        Ministries
+        </Navbar.Link>
+        </Link>
      </Navbar.Collapse>
     </Navbar>
   );

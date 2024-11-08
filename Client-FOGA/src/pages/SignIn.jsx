@@ -8,7 +8,7 @@ import OAuth from '../components/OAuth';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const { loading, error: errorMessage } = useSelector((state) => state.user); // Fixed typo
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -85,7 +85,8 @@ export default function SignIn() {
           <div className="flex gap-2 text-sm mt-5">
             <span>Don't have an account?</span>
             <Link to='/sign-up' className='text-blue-950 dark:text-white font-bold'>
-              Sign Up
+            <span className="hover:underline hover:underline-offset-1">Sign Up</span>
+
             </Link>
           </div>
           {errorMessage && (

@@ -1,4 +1,3 @@
-import e from "express";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -19,6 +18,22 @@ const userSchema = new mongoose.Schema({
     profilePicture: {
         type: String,
         default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png",
+    },
+    isMember: {
+        type: Boolean,
+        default: false, // false if user is a visitor
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    },
+    isDeptHead: {
+        type: Boolean,
+        default: false,
+    },
+    isPastor: {
+        type: Boolean,
+        default: false,
     },
 }, { timestamps: true });
 
