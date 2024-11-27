@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Alert, Button, Modal, TextInput } from "flowbite-react";
 import { Client, Storage } from 'appwrite';
-import { updateStart, updateSuccess, updateFailure, deleteUserFailure, deleteUserSuccess, deleteUserStart } from '../radux/user/userSlice';
+import { updateStart, updateSuccess, updateFailure, deleteUserFailure, deleteUserSuccess, deleteUserStart, signoutSuccess } from '../radux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { set } from 'mongoose';
@@ -127,8 +127,23 @@ export default function DashProfile() {
     dispatch(deleteUserFailure(error.message));
     
   }
-
+  
  };
+ const handleSignout = async () => {
+  try {
+    const res = await fetch('api/user/signout', {
+      method: 'POST',
+    });
+    if(!res.ok) {
+      console.log(data.message);
+    }else {
+      dispatch(signoutSuccess());
+      // Redirect to login page
+    }
+  } catch (error) {
+    console.log(error.message)
+  }
+};
 
   return (
     <div className='max-w-lg mx-auto p-3 w-full mb-20'>
@@ -161,7 +176,7 @@ export default function DashProfile() {
         <span className='cursor-pointer hover:underline' onClick={()=>setShowModal(true)}>
           Delete Account
         </span>
-        <span className='cursor-pointer hover:underline'>
+        <span onClick={handleSignout} className='cursor-pointer hover:underline'>
           Sign Out
         </span>
       </div>

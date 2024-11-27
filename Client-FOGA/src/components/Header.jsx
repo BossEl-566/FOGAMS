@@ -6,13 +6,29 @@ import { FaMoon, FaSun } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux'; // Import useDispatch here
 import { HiLogout, HiViewGrid } from "react-icons/hi";
 import { toggleTheme } from '../radux/theme/themeSlice.js';
+import { signoutSuccess } from '../radux/user/userSlice.js';
+
 
 export default function Header() {
   const path = useLocation().pathname;
   const { currentUser } = useSelector(state => state.user);
   const { theme } = useSelector(state => state.theme); // Get the theme state here
   const dispatch = useDispatch(); // Initialize dispatch here
-
+  const handleSignout = async () => {
+    try {
+      const res = await fetch('api/user/signout', {
+        method: 'POST',
+      });
+      if(!res.ok) {
+        console.log(data.message);
+      }else {
+        dispatch(signoutSuccess());
+        // Redirect to login page
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  };
   return (
     <Navbar className='border-b-2'>
       <Link to='/' className='self-center whitespace-nowrap'>
@@ -51,7 +67,7 @@ export default function Header() {
               <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item icon={HiLogout}>Sign out</Dropdown.Item>
+            <Dropdown.Item icon={HiLogout} onClick={handleSignout}>Sign out</Dropdown.Item>
           </Dropdown>
         ) : (
           <Link to='/sign-up'>
