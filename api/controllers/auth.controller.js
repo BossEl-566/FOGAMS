@@ -42,7 +42,11 @@ export const signin = async (req, res, next) => {
         if (!validPassword) {
             return next(errorHandler(401, 'Invalid password'));
         }
-        const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+        const token = jwt.sign({ id: validUser._id, 
+            isMember: validUser.isMember,
+            isAdmin: validUser.isAdmin,
+            isDeptHead: validUser.isDeptHead,
+            isPastor: validUser.isPastor }, process.env.JWT_SECRET);
         const { password: pass, ...rest } = validUser._doc;
         res.status(200).cookie('access_token', token, {
             httpOnly: true
@@ -57,7 +61,7 @@ export const google = async (req, res, next) => {
     try {
         const user = await User.findOne({ email });
         if (user) {
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: user._id, isMember: user.isMember, isAdmin: user.isAdmin, isDeptHead: user.isDeptHead, isPastor: user.isPastor }, process.env.JWT_SECRET);
             const { password: pass, ...rest } = user._doc;
             return res.status(200).cookie('access_token', token, {
                 httpOnly: true
@@ -72,7 +76,7 @@ export const google = async (req, res, next) => {
                 profilePicture: googlePhotoUrl,
             });
             await newUser.save();
-            const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: newUser._id, isMember: newUser.isMember, isAdmin: newUser.isAdmin, isDeptHead: newUser.isDeptHead, isPastor: newUser.isPastor }, process.env.JWT_SECRET);
             const { password, ...rest } = newUser._doc;
             return res.status(200).cookie('access_token', token, {
                 httpOnly: true
