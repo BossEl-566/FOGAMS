@@ -175,7 +175,7 @@ export default function DashProfile() {
           {loading ? 'Loading...' : 'Update'}
         </Button>
         {
-          currentUser.isMember && (
+          currentUser.isAdmin && (
             <Link to={'/daily-bible-message'}>
             <Button type='button' className='w-full' outline>Admin Dashboard</Button>
             </Link>

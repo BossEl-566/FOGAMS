@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoute from './routes/user.route.js';
+import dailyBibleMessageRoute from './routes/dailybiblemessage.route.js';
 import authRoute from './routes/auth.route.js';
 import cookieParser from 'cookie-parser';
 
@@ -24,6 +25,7 @@ mongoose.connect(process.env.MONGO)
 
 app.use('/api/user', userRoute);
 app.use('/api/auth', authRoute);
+app.use('/api', dailyBibleMessageRoute);
 
 
 //this is the error handling middleware
