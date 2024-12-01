@@ -63,6 +63,7 @@ export default function DashProfile() {
       setImageFileUploading(false);
     } catch (error) {
       setUploadImageError('Image upload failed. Image should be less than 5MB.');
+      alert('Image upload failed. Image should be less than 5MB.');
       setImageFile(null);
       setImageFileUrl(null);
       // console.log('Image upload failed:', error);
