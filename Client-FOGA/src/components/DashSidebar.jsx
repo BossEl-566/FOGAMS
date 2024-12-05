@@ -1,14 +1,17 @@
 import React from 'react'
 import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiTable, HiUser } from "react-icons/hi";
+import { HiArrowSmRight, HiDocument, HiDocumentText, HiTable, HiUser } from "react-icons/hi";
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { signoutSuccess } from '../radux/user/userSlice';
 import { useDispatch } from 'react-redux';
+import { current } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 
 
 export default function DashSidebar() {
     const location = useLocation();
+    const  {currentUser} = useSelector(state => state.user);
     const [tab, setTab] = useState('');
     const dispatch = useDispatch();
   
@@ -37,18 +40,33 @@ export default function DashSidebar() {
   return (
     <Sidebar className='w-full md:w-56'>
     <Sidebar.Items>
-      <Sidebar.ItemGroup>
+      <Sidebar.ItemGroup className='flex flex-col gap-1'>
         <Link to='/dashboard?tab=profile'>
-        <Sidebar.Item active={tab === 'profile'} href="#" icon={HiUser} label={'User'} labelColor='dark' as='div'>
+        <Sidebar.Item active={tab === 'profile'} href="#" icon={HiUser} label={currentUser.isAdmin ? 'Admin' : 'User'} labelColor='dark' as='div'>
           Profile
         </Sidebar.Item>
-        </Link>
-        <Link to='/dashboard?tab=join'>
+        </Link>{
+          !currentUser.isMember && (
+            <Link to='/dashboard?tab=join'>
         <Sidebar.Item active={tab === 'join'} href="#" icon={HiTable}>
           Join Church
         </Sidebar.Item>
+
         </Link>
-        <Sidebar.Item  onClick={handleSignout} icon={HiArrowSmRight}>
+          ) 
+        }
+        {
+          currentUser.isAdmin && (
+            <Link to='/dashboard?tab=daily-bible-message'>
+            <Sidebar.Item active={tab === 'daily-bible-message'} href="#" icon={HiDocumentText} as='div'>
+              Daily Message
+            </Sidebar.Item>
+            </Link>
+          )
+
+        }
+
+        <Sidebar.Item  onClick={handleSignout} icon={HiArrowSmRight} as='div'>
           Sign Out
         </Sidebar.Item>
         

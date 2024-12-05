@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import DashSidebar from '../components/DashSidebar';
 import DashProfile from '../components/DashProfile';
 import DashJoinChurch from '../components/DashJoinChurch';
+import DashMainPageDBM from '../components/DashMainPageDBM';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -25,6 +26,8 @@ export default function Dashboard() {
       {/* Profile */}
       {tab === 'profile' && <DashProfile />}
       {tab === 'join' && <DashJoinChurch />}
+      {/* Daily Bible Message */}
+      {tab === 'daily-bible-message' && <DashMainPageDBM />} 
     </div>
   );
 }
