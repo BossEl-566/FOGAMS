@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Client, Storage } from 'appwrite';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function DashDailyBibleMessage() {
   const [file, setFile] = useState(null);
@@ -10,6 +11,9 @@ export default function DashDailyBibleMessage() {
   const [formData, setFormData] = useState({});
   const [imageUploadError, setImageUploadError] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [publishError, setPublishError] = useState(null);
+ console.log(formData);
+ const navigate = useNavigate();
 
   const handleUploadImage = async () => {
     try {
@@ -56,13 +60,42 @@ export default function DashDailyBibleMessage() {
     }
   }, [fileUrl]); // This runs whenever fileUrl changes
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/daily-bible-message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if(!res.ok) {
+        setPublishError(data.message)
+      }
+      if (res.ok) {
+       
+        navigate(`/daily-bible-message/${data.slug}`);
+      }
+      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred while submitting the form');
+      setPublishError('An error occurred while submitting the form');
+      
+    }
+  }
+
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen mb-20'>
       <h1 className='text-center font-semibold text-3xl my-7'>Daily Bible Message</h1>
-      <form className='flex flex-col gap-4'>
+      <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
-          <TextInput type='text' placeholder='Title' required id='title' className='flex-1'/>
-          <Select>
+          <TextInput type='text' placeholder='Title' required id='title' className='flex-1' onChange={(e) => setFormData({...formData, title: e.target.value})}/>
+          <Select
+          onChange={(e) => setFormData({...formData, category: e.target.value})} // Update the form data on change
+          >
             <option value='uncategorized'>Select a category</option>
             <option value='Faith and Hope'>Faith and Hope</option>
             <option value='Love and Forgiveness'>Love and Forgiveness</option>
@@ -89,10 +122,17 @@ export default function DashDailyBibleMessage() {
                 </Alert>
             )}
             {formData.image && (
-                <img src={formData.image} alt='Uploaded Image' className='w-full h-40 mx-auto mt-4 object-cover' />
+                <img src={formData.image} alt='Uploaded Image' className='w-full h-72 mx-auto mt-4 object-cover' />
             )}
-        <ReactQuill theme="snow" placeholder='Write your message' className='h-72 mb-12' required/>
+        <ReactQuill theme="snow" placeholder='Write your inspiring message here...' className='h-72 mb-12' required onChange={(value)=>{
+          setFormData({...formData, content: value});
+        }}/>
         <Button type='submit' gradientDuoTone='purpleToBlue'>Publish</Button>
+        {publishError && (
+                <Alert className='mt-5' color='failure' >
+                    {publishError}  
+                </Alert>  
+            )}
       </form>
     </div>
   );
