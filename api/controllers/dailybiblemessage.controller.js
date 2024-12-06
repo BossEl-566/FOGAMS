@@ -70,3 +70,37 @@ export const deleteDailyBibleMessage = async (req, res, next) => {
         
     }
 };
+
+export const updateDailyBibleMessage = async (req, res, next) => {
+    try {
+        // Authorization check
+        if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+            return res.status(403).json({ message: 'You are not authorized to update this message' });
+        }
+
+        // Update the message
+        const updatedMessage = await DailyBibleMessage.findByIdAndUpdate(
+            req.params.dailyBibleMessageId,
+            {
+                $set: {
+                    title: req.body.title,
+                    content: req.body.content,
+                    category: req.body.category,
+                    image: req.body.image,
+                },
+            },
+            { new: true } // Return the updated document
+        );
+
+        // Check if the document exists
+        if (!updatedMessage) {
+            return res.status(404).json({ message: 'Daily Bible Message not found' });
+        }
+
+        // Success response
+        res.status(200).json(updatedMessage);
+    } catch (error) {
+        console.error('Error updating daily Bible message:', error); // Debugging logs
+        next(error); // Pass error to middleware
+    }
+};

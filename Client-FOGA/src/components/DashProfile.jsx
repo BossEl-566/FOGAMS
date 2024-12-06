@@ -5,8 +5,7 @@ import { Client, Storage } from 'appwrite';
 import { updateStart, updateSuccess, updateFailure, deleteUserFailure, deleteUserSuccess, deleteUserStart, signoutSuccess } from '../radux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
-import { set } from 'mongoose';
-import { Link } from 'react-router-dom';
+
 
 
 export default function DashProfile() {
@@ -175,14 +174,7 @@ export default function DashProfile() {
         <Button type='submit' outline gradientDuoTone="purpleToBlue" disabled={loading || imageFileUploading}>
           {loading ? 'Loading...' : 'Update'}
         </Button>
-        {
-          currentUser.isAdmin && (
-            <Link to={'/daily-bible-message'}>
-            <Button type='button' className='w-full' outline>Admin Dashboard</Button>
-            </Link>
-            
-          )
-        }
+
       </form>
       <div className="text-red-500 flex justify-between mt-5">
         <span className='cursor-pointer hover:underline' onClick={()=>setShowModal(true)}>

@@ -14,6 +14,8 @@ import Dashboard from './pages/Dashboard'
 import PrivateRoute from './components/PrivateRoute'
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute'
 import DashDailyBibleMessage from './components/DashDailyBibleMessage'
+import DailyBibleMessage from '../../api/models/dailybiblemessage.model'
+import UpdateDailyBibleMessage from './pages/UpdateDailyBibleMessage'
 
 export default function App() {
   return (
@@ -32,6 +34,7 @@ export default function App() {
       </Route>
       <Route element={<OnlyAdminPrivateRoute />}>
       <Route path="/daily-bible-message" element={<DashDailyBibleMessage />} />
+      <Route path="/update-daily-bible-message/:dailyBibleMessageId" element={<UpdateDailyBibleMessage />} />
       </Route>
     </Routes>
      <Footer />

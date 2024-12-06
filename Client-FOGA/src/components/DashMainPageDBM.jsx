@@ -75,6 +75,14 @@ const handleDeleteMessage = async () => {
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-blue-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
+              {
+          currentUser.isAdmin && (
+            <Link to={'/daily-bible-message'}>
+            <Button type='button' className='w-full mb-2' outline>Create Bible Message</Button>
+            </Link>
+            
+          )
+        }
       {
         currentUser.isAdmin && dailyBibleMessage.length > 0 ? (
           <>
