@@ -57,3 +57,16 @@ export const getDailyBibleMessage = async (req, res, next) => {
         
      }
 };   
+
+export const deleteDailyBibleMessage = async (req, res, next) => {
+    if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+        return next(errorHandler(403, 'You are not authorized to delete this message'));
+    }
+    try {
+        await DailyBibleMessage.findByIdAndDelete(req.params.dailyBibleMessageId);
+        res.status(200).json({ message: 'Daily Bible Message deleted successfully' });
+    } catch (error) {
+        next(error)
+        
+    }
+};

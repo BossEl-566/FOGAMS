@@ -1,6 +1,8 @@
-import { Table } from 'flowbite-react'
+import { Button, Modal, Table } from 'flowbite-react'
+import { set } from 'mongoose'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
+import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -8,7 +10,8 @@ export default function DashMainPageDBM() {
   const { currentUser} = useSelector(state => state.user)
   const [dailyBibleMessage, setDailyBibleMessage] = useState([])
   const [showMore, setShowMore] = useState(true)
-  console.log(dailyBibleMessage)
+  const [showModal, setShowModal] = useState(false)
+  const [deleteId, setDeleteId] = useState('') 
   useEffect(() => {
     const fetchDailyBibleMessage = async () => {
       try {
@@ -51,6 +54,25 @@ const handleShowMore = async () => {
   }
  
 }
+const handleDeleteMessage = async () => {
+  setShowModal(false);
+  try {
+    const res = await fetch(`/api/delete-daily-bible-message/${deleteId}/${currentUser._id}`, {
+      method: 'DELETE',
+    });
+    const data = await res.json();
+    if(!res.ok) {
+      console.log(data.message);
+    } else {
+      setDailyBibleMessage((prev) => prev.filter((message) => message._id !== deleteId));
+    } 
+     
+  } catch (error) {
+    console.log(error.message)
+    
+  }
+};
+
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-blue-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
       {
@@ -88,7 +110,10 @@ const handleShowMore = async () => {
                     </Link>
                     </Table.Cell>
                   <Table.Cell>
-                    <button className='bg-red-500 text-white p-2 rounded-md'>Delete</button>
+                    <button className='bg-red-500 text-white p-2 rounded-md' onClick={() => {
+                      setShowModal(true);
+                      setDeleteId(message._id);
+                    }}>Delete</button>
                   </Table.Cell>
                   <Table.Cell>
                     <Link to={`/update-daily-bible-message/${message._id}`} >
@@ -103,9 +128,22 @@ const handleShowMore = async () => {
           </>
         ) : (
           <p>There are no daily bible messages yet!</p>
-        )
-
-      }
+        )}
+            <Modal show={showModal} onClose={()=>setShowModal(false)} popup size='md'>
+        <Modal.Header/>
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto'/>
+            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
+              Are you sure you want to delete your message? 
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color='failure' onClick={handleDeleteMessage}>Yes I'm Sure</Button>
+              <Button color='gray' onClick={()=>setShowModal(false)}>Cancel</Button>
+            </div>
+          </div>
+          </Modal.Body>
+      </Modal>
 
     </div>
   )
