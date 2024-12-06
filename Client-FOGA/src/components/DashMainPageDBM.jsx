@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 export default function DashMainPageDBM() {
   const { currentUser} = useSelector(state => state.user)
   const [dailyBibleMessage, setDailyBibleMessage] = useState([])
+  const [showMore, setShowMore] = useState(true)
   console.log(dailyBibleMessage)
   useEffect(() => {
     const fetchDailyBibleMessage = async () => {
@@ -16,6 +17,9 @@ export default function DashMainPageDBM() {
         console.log(data)
         if(res.ok) {
           setDailyBibleMessage(data.dailyBibleMessage)
+          if(data.dailyBibleMessage.length < 9) {
+            setShowMore(false);
+          }
         
       }
      } catch (error) {
@@ -28,6 +32,25 @@ export default function DashMainPageDBM() {
   }
 
 }, [currentUser._id])
+const handleShowMore = async () => {
+  const startIndex = dailyBibleMessage.length;
+  try {
+    const res = await fetch(`/api/get-daily-bible-message?userId=${currentUser._id}&startIndex=${startIndex}`);
+    const data = await res.json();
+    if(res.ok) {
+      setDailyBibleMessage((prev) => [...prev, ...data.dailyBibleMessage]);
+      if(data.dailyBibleMessage.length < 9) {
+        setShowMore(false);
+      }
+    }
+    
+    
+  } catch (error) {
+    console.log(error.message)
+    
+  }
+ 
+}
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-blue-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
       {
@@ -76,6 +99,7 @@ export default function DashMainPageDBM() {
                 </Table.Body>
                 ))}
           </Table>
+          {showMore && (<button className='w-full text-teal-500 self-center text-sm py-7' onClick={handleShowMore}>Show More</button>)}
           </>
         ) : (
           <p>There are no daily bible messages yet!</p>
