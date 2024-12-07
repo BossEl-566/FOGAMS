@@ -4,6 +4,7 @@ import DashSidebar from '../components/DashSidebar';
 import DashProfile from '../components/DashProfile';
 import DashJoinChurch from '../components/DashJoinChurch';
 import DashMainPageDBM from '../components/DashMainPageDBM';
+import DashUsers from '../components/DashUsers';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -28,6 +29,8 @@ export default function Dashboard() {
       {tab === 'join' && <DashJoinChurch />}
       {/* Daily Bible Message */}
       {tab === 'daily-bible-message' && <DashMainPageDBM />} 
+      {/* user */}
+      {tab === 'users' && <DashUsers />}
     </div>
   );
 }
