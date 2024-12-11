@@ -24,10 +24,10 @@ export default function DashDailyBibleMessage() {
       setImageUploadError(null);
       setIsUploading(true);
       const client = new Client();
-      const storage = new Storage(client);
+      const storage = new Storage(client); 
 
       client
-        .setEndpoint(import.meta.env.VITE_APPWRITE_API_ENDPOINT) // Your Appwrite endpoint
+        .setEndpoint(import.meta.env.VITE_APPWRITE_API_ENDPOINT) //Appwrite endpoint
         .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID); // Your project ID
 
       const response = await storage.createFile(
