@@ -1,28 +1,34 @@
 import DailyBibleMessage from "../models/dailybiblemessage.model.js";
 import { errorHandler } from "../utils/error.js";
 
-export const create = async (req, res, next) => {
+export const create = async (req, res, next) => { 
     if (!req.user.isAdmin) {
         return next(errorHandler(403, 'You are not authorized to perform this action'));
     }
-    if(!req.body.title || !req.body.content) {
+    if (!req.body.title || !req.body.content) {
         return next(errorHandler(400, 'Title and content are required'));
     }
-    const slug = req.body.title.split(' ').join('').toLowerCase().replace(/[^a-zA-Z0-9-]/g, '-');
+
+    // Generate slug
+    const slug = req.body.title
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, '-')        // Replace spaces with dashes
+        .replace(/[^a-z0-9-]/g, '')  // Remove special characters
+        .replace(/--+/g, '-');       // Avoid multiple dashes
+
     const newDailyBibleMessage = new DailyBibleMessage({
         ...req.body, slug, userId: req.user.id
-    }
-    );
+    });
+
     try {
         const dailyBibleMessage = await newDailyBibleMessage.save();
         res.status(201).json(dailyBibleMessage);
-        
-        
     } catch (error) {
-        next(error)
-        
+        next(error);
     }
 };
+
 
 export const getDailyBibleMessage = async (req, res, next) => {
      try {
