@@ -36,7 +36,7 @@ export default function SignUp() {
       }
       setLoading(false);
       if(res.ok) {
-        navigate('/');
+        navigate('/sign-in');
       }
     } catch (error) {
       setErrorMessage(error.message);
