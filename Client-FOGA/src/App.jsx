@@ -17,6 +17,7 @@ import DashDailyBibleMessage from './components/DashDailyBibleMessage'
 import DailyBibleMessage from '../../api/models/dailybiblemessage.model'
 import UpdateDailyBibleMessage from './pages/UpdateDailyBibleMessage'
 import DailyBibleMessagePage from './pages/DailyBibleMessagePage'
+import HowToJoinUs from './pages/HowToJoinUs'
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
       <Route path="/update-daily-bible-message/:dailyBibleMessageId" element={<UpdateDailyBibleMessage />} />
       </Route>
       <Route path="/daily-bible-message/:dailyBibleMessageSlug" element={<DailyBibleMessagePage />} />
+      <Route path="/how-to-join-us" element={<HowToJoinUs />} />
 
     </Routes>
      <Footer />
