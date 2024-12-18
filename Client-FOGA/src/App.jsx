@@ -18,10 +18,12 @@ import DailyBibleMessage from '../../api/models/dailybiblemessage.model'
 import UpdateDailyBibleMessage from './pages/UpdateDailyBibleMessage'
 import DailyBibleMessagePage from './pages/DailyBibleMessagePage'
 import HowToJoinUs from './pages/HowToJoinUs'
+import ScrollToTop from './components/ScrollToTop'
 
 export default function App() {
   return (
     <BrowserRouter>
+    <ScrollToTop />
     <Header />
     <Routes>
       <Route path="/" element={<Home />} />

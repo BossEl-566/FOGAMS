@@ -1,4 +1,5 @@
-import { Button } from 'flowbite-react'
+import { current } from '@reduxjs/toolkit'
+import { Button, Textarea } from 'flowbite-react'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
@@ -19,7 +20,7 @@ export default function CallToAction() {
             </Link> 
         </div>
         <div className="p-7 flex-1">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFjD6yCpTkNWBeBWnqSuElUnzOQKQPpnhYFw&s" alt="wecome" className="" />
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFjD6yCpTkNWBeBWnqSuElUnzOQKQPpnhYFw&s" alt="wecome" className="rounded-full" />
         </div>
     </div>
   )
