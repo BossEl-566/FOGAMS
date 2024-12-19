@@ -1,8 +1,8 @@
 import { Alert, Button, Textarea } from 'flowbite-react';
 import React, { useEffect, useState } from 'react';
-import { use } from 'react';
+
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Comments from './Comments';
 
 export default function CommentSection({ postId }) {
@@ -10,6 +10,7 @@ export default function CommentSection({ postId }) {
     const [comment, setComment] = useState('');
     const [commentError, setCommentError] = useState(null);
     const [comments, setComments] = useState([]);
+    const navigate = useNavigate();
     console.log(comments);
     
 
@@ -35,9 +36,9 @@ export default function CommentSection({ postId }) {
             });
             const data = await res.json();
             if (res.ok) {
-                setComment('');
+                setComment(''); // Reset the comment textarea
                 setCommentError(null);
-                setComment([data, ...comments]);
+                setComments([data, ...comments]); // Update the comments list
             } else {
                 console.error('Error submitting comment:', data.message);
                 alert('Error submitting comment');
@@ -48,6 +49,7 @@ export default function CommentSection({ postId }) {
             setCommentError(error.message);
         }
     };
+    
     useEffect(() => {
         const getComments = async () => {
             try {
@@ -63,7 +65,31 @@ export default function CommentSection({ postId }) {
         getComments();
     }, [postId]);
 
-    // Properly return the JSX here
+    const handleLike = async (commentId) => {
+        try {
+            if (!currentUser) {
+                return navigate('/sign-in');
+            }
+    
+            const res = await fetch(`/api/comment/likeComment/${commentId}`, {
+                method: 'PUT',
+            });
+            if (res.ok) {
+                const data = await res.json();
+    
+                // Update the list of comments without overwriting the textarea value
+                setComments(comments.map((comment) =>
+                    comment._id === commentId
+                        ? { ...comment, likes: data.likes, numberOfLikes: data.likes.length }
+                        : comment
+                ));
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+  
     return (
         <div className="max-w-2xl mx-auto w-full p-2">
             {currentUser ? (
@@ -125,7 +151,7 @@ export default function CommentSection({ postId }) {
                     comments.map(
                       comment => (
                         <Comments key={comment._id}
-                        comment={comment} />  
+                        comment={comment} onLike={handleLike}/>  
                     ))
                 }
                 </>
