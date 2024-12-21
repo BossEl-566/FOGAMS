@@ -5,6 +5,7 @@ import DashProfile from '../components/DashProfile';
 import DashJoinChurch from '../components/DashJoinChurch';
 import DashMainPageDBM from '../components/DashMainPageDBM';
 import DashUsers from '../components/DashUsers';
+import DashComment from '../components/DashComment';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -31,6 +32,8 @@ export default function Dashboard() {
       {tab === 'daily-bible-message' && <DashMainPageDBM />} 
       {/* user */}
       {tab === 'users' && <DashUsers />}
+      {/* comment */}
+      {tab === 'comments' && <DashComment />}
     </div>
   );
 }

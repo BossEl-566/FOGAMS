@@ -1,6 +1,6 @@
 import React from 'react'
 import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser } from "react-icons/hi";
+import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser, HiAnnotation } from "react-icons/hi";
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { signoutSuccess } from '../radux/user/userSlice';
@@ -66,17 +66,28 @@ export default function DashSidebar() {
           )
 
         }
-          {
-          currentUser.isAdmin && (
-            <Link to='/dashboard?tab=users'>
-            <Sidebar.Item active={tab === 'users'} href="#" icon={HiOutlineUserGroup} as='div'>
-              Users
-            </Sidebar.Item>
-            </Link>
-            
-          )
-
-        }
+          {currentUser.isAdmin && (
+            <>
+              <Link to='/dashboard?tab=users'>
+                <Sidebar.Item
+                  active={tab === 'users'}
+                  icon={HiOutlineUserGroup}
+                  as='div'
+                >
+                  Users
+                </Sidebar.Item>
+              </Link>
+              <Link to='/dashboard?tab=comments'>
+                <Sidebar.Item
+                  active={tab === 'comments'}
+                  icon={HiAnnotation}
+                  as='div'
+                >
+                  Comments
+                </Sidebar.Item>
+              </Link>
+            </>
+          )}
 
         <Sidebar.Item  onClick={handleSignout} icon={HiArrowSmRight} as='div'>
           Sign Out
