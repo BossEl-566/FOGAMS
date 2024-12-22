@@ -78,7 +78,7 @@ const handleDeleteMessage = async () => {
               {
           currentUser.isAdmin && (
             <Link to={'/daily-bible-message'}>
-            <Button type='button' className='w-full mb-2' outline>Create Bible Message</Button>
+            <Button type='button' className='w-full mb-2' outline gradientDuoTone='purpleToBlue'>CREATE MESSAGE</Button>
             </Link>
             
           )
