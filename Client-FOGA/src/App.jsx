@@ -19,6 +19,7 @@ import UpdateDailyBibleMessage from './pages/UpdateDailyBibleMessage'
 import DailyBibleMessagePage from './pages/DailyBibleMessagePage'
 import HowToJoinUs from './pages/HowToJoinUs'
 import ScrollToTop from './components/ScrollToTop'
+import Search from './pages/Search'
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
       <Route path="/contact-us" element={<ContactUs />} />
       <Route path="/sign-in" element={<SignIn />} />  
       <Route path="/sign-up" element={<SignUp />} />
+      <Route path="/search" element={<Search />} />
       <Route path="/project" element={<Project />} />
       <Route path="/ministries" element={<Ministries />} />
       <Route element={<PrivateRoute />}>

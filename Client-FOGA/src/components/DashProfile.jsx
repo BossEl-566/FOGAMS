@@ -5,6 +5,7 @@ import { Client, Storage } from 'appwrite';
 import { updateStart, updateSuccess, updateFailure, deleteUserFailure, deleteUserSuccess, deleteUserStart, signoutSuccess } from '../radux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { Eye, EyeOff } from 'lucide-react';
 
 
 
@@ -18,6 +19,7 @@ export default function DashProfile() {
   const [updateUserError, setUpdateUserError] = useState(null);
   const [formData, setFormData] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const filePickerRef = useRef();
   const dispatch = useDispatch();
   const handleImageChange = (e) => {
@@ -170,7 +172,20 @@ export default function DashProfile() {
         {uploadImageError && <Alert color='failure'>{uploadImageError}</Alert>}
         <TextInput type='text' id='username' placeholder='username' defaultValue={currentUser.username} onChange={handleChange}/>
         <TextInput type='email' id='email' placeholder='email' defaultValue={currentUser.email} onChange={handleChange} />
-        <TextInput type='password' id='password' placeholder='password' onChange={handleChange}/>
+        <div className="relative">
+          <TextInput
+            type={showPassword ? 'text' : 'password'}
+            id="password"
+            placeholder="password"
+            onChange={handleChange}
+          />
+          <span
+            className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOff /> : <Eye />}
+          </span>
+        </div>
         <Button type='submit' outline gradientDuoTone="purpleToBlue" disabled={loading || imageFileUploading}>
           {loading ? 'Loading...' : 'Update'}
         </Button>
