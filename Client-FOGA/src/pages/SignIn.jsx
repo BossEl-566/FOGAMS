@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './SignUp.css';
-import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
+import { Button, Label, Spinner, TextInput } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../radux/user/userSlice';
 import { Eye, EyeOff } from 'lucide-react'; // Import icons
 import OAuth from '../components/OAuth';
+import toast from 'react-hot-toast'; // Import react-hot-toast
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -21,6 +22,7 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
+      toast.error('All fields are required'); // Show error toast
       return dispatch(signInFailure('All fields are required'));
     }
     try {
@@ -36,11 +38,14 @@ export default function SignIn() {
       if (res.ok) {
         dispatch(signInSuccess(data));
         navigate('/');
+        toast.success('Successfully signed in'); // Show success toast
       } else {
         dispatch(signInFailure(data.message));
+        toast.error(data.message); // Show error toast
       }
     } catch (error) {
       dispatch(signInFailure(error.message));
+      toast.error(error.message); // Show error toast
     }
   };
 
@@ -116,11 +121,6 @@ export default function SignIn() {
               <span className="hover:underline hover:underline-offset-1">Sign Up</span>
             </Link>
           </div>
-          {errorMessage && (
-            <Alert className="mt-5" color="failure">
-              {errorMessage}
-            </Alert>
-          )}
         </div>
       </div>
     </div>

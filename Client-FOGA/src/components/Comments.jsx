@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { FaThumbsUp } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
-import {Button, Textarea} from 'flowbite-react';
+import { Button, Textarea } from 'flowbite-react';
+import { toast } from 'react-hot-toast';
 
 export default function Comments({ comment, onLike, onEdit, onDelete }) {
     const [user, setUser] = useState({});
@@ -38,11 +39,13 @@ export default function Comments({ comment, onLike, onEdit, onDelete }) {
     const handleLike = () => {
         setIsLiked(!isLiked); // Optimistically update the UI
         onLike(comment._id); // Trigger the like function
+        toast.success(isLiked ? 'Like removed' : 'Liked the comment!');
     };
-        const handleEdit = () => {
+
+    const handleEdit = () => {
         setIsEditing(true);
         setEditedContent(comment.content);
-        }
+    };
 
     const handleSave = async () => {
         try {
@@ -57,17 +60,24 @@ export default function Comments({ comment, onLike, onEdit, onDelete }) {
             });
 
             if (res.ok) {
-
                 setIsEditing(false);
                 onEdit(comment, editedContent);
+                toast.success('Comment updated successfully!');
             } else {
-                console.error('Error updating comment:', data.message);
+                console.error('Error updating comment');
+                toast.error('Failed to update the comment.');
             }
         } catch (error) {
             console.error('Error:', error);
-            
+            toast.error('An error occurred while saving the comment.');
         }
     };
+
+    const handleDelete = () => {
+        onDelete(comment._id);
+        toast.success('Comment deleted successfully!');
+    };
+
     return (
         <div className="flex p-4 dark:border-gray-600 text-sm">
             <div className="flex-shrink-0 mr-3">
@@ -86,57 +96,70 @@ export default function Comments({ comment, onLike, onEdit, onDelete }) {
                         {moment(comment.createdAt).fromNow()}
                     </span>
                 </div>
-                {isEditing ? (<>
-                    <Textarea
-                        className="mb-2"
-                        onChange={(e) => setEditedContent(e.target.value)}
-                        value={editedContent}
-                    />
-                    <div className="flex justify-end gap-2 text-xs">
-                        <Button type='button' size='sm' gradientDuoTone='purpleToBlue' outline onClick={handleSave}>
-                            Save
-                        </Button>
-                        <Button type='button' size='sm' gradientDuoTone='purpleToBlue' onClick={() => setIsEditing(false)}>
-                            Cancel
-                        </Button>
-                    </div>
-                </>
-                  
+                {isEditing ? (
+                    <>
+                        <Textarea
+                            className="mb-2"
+                            onChange={(e) => setEditedContent(e.target.value)}
+                            value={editedContent}
+                        />
+                        <div className="flex justify-end gap-2 text-xs">
+                            <Button
+                                type="button"
+                                size="sm"
+                                gradientDuoTone="purpleToBlue"
+                                outline
+                                onClick={handleSave}
+                            >
+                                Save
+                            </Button>
+                            <Button
+                                type="button"
+                                size="sm"
+                                gradientDuoTone="purpleToBlue"
+                                onClick={() => setIsEditing(false)}
+                            >
+                                Cancel
+                            </Button>
+                        </div>
+                    </>
                 ) : (
                     <>
-                    <p className="text-gray-500">{comment.content}</p>
-                <div className='flex items-center pt-2 text-xs dark:border-gray-700 max-w-fit gap-2'>
-                    <button
-                        type="button"
-                        onClick={handleLike}
-                        className={`text-gray-400 hover:text-blue-500 ${
-                            isLiked && '!text-blue-500'
-                        }`}
-                    >
-                        <FaThumbsUp className="text-sm" />
-                    </button>
-                    <p className='text-gray-400'>
-                        {comment.numberOfLikes > 0 && comment.numberOfLikes + " " 
-                        + (comment.numberOfLikes === 1 ? "like" : "likes")} 
-                    </p>
-                    {
-                        currentUser && (currentUser._id === comment.userId || currentUser.isAdmin) && (
-                            <>
-                            <button className="text-gray-400 hover:text-blue-500" onClick={handleEdit} type='button'>
-                                Edit
+                        <p className="text-gray-500">{comment.content}</p>
+                        <div className="flex items-center pt-2 text-xs dark:border-gray-700 max-w-fit gap-2">
+                            <button
+                                type="button"
+                                onClick={handleLike}
+                                className={`text-gray-400 hover:text-blue-500 ${
+                                    isLiked && '!text-blue-500'
+                                }`}
+                            >
+                                <FaThumbsUp className="text-sm" />
                             </button>
-                            <button className="text-gray-400 hover:text-red-500" onClick={
-                                () => onDelete(comment._id)
-                            } type='button'>
-                                Delete
-                            </button>
-                            </>
-                        ) 
-                    }
-                </div>
+                            <p className="text-gray-400">
+                                {comment.numberOfLikes > 0 && comment.numberOfLikes + ' ' + (comment.numberOfLikes === 1 ? 'like' : 'likes')}
+                            </p>
+                            {currentUser && (currentUser._id === comment.userId || currentUser.isAdmin) && (
+                                <>
+                                    <button
+                                        className="text-gray-400 hover:text-blue-500"
+                                        onClick={handleEdit}
+                                        type="button"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        className="text-gray-400 hover:text-red-500"
+                                        onClick={handleDelete}
+                                        type="button"
+                                    >
+                                        Delete
+                                    </button>
+                                </>
+                            )}
+                        </div>
                     </>
                 )}
-                
             </div>
         </div>
     );

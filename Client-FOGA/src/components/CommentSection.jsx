@@ -1,10 +1,10 @@
 import { Alert, Button, Modal, Textarea } from 'flowbite-react';
 import React, { useEffect, useState } from 'react';
-
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Comments from './Comments';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { toast } from 'react-hot-toast';
 
 export default function CommentSection({ postId }) {
     const { currentUser } = useSelector((state) => state.user);
@@ -15,15 +15,15 @@ export default function CommentSection({ postId }) {
     const [commentToDelete, setCommentToDelete] = useState(null);
     const navigate = useNavigate();
     
-    
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (comment.trim() === '') {
-            return alert('Comment cannot be empty');
+            toast.error('Comment cannot be empty');
+            return;
         }
         if (comment.length > 200) {
-            return alert('Comment cannot exceed 200 characters');
+            toast.error('Comment cannot exceed 200 characters');
+            return;
         }
         try {
             const res = await fetch('/api/comment/create', {
@@ -42,13 +42,14 @@ export default function CommentSection({ postId }) {
                 setComment(''); // Reset the comment textarea
                 setCommentError(null);
                 setComments([data, ...comments]); // Update the comments list
+                toast.success('Comment added successfully');
             } else {
+                toast.error('Error submitting comment');
                 console.error('Error submitting comment:', data.message);
-                alert('Error submitting comment');
             }
         } catch (error) {
+            toast.error('An unexpected error occurred. Please try again.');
             console.error('Error:', error);
-            alert('An unexpected error occurred. Please try again.');
             setCommentError(error.message);
         }
     };
@@ -71,7 +72,8 @@ export default function CommentSection({ postId }) {
     const handleLike = async (commentId) => {
         try {
             if (!currentUser) {
-                return navigate('/sign-in');
+                navigate('/sign-in');
+                return;
             }
     
             const res = await fetch(`/api/comment/likeComment/${commentId}`, {
@@ -79,28 +81,30 @@ export default function CommentSection({ postId }) {
             });
             if (res.ok) {
                 const data = await res.json();
-    
-                // Update the list of comments without overwriting the textarea value
                 setComments(comments.map((comment) =>
                     comment._id === commentId
                         ? { ...comment, likes: data.likes, numberOfLikes: data.likes.length }
                         : comment
                 ));
+                toast.success('Comment liked');
             }
         } catch (error) {
+            toast.error('Error liking comment');
             console.error('Error:', error);
         }
     };
 
     const handleEdit = async (comment, editedContent) => {
         setComments(comments.map((c) => (c._id === comment._id ? { ...c, content: editedContent } : c)));
+        toast.success('Comment edited');
     };
 
     const handleDelete = async (commentId) => {
         setShowModal(false);
         try {
             if (!currentUser) {
-                return navigate('/sign-in');
+                navigate('/sign-in');
+                return;
             }
             const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
                 method: 'DELETE',
@@ -108,10 +112,11 @@ export default function CommentSection({ postId }) {
             if (res.ok) {
                 const data = await res.json();
                 setComments(comments.filter((comment) => comment._id !== commentId));
+                toast.success('Comment deleted successfully');
             }
         } catch (error) {
+            toast.error('Error deleting comment');
             console.error('Error:', error);
-            
         }
     };
   
@@ -156,7 +161,6 @@ export default function CommentSection({ postId }) {
                     </div>
                     {commentError && <Alert color='failure' className='mt-5'>{commentError}</Alert>}
                 </form>
-
             )}
             {comments.length === 0 ? (
                 <p className='text-sm my-5'>
@@ -176,11 +180,11 @@ export default function CommentSection({ postId }) {
                     comments.map(
                       comment => (
                         <Comments key={comment._id}
-                        comment={comment} onLike={handleLike} onEdit={handleEdit} onDelete={
+                        comment={comment} onLike={handleLike} onEdit={handleEdit} onDelete={ 
                             (commentId) => {
                                 setShowModal(true)
-                                setCommentToDelete(commentId)}
-
+                                setCommentToDelete(commentId)
+                            }
                         }/>  
                     ))
                 }

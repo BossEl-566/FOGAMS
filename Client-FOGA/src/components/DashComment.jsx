@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { FaCheck, FaTimes } from 'react-icons/fa';
+import { toast } from 'react-hot-toast';  // Import React Hot Toast
 
 export default function DashComment() {
   const { currentUser } = useSelector((state) => state.user);
@@ -10,6 +11,7 @@ export default function DashComment() {
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [commentIdToDelete, setCommentIdToDelete] = useState('');
+
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -22,6 +24,7 @@ export default function DashComment() {
           }
         }
       } catch (error) {
+        toast.error('Error fetching comments');  // Show toast error
         console.log(error.message);
       }
     };
@@ -44,6 +47,7 @@ export default function DashComment() {
         }
       }
     } catch (error) {
+      toast.error('Error loading more comments');  // Show toast error
       console.log(error.message);
     }
   };
@@ -62,11 +66,13 @@ export default function DashComment() {
         setComments((prev) =>
           prev.filter((comment) => comment._id !== commentIdToDelete)
         );
+        toast.success('Comment deleted successfully');  // Show toast success
         setShowModal(false);
       } else {
-        console.log(data.message);
+        toast.error(data.message || 'Error deleting comment');  // Show toast error
       }
     } catch (error) {
+      toast.error('Error deleting comment');  // Show toast error
       console.log(error.message);
     }
   };

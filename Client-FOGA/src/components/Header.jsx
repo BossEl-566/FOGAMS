@@ -3,20 +3,21 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon, FaSun } from 'react-icons/fa';
-import { useSelector, useDispatch } from 'react-redux'; // Import useDispatch here
+import { useSelector, useDispatch } from 'react-redux';
 import { HiLogout, HiViewGrid } from "react-icons/hi";
 import { toggleTheme } from '../radux/theme/themeSlice.js';
 import { signoutSuccess } from '../radux/user/userSlice.js';
-
+import toast from 'react-hot-toast'; // Import React Hot Toast
 
 export default function Header() {
   const path = useLocation().pathname;
   const location = useLocation();
   const navigate = useNavigate();
   const { currentUser } = useSelector(state => state.user);
-  const { theme } = useSelector(state => state.theme); // Get the theme state here
-  const dispatch = useDispatch(); // Initialize dispatch here
+  const { theme } = useSelector(state => state.theme);
+  const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState('');
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get('searchTerm');
@@ -24,28 +25,33 @@ export default function Header() {
       setSearchTerm(searchTermFromUrl);
     }
   }, [location.search]);
+
   const handleSignout = async () => {
     try {
       const res = await fetch('api/user/signout', {
         method: 'POST',
       });
-      if(!res.ok) {
-        console.log(data.message);
-      }else {
+
+      if (!res.ok) {
+        toast.error('Failed to sign out. Please try again.');
+      } else {
         dispatch(signoutSuccess());
-        // Redirect to login page
+        toast.success('Signed out successfully!'); // Show success toast on sign-out
+        navigate('/sign-in');
       }
     } catch (error) {
-      console.log(error.message)
+      toast.error('An error occurred during sign-out. Please try again.');
     }
   };
+
   const handlesubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(location.search);
     urlParams.set('searchTerm', searchTerm);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
-  }
+  };
+
   return (
     <Navbar className='border-b-2'>
       <Link to='/' className='self-center whitespace-nowrap'>
@@ -57,7 +63,7 @@ export default function Header() {
         </div>
       </Link>
       <form onSubmit={handlesubmit}>
-        <TextInput type='text' placeholder='Search...' rightIcon={AiOutlineSearch} className='hidden lg:inline' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
+        <TextInput type='text' placeholder='Search...' rightIcon={AiOutlineSearch} className='hidden lg:inline' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
       </form>
       <Button className='w-12 h-10 lg:hidden' color='gray' pill>
         <AiOutlineSearch />
@@ -67,10 +73,12 @@ export default function Header() {
           className='w-12 h-10 hidden sm:inline'
           color='gray'
           pill
-          onClick={() => dispatch(toggleTheme())} // Correctly dispatch the action here
+          onClick={() => {
+            dispatch(toggleTheme());
+            toast.success(`Theme switched to ${theme === 'light' ? 'dark' : 'light'}.`); // Show toast for theme switch
+          }}
         >
           {theme === 'light' ? <FaSun /> : <FaMoon />}
-        
         </Button>
         {currentUser ? (
           <Dropdown arrowIcon={false} inline label={
@@ -97,29 +105,19 @@ export default function Header() {
       </div>
       <Navbar.Collapse>
         <Link to='/'>
-          <Navbar.Link active={path === "/"} as={'div'}>
-            Home
-          </Navbar.Link>
+          <Navbar.Link active={path === "/"} as={'div'}>Home</Navbar.Link>
         </Link>
         <Link to='/about'>
-          <Navbar.Link active={path === "/about"} as={'div'}>
-            About
-          </Navbar.Link>
+          <Navbar.Link active={path === "/about"} as={'div'}>About</Navbar.Link>
         </Link>
         <Link to='/contact-us'>
-          <Navbar.Link active={path === "/contact-us"} as={'div'}>
-            Contact Us
-          </Navbar.Link>
+          <Navbar.Link active={path === "/contact-us"} as={'div'}>Contact Us</Navbar.Link>
         </Link>
         <Link to='/project'>
-          <Navbar.Link active={path === "/project"} as={'div'}>
-            Project
-          </Navbar.Link>
+          <Navbar.Link active={path === "/project"} as={'div'}>Project</Navbar.Link>
         </Link>
         <Link to='/ministries'>
-          <Navbar.Link active={path === "/ministries"} as={'div'}>
-            Ministries
-          </Navbar.Link>
+          <Navbar.Link active={path === "/ministries"} as={'div'}>Ministries</Navbar.Link>
         </Link>
       </Navbar.Collapse>
     </Navbar>

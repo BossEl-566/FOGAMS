@@ -1,13 +1,13 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './SignUp.css'; // Import the CSS file
-import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
+import { Button, Label, Spinner, TextInput } from 'flowbite-react'; // Removed Alert import
 import { Eye, EyeOff } from 'lucide-react'; // Import icons
 import OAuth from '../components/OAuth';
+import toast, { Toaster } from 'react-hot-toast'; // Import React Hot Toast
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const navigate = useNavigate();
@@ -19,12 +19,11 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.username || !formData.email || !formData.password) {
-      setErrorMessage('Please fill in all fields');
+      toast.error('Please fill in all fields'); // Show error toast
       return;
     }
     try {
       setLoading(true);
-      setErrorMessage(null);
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
@@ -32,18 +31,19 @@ export default function SignUp() {
         },
         body: JSON.stringify(formData),
       });
-      console.log(res);
       const data = await res.json();
-      console.log(data);
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        toast.error(data.message); // Show error toast
+        setLoading(false);
+        return;
       }
       setLoading(false);
       if (res.ok) {
+        toast.success('Sign up successful! Redirecting to Sign In...'); // Show success toast
         navigate('/sign-in');
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      toast.error(error.message); // Show error toast
       setLoading(false);
     }
   };
@@ -119,13 +119,9 @@ export default function SignUp() {
               Sign In here
             </Link>
           </div>
-          {errorMessage && (
-            <Alert className="mt-5" color="failure">
-              {errorMessage}
-            </Alert>
-          )}
         </div>
       </div>
+      <Toaster /> {/* Toaster container for displaying toasts */}
     </div>
   );
 }

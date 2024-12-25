@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useSelector } from 'react-redux'
 import { FaCheck, FaTimes } from 'react-icons/fa'
+import { toast } from 'react-hot-toast'
 
 
 export default function DashUsers() {
@@ -25,6 +26,7 @@ export default function DashUsers() {
         
       }
      } catch (error) {
+      toast.error("Failed to fetch users!")
         console.log(error.message)
         
       }
@@ -43,12 +45,14 @@ const handleShowMore = async () => {
       setUsers((prev) => [...prev, ...data.users]);
       if(data.users.length < 9) {
         setShowMore(false);
+        
       }
     }
     
     
   } catch (error) {
     console.log(error.message)
+    toast.error("Failed to load more users!")
     
   }
  
@@ -62,11 +66,14 @@ const handleDeleteUser = async () => {
       if(res.ok) {
         setUsers((prev) => prev.filter(user => user._id !== userIdToDelete));
         setShowModal(false);
+        toast.success("User deleted successfully!")
       } else {
+        toast.error(data.message || "Failed to delete user.")
         console.log(data.message)
       }
 
   } catch (error) {
+    toast.error("Error deleting user!")
     console.log(error.message)
     
   }
