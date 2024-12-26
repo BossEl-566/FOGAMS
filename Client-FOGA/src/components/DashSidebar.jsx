@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser, HiAnnotation, HiChartPie } from "react-icons/hi";
+import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser, HiAnnotation, HiChartPie, HiFolderDownload } from "react-icons/hi";
 import { Link, useLocation } from 'react-router-dom';
 import { signoutSuccess } from '../radux/user/userSlice';
 import { useDispatch } from 'react-redux';
@@ -89,6 +89,15 @@ export default function DashSidebar() {
                   as='div'
                 >
                   Comments
+                </Sidebar.Item>
+              </Link>
+              <Link to='/dashboard?tab=resources'>
+                <Sidebar.Item
+                  active={tab === 'resources'}
+                  icon={HiFolderDownload}
+                  as='div'
+                >
+                  Resources
                 </Sidebar.Item>
               </Link>
             </>
