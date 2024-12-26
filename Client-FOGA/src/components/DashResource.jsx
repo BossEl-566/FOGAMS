@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { Button, Card, Modal } from 'flowbite-react';
 import { FaFileUpload, FaFilePdf, FaFileImage, FaFileAlt, FaTrashAlt } from 'react-icons/fa';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
@@ -14,36 +14,43 @@ export default function DashResource() {
   const [isAdmin, setIsAdmin] = useState(true); // Change to dynamically determine admin status
   const [showModal, setShowModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
-  const [reloadResources, setReloadResources] = useState(false); // New state to trigger re-fetch
+  const [showMore, setShowMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 9; // Number of items to fetch per page
 
   const handleButtonClick = () => {
-    // Toggle the visibility of the popover and trigger resource re-fetch
     setPopoverVisible((prev) => !prev);
-    setReloadResources((prev) => !prev); // Toggle reloadResources to trigger useEffect
   };
 
   const handleClose = () => setPopoverVisible(false);
 
   // Fetch resources from the API
-  useEffect(() => {
-    const fetchResources = async () => {
-      try {
-        const response = await fetch('/api/resource/get'); // Replace with your API endpoint
-        if (!response.ok) {
-          throw new Error('Failed to fetch resources');
-        }
-        const data = await response.json();
-        setResources(data.resources); // Adjust if API structure differs
-      } catch (error) {
-        console.error('Error fetching resources:', error);
-        toast.error('Failed to fetch resources');
-      } finally {
-        setLoading(false);
+  const fetchResources = async (page = 0) => {
+    try {
+      const response = await fetch(`/api/resource/get?page=${page}&size=${pageSize}`); // Adjust API endpoint for pagination
+      if (!response.ok) {
+        throw new Error('Failed to fetch resources');
       }
-    };
+      const data = await response.json();
 
+      if (page === 0) {
+        setResources(data.resources);
+      } else {
+        setResources((prevResources) => [...prevResources, ...data.resources]);
+      }
+
+      setShowMore(data.resources.length === pageSize); // Show "Show More" if more items exist
+    } catch (error) {
+      console.error('Error fetching resources:', error);
+      toast.error('Failed to fetch resources');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchResources();
-  }, [reloadResources]); // Dependency array now includes reloadResources
+  }, []);
 
   // Determine the file type icon
   const getFileIcon = (url) => {
@@ -67,8 +74,6 @@ export default function DashResource() {
       if (!response.ok) {
         throw new Error('Failed to delete resource');
       }
-
-      // Update the resource list after successful deletion
       setResources((prevResources) => prevResources.filter((resource) => resource._id !== resourceId));
       toast.success('Resource deleted successfully');
     } catch (error) {
@@ -77,6 +82,12 @@ export default function DashResource() {
     } finally {
       setShowModal(false);
     }
+  };
+
+  const handleShowMore = () => {
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    fetchResources(nextPage);
   };
 
   return (
@@ -100,9 +111,9 @@ export default function DashResource() {
       {/* Display Resources */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading ? (
-          <p className="text-center col-span-full">Loading resources...</p>
+          <p className="text-center col-span-full text-2xl font-bold text-gray-700 dark:text-gray-300 animate-bounce">Loading resources...</p>
         ) : resources.length === 0 ? (
-          <p className="text-center col-span-full">No resources available.</p>
+          <p className="text-center col-span-full text-2xl font-bold text-gray-700 dark:text-gray-300 animate-bounce">No resources available.</p>
         ) : (
           resources.map((resource) => (
             <Card
@@ -141,6 +152,16 @@ export default function DashResource() {
           ))
         )}
       </div>
+
+      {/* Show More Button */}
+      {showMore && (
+        <button
+          className="w-full text-teal-500 self-center text-sm py-7"
+          onClick={handleShowMore}
+        >
+          Show More
+        </button>
+      )}
 
       {/* Delete Confirmation Modal */}
       <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">
