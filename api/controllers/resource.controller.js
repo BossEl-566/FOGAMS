@@ -1,4 +1,5 @@
 import Resource from "../models/resource.model.js";
+import { errorHandler } from "../utils/error.js";
 
 export const createResource = async (req, res, next) => {
     if (!req.user.isAdmin) {

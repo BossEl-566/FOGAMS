@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from "flowbite-react";
 import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser, HiAnnotation, HiChartPie, HiFolderDownload } from "react-icons/hi";
+import { MdEventAvailable } from "react-icons/md";
 import { Link, useLocation } from 'react-router-dom';
 import { signoutSuccess } from '../radux/user/userSlice';
 import { useDispatch } from 'react-redux';
@@ -100,6 +101,16 @@ export default function DashSidebar() {
                   Resources
                 </Sidebar.Item>
               </Link>
+              <Link to='/dashboard?tab=events'>
+                <Sidebar.Item
+                  active={tab === 'events'}
+                  icon={MdEventAvailable}
+                  as='div'
+                >
+                  Upcoming Events
+                </Sidebar.Item>
+              </Link>
+
             </>
           )}
           <Sidebar.Item onClick={handleSignout} icon={HiArrowSmRight} as='div'>

@@ -20,6 +20,7 @@ import UpdateDailyBibleMessage from './pages/UpdateDailyBibleMessage';
 import HowToJoinUs from './pages/HowToJoinUs';
 import ScrollToTop from './components/ScrollToTop';
 import Search from './pages/Search';
+import AddEvent from './components/AddEvent';
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/daily-bible-message" element={<DashDailyBibleMessage />} />
           <Route path="/update-daily-bible-message/:dailyBibleMessageId" element={<UpdateDailyBibleMessage />} />
+          <Route path="/add-event" element={<AddEvent />} />
         </Route>
         <Route path="/daily-bible-message/:dailyBibleMessageSlug" element={<DailyBibleMessagePage />} />
         <Route path="/how-to-join-us" element={<HowToJoinUs />} />

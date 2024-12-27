@@ -6,6 +6,7 @@ import dailyBibleMessageRoute from './routes/dailybiblemessage.route.js';
 import authRoute from './routes/auth.route.js';
 import commentRoute from './routes/comment.route.js';
 import resourceRoute from './routes/resource.route.js';
+import eventRoute from './routes/event.route.js';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
@@ -30,6 +31,7 @@ app.use('/api/auth', authRoute);
 app.use('/api', dailyBibleMessageRoute);
 app.use('/api/comment', commentRoute);
 app.use('/api/resource', resourceRoute);
+app.use('/api/event', eventRoute);
 
 //this is the error handling middleware
 app.use((err, req, res, next) => {

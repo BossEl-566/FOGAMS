@@ -101,7 +101,7 @@ export default function DashResource() {
           gradientDuoTone="purpleToBlue"
           onClick={handleButtonClick}
         >
-          <FaFileUpload className="text-lg" />
+          <FaFileUpload className="text-lg mr-2" />
           Add New File
         </Button>
 
