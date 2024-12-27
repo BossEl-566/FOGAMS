@@ -62,8 +62,10 @@ export default function AddEvent() {
         location: formData.location,
         date: formData.date,
         description: formData.description,
-        imageUrl: formData.fileUrl,
+        imageUrl: formData.imageUrl,
         };
+
+    console.log('Data being sent to the server:', requestData);
 
     try {
       const res = await fetch('/api/event/create', {
@@ -97,6 +99,7 @@ export default function AddEvent() {
         <h1 className="text-center font-semibold text-3xl my-7">Add Events</h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <TextInput
+          value={formData.title || ''}
             type="text"
             placeholder="Title"
             required
@@ -107,6 +110,7 @@ export default function AddEvent() {
 
           <TextInput
             type="text"
+            value={formData.location || ''}
             placeholder="Location"
             required
             id="location"
