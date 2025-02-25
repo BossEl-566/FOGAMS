@@ -103,7 +103,11 @@ const handleDeleteUser = async () => {
               {users.map((user) => (
                 <Table.Body className='divide-y' key={user._id}>
                   <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell>{new Date(user.createdAt).toLocaleDateString()}</Table.Cell>
+                  <Table.Cell>{new Intl.DateTimeFormat("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }).format(new Date(user.createdAt))}</Table.Cell>
                   <Table.Cell>
 
                 <img src={user.profilePicture} alt={user.username} className='w-20 h-10 object-cover bg-gray-500 rounded-full' />

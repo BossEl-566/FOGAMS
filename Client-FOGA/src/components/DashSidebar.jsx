@@ -7,6 +7,7 @@ import { signoutSuccess } from '../radux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
+import { FaUserPlus } from "react-icons/fa";
 
 export default function DashSidebar() {
   const location = useLocation();
@@ -108,6 +109,15 @@ export default function DashSidebar() {
                   as='div'
                 >
                   Upcoming Events
+                </Sidebar.Item>
+              </Link>
+              <Link to='/dashboard?tab=membership'>
+                <Sidebar.Item
+                  active={tab === 'membership'}
+                  icon={FaUserPlus}
+                  as='div'
+                >
+                  Member Requests
                 </Sidebar.Item>
               </Link>
 

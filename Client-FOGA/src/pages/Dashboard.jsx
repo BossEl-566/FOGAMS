@@ -9,6 +9,7 @@ import DashComment from '../components/DashComment';
 import DashboardComp from '../components/DashboardComp';
 import DashResource from '../components/DashResource';
 import DashEvents from '../components/DashEvents';
+import MembershipRequest from '../components/MembershipRequest';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -43,6 +44,7 @@ export default function Dashboard() {
       {tab === 'resources' && <DashResource />}
       {/* events */}
       {tab === 'events' && <DashEvents />}
+      {tab === 'membership' && <MembershipRequest />}
     </div>
   );
 }

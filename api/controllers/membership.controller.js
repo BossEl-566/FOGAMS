@@ -23,3 +23,12 @@ export const createMembership = async (req, res, next) => {
     }
 };
 
+export const getMembership = async (req, res, next) => {
+    try {
+        const membership = await Membership.find().sort({ createdAt: -1 });
+        res.status(200).json(membership);
+    } catch (error) {
+        next(error);
+    }
+}
+
