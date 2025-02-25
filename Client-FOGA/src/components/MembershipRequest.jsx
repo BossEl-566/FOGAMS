@@ -11,6 +11,7 @@ export default function MembershipRequest() {
       try {
         const res = await fetch(`/api/membership/get`);
         const data = await res.json();
+        console.log(data);
         if (res.ok) {
           setUsers(data);
         }
