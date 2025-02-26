@@ -57,3 +57,15 @@ export const updateMembership = async (req, res, next) => {
     }
 };
 
+export const deleteMembership = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, "You are not authorized to perform this action"));
+    }
+    try {
+        await Membership.findByIdAndDelete(req.params.membershipId);
+        res.status(200).json({ message: "Membership has been deleted" });
+    } catch (error) {
+        next(error);
+    }
+}
+
