@@ -10,6 +10,7 @@ export default function MembershipRequest() {
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [userIdToUpdate, setUserIdToUpdate] = useState("");
+  const [memberIdToUpdate, setMemberIdToUpdate] = useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -23,6 +24,9 @@ export default function MembershipRequest() {
         toast.error("Failed to fetch users!");
       }
     };
+    console.log(currentUser);
+    console.log(currentUser?._id);
+    console.log(memberIdToUpdate)
 
     if (currentUser?.isAdmin) {
       fetchUsers();
@@ -32,8 +36,9 @@ export default function MembershipRequest() {
   if (!currentUser?.isAdmin) {
     return <p className="text-center text-red-500">You are not allowed to view this page</p>;
   }
+  
 
-  // ✅ Accept Membership (Update "member" field to true)
+  // Accept Membership (Update "member" field to true)
   const handleAcceptUser = async () => {
     try {
       const res = await fetch(`/api/membership/update/${userIdToUpdate}`, {
@@ -41,7 +46,13 @@ export default function MembershipRequest() {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (res.ok) {
+      const res1 = await fetch(`/api/user/updatemember/${memberIdToUpdate}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ member: true }),
+        });
+
+      if (res.ok && res1.ok) {
         toast.success("User accepted successfully");
         setUsers(users.filter(user => user._id !== userIdToUpdate)); // Remove from UI
         setShowAcceptModal(false);
@@ -87,8 +98,8 @@ export default function MembershipRequest() {
             </tr>
           </thead>
           <tbody>
-            {users.length > 0 ? (
-              users.map((user, index) => (
+          {users.filter(user => !user.member).length > 0 ? (
+    users.filter(user => !user.member).map((user, index) => (
                 <tr key={index} className="border-b dark:border-gray-700">
                   <td className="p-3 text-blue-600 font-medium">
                     {new Intl.DateTimeFormat("en-US", { year: "numeric", month: "long", day: "numeric" }).format(new Date(user.createdAt))}
@@ -101,7 +112,7 @@ export default function MembershipRequest() {
                     <button
                       className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md mx-1"
                       onClick={() => {
-                        setUserIdToUpdate(user._id);
+                        setUserIdToUpdate(user._id);setMemberIdToUpdate(user.userId);
                         setShowAcceptModal(true);
                       }}
                     >

@@ -119,3 +119,26 @@ export const getUser = async (req, res, next) => {
     
   }
 };
+
+export const updateMemberUser = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(errorHandler(403, "You are not authorized to perform this action"));
+  }
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      {
+        $set: {
+          isMember: true, 
+        },
+      },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return next(errorHandler(404, "User not found"));
+    }
+    res.status(200).json({ message: "User membership updated successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
