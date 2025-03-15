@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './SignUp.css';
-import { Button, Label, Spinner, TextInput } from 'flowbite-react';
-import { useDispatch, useSelector } from 'react-redux';
-import { signInStart, signInSuccess, signInFailure } from '../radux/user/userSlice';
-import { Eye, EyeOff } from 'lucide-react'; // Import icons
-import OAuth from '../components/OAuth';
-import toast from 'react-hot-toast'; // Import react-hot-toast
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./SignUp.css";
+import { Button, Label, Spinner, TextInput } from "flowbite-react";
+import { useDispatch, useSelector } from "react-redux";
+import { signInStart, signInSuccess, signInFailure } from "../radux/user/userSlice";
+import { connectSocket } from "../radux/socket/socketSlice"; // Import connectSocket action
+import { Eye, EyeOff } from "lucide-react"; // Import icons
+import OAuth from "../components/OAuth";
+import toast from "react-hot-toast"; // Import react-hot-toast
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const { loading, error: errorMessage } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
@@ -22,30 +23,31 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
-      toast.error('All fields are required'); // Show error toast
-      return dispatch(signInFailure('All fields are required'));
+      toast.error("All fields are required");
+      return dispatch(signInFailure("All fields are required"));
     }
+
     try {
       dispatch(signInStart());
-      const res = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+
       if (res.ok) {
         dispatch(signInSuccess(data));
-        navigate('/');
-        toast.success('Successfully signed in'); // Show success toast
+        dispatch(connectSocket()); // Connect WebSocket after successful login
+        navigate("/");
+        toast.success("Successfully signed in");
       } else {
         dispatch(signInFailure(data.message));
-        toast.error(data.message); // Show error toast
+        toast.error(data.message);
       }
     } catch (error) {
       dispatch(signInFailure(error.message));
-      toast.error(error.message); // Show error toast
+      toast.error(error.message);
     }
   };
 
@@ -77,20 +79,15 @@ export default function SignIn() {
         {/* right */}
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <div className="">
+            <div>
               <Label value="Enter your email" />
-              <TextInput
-                type="email"
-                placeholder="example@example.com"
-                id="email"
-                onChange={handleChange}
-              />
+              <TextInput type="email" placeholder="example@example.com" id="email" onChange={handleChange} />
             </div>
-            <div className="">
+            <div>
               <Label value="Enter password" />
               <div className="relative">
                 <TextInput
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   id="password"
                   onChange={handleChange}
@@ -99,7 +96,7 @@ export default function SignIn() {
                   className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />} {/* Icons */}
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </span>
               </div>
             </div>
@@ -110,7 +107,7 @@ export default function SignIn() {
                   <span className="pl-3">Loading...</span>
                 </>
               ) : (
-                'Sign In'
+                "Sign In"
               )}
             </Button>
             <OAuth />

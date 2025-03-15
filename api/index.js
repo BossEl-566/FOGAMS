@@ -9,6 +9,7 @@ import commentRoute from './routes/comment.route.js'; // Comment-related routes
 import resourceRoute from './routes/resource.route.js'; // Resource-related routes
 import eventRoute from './routes/event.route.js'; // Event-related routes
 import membershipRoute from './routes/membership.route.js'; // Membership-related routes
+import messageRoute from './routes/message.route.js'; // Message-related routes
 import cookieParser from 'cookie-parser'; // Middleware to parse cookies
 import jwt from 'jsonwebtoken'; // JWT for authentication
 import { createServer } from 'http'; // HTTP server module
@@ -38,6 +39,14 @@ const io = new Server(server, {
   },
 });
 
+// Store online users
+const userSocketMap = {}; // { userId: socketId }
+
+// Function to get a user's socket ID
+export function getReceiverSocketId(userId) {
+  return userSocketMap[userId];
+}
+
 // Socket.IO authentication middleware
 io.use((socket, next) => {
   const token = socket.handshake.auth.token; // Get token from handshake auth
@@ -57,9 +66,19 @@ io.use((socket, next) => {
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.user.id}`); // Log user ID upon successful connection
 
+  const userId = socket.user.id;
+  if (userId) {
+    userSocketMap[userId] = socket.id;
+  }
+
+  // Broadcast online users
+  io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
   // Handle user disconnection
   socket.on("disconnect", () => {
-    console.log("A user disconnected:", socket.user.id); // Log user ID on disconnection
+    console.log(`User disconnected: ${userId}`); // Log user ID on disconnection
+    delete userSocketMap[userId]; // Remove user from tracking map
+    io.emit("getOnlineUsers", Object.keys(userSocketMap)); // Broadcast updated list
   });
 
   // Custom events can be added here
@@ -73,6 +92,7 @@ app.use('/api/comment', commentRoute); // Routes for comments
 app.use('/api/resource', resourceRoute); // Routes for resources
 app.use('/api/event', eventRoute); // Routes for events
 app.use('/api/membership', membershipRoute); // Routes for memberships
+app.use('/api/messages', messageRoute); // Routes for messages
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -85,3 +105,4 @@ app.use((err, req, res, next) => {
 server.listen(3000, () => {
   console.log('Server running on port 3000'); // Log that the server is running
 });
+ 

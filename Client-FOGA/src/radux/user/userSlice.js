@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-    currentUser: null,
+    currentUser: JSON.parse(localStorage.getItem("currentUser")) || null,
     error: null,
     loading: false,
 };
@@ -19,8 +19,10 @@ const userSlice = createSlice({
             state.loading = false;
             state.currentUser = action.payload;
             state.error = null;
-            state.loading = false;
-        },
+            
+            // Persist user in localStorage
+            localStorage.setItem("currentUser", JSON.stringify(action.payload));
+        },        
         signInFailure: (state, action) => {
             state.loading = false;
             state.error = action.payload;

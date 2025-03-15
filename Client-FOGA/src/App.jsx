@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-// import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { connectSocket } from './radux/socket/socketSlice'; // Import socket action
+import { signInSuccess } from './radux/user/userSlice'; // Import Redux action for setting user
 import Home from './pages/Home';
 import ContactUs from './pages/ContactUs';
 import SignIn from './pages/SignIn';
@@ -23,6 +25,18 @@ import Search from './pages/Search';
 import AddEvent from './components/AddEvent';
 
 export default function App() {
+  const dispatch = useDispatch();
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (storedUser) {
+        dispatch(signInSuccess(storedUser)); // Use correct Redux action
+        dispatch(connectSocket()); // Connect WebSocket
+        setCurrentUser(storedUser); // Update local state as well
+    }
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
       <ScrollToTop />
@@ -48,7 +62,7 @@ export default function App() {
         <Route path="/how-to-join-us" element={<HowToJoinUs />} />
       </Routes>
       <Footer />
-      <Toaster /> {/* This is where you can show your toast notifications */}
+      <Toaster /> {/* Show toast notifications */}
     </BrowserRouter>
   );
 }
