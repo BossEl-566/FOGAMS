@@ -10,6 +10,7 @@ import DashboardComp from '../components/DashboardComp';
 import DashResource from '../components/DashResource';
 import DashEvents from '../components/DashEvents';
 import MembershipRequest from '../components/MembershipRequest';
+import DashAccountRecord from '../components/DashAccountRecord';
 import Chat from '../components/Chat';
 
 export default function Dashboard() {
@@ -47,6 +48,8 @@ export default function Dashboard() {
       {tab === 'events' && <DashEvents />}
       {tab === 'membership' && <MembershipRequest />}
       {tab === 'message' && <Chat />}
+      {/* tithe */}
+      {tab === 'tithe' && <DashAccountRecord />}
     </div>
   );
 }

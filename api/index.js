@@ -10,6 +10,7 @@ import resourceRoute from './routes/resource.route.js'; // Resource-related rout
 import eventRoute from './routes/event.route.js'; // Event-related routes
 import membershipRoute from './routes/membership.route.js'; // Membership-related routes
 import messageRoute from './routes/message.route.js'; // Message-related routes
+import titheRoute from './routes/tithe.route.js'
 import cookieParser from 'cookie-parser'; // Middleware to parse cookies
 import jwt from 'jsonwebtoken'; // JWT for authentication
 import { createServer } from 'http'; // HTTP server module
@@ -93,6 +94,7 @@ app.use('/api/resource', resourceRoute); // Routes for resources
 app.use('/api/event', eventRoute); // Routes for events
 app.use('/api/membership', membershipRoute); // Routes for memberships
 app.use('/api/messages', messageRoute); // Routes for messages
+app.use('/api/tithe', titheRoute); // Routes for tithes
 
 // Error handling middleware
 app.use((err, req, res, next) => {

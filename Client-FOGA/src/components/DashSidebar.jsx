@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Sidebar } from "flowbite-react";
 import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser, HiAnnotation, HiChartPie, HiFolderDownload } from "react-icons/hi";
 import { BiMessageRounded, BiChat } from "react-icons/bi";
-import { MdEventAvailable } from "react-icons/md";
+import { FaMoneyBillWave } from "react-icons/fa";
+import { MdEventAvailable, MdOutlineAttachMoney } from "react-icons/md";
 import { Link, useLocation } from 'react-router-dom';
 import { signoutSuccess } from '../radux/user/userSlice';
 import { useDispatch } from 'react-redux';
@@ -61,11 +62,19 @@ export default function DashSidebar() {
             </Sidebar.Item>
           </Link>
           {currentUser.isMember && (
+            <>
             <Link to='/dashboard?tab=message'>
               <Sidebar.Item active={tab === 'message'} href="#" icon={BiChat} as='div'>
                 Chat
               </Sidebar.Item>
             </Link>
+            <Link to='/dashboard?tab=tithe'>
+              <Sidebar.Item active={tab === 'tithe'} href="#" icon={ MdOutlineAttachMoney } as='div'>
+                Account
+              </Sidebar.Item>
+            </Link>
+            </>
+            
           )}
           {!currentUser.isMember && (
             <Link to='/dashboard?tab=join'>
