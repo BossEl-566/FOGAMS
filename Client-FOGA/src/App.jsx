@@ -23,6 +23,7 @@ import HowToJoinUs from './pages/HowToJoinUs';
 import ScrollToTop from './components/ScrollToTop';
 import Search from './pages/Search';
 import AddEvent from './components/AddEvent';
+import RecieptPage from './pages/RecieptPage';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -59,6 +60,7 @@ export default function App() {
           <Route path="/add-event" element={<AddEvent />} />
         </Route>
         <Route path="/daily-bible-message/:dailyBibleMessageSlug" element={<DailyBibleMessagePage />} />
+        <Route path="/receipt/:recieptId" element={<RecieptPage />} />
         <Route path="/how-to-join-us" element={<HowToJoinUs />} />
       </Routes>
       <Footer />

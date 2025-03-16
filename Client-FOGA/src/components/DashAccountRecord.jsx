@@ -1,32 +1,15 @@
 import { Button } from "flowbite-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaMoneyBillWave, FaCalendarAlt, FaCashRegister } from "react-icons/fa";
 import { useSelector } from "react-redux";
-
-
-const transactions = [
-  {
-    id: "1",
-    amount: "200",
-    period: "Monthly",
-    paymentForMonth: "March",
-    mode: "Mobile Money",
-    timestamp: "2025-03-15 10:30 AM",
-  },
-  {
-    id: "2",
-    amount: "150",
-    period: "Weekly",
-    paymentForMonth: "March",
-    mode: "Physical Cash",
-    timestamp: "2025-03-08 12:45 PM",
-  },
-];
+import { Link } from "react-router-dom";
 
 
 export default function DashAccountRecord() {
  const { currentUser } = useSelector((state) => state.user);
+ const [transactions, setTransactions] = useState([]);
+ const [titheId, setTitheId] = useState(null);
   const [formData, setFormData] = useState({
     userID: currentUser._id,
     amount: "",
@@ -71,13 +54,36 @@ export default function DashAccountRecord() {
   
   };
 
+  const getTransactions = async () => {
+    try {
+      const res = await fetch("/api/tithe/getTithe", {
+        method: "GET",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setTransactions(data);
+        console.log(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getTransactions();
+  }, []);
+
   return (
   <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
     {/* Main Content */}
     <div className="flex-1 p-6">
+      <Link to="/reciept">
     <Button gradientDuoTone="purpleToBlue" outline className="ml-96">
   View All Transaction 
 </Button>
+</Link>
       <h1 className="text-2xl font-semibold mb-6">Tithe Dashboard</h1>
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg flex items-center shadow-md">
         <FaMoneyBillWave className="text-green-400 text-2xl mr-2" />
@@ -226,9 +232,19 @@ export default function DashAccountRecord() {
           <div className="mt-2 w-20 h-6 flex items-center justify-center bg-green-500 text-white text-xs font-semibold rounded-full">
             Completed
           </div>
-          <p className="text-sm text-blue-500 mt-2">View Reciept</p>
+          <p className="text-sm text-blue-500 mt-2 cursor-pointer">
+  <Link
+    to={`/receipt/${tx._id}`}  // Corrected template literal
+    state={{ titheId: tx._id }}
+    className="text-sm text-blue-500"
+    onClick={() => setTitheId(tx._id)}  // Kept only one onClick
+  >
+    View Receipt
+  </Link>
+</p>
         </div>
       ))}
+
       <p className="text-sm text-blue-500 mt-2">View All Transactions</p>
     </div>
   </div>
