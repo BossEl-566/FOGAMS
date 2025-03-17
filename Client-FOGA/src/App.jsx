@@ -24,17 +24,19 @@ import ScrollToTop from './components/ScrollToTop';
 import Search from './pages/Search';
 import AddEvent from './components/AddEvent';
 import RecieptPage from './pages/RecieptPage';
+import AllTransanction from './pages/AllTransanction';
 
 export default function App() {
+  const {currentUser} = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUsers, setCurrentUsers] = useState(null);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("currentUser"));
     if (storedUser) {
         dispatch(signInSuccess(storedUser)); // Use correct Redux action
         dispatch(connectSocket()); // Connect WebSocket
-        setCurrentUser(storedUser); // Update local state as well
+        setCurrentUsers(storedUser); // Update local state as well
     }
   }, [dispatch]);
 
@@ -43,16 +45,20 @@ export default function App() {
       <ScrollToTop />
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+      <Route path="/" element={currentUser ? <Home /> : <SignIn />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        
         <Route path="/about" element={<About />} />
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/sign-in" element={<SignIn />} />
+        
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/search" element={<Search />} />
         <Route path="/project" element={<Project />} />
         <Route path="/ministries" element={<Ministries />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/receipt/:recieptId" element={<RecieptPage />} />
+          <Route path="/all-transaction" element={<AllTransanction />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/daily-bible-message" element={<DashDailyBibleMessage />} />
@@ -60,7 +66,7 @@ export default function App() {
           <Route path="/add-event" element={<AddEvent />} />
         </Route>
         <Route path="/daily-bible-message/:dailyBibleMessageSlug" element={<DailyBibleMessagePage />} />
-        <Route path="/receipt/:recieptId" element={<RecieptPage />} />
+        
         <Route path="/how-to-join-us" element={<HowToJoinUs />} />
       </Routes>
       <Footer />

@@ -9,7 +9,10 @@ import { Link } from "react-router-dom";
 export default function DashAccountRecord() {
  const { currentUser } = useSelector((state) => state.user);
  const [transactions, setTransactions] = useState([]);
+ const [isApproved, setIsApproved] = useState([]);
+const [isPending, setIsPending] = useState([]);
  const [titheId, setTitheId] = useState(null);
+ const [firstTransaction, setFirstTransaction] = useState(null);
   const [formData, setFormData] = useState({
     userID: currentUser._id,
     amount: "",
@@ -45,6 +48,7 @@ export default function DashAccountRecord() {
         });
         console.log(data);
         toast.success("Payment successful");
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);
@@ -54,22 +58,57 @@ export default function DashAccountRecord() {
   
   };
 
+
   const getTransactions = async () => {
     try {
       const res = await fetch("/api/tithe/getTithe", {
         method: "GET",
       });
+  
       const data = await res.json();
+  
       if (!res.ok) {
         console.log(data.message);
       } else {
+        console.log("Fetched transactions:", data);
         setTransactions(data);
-        console.log(data);
+  
+        // Filter transactions
+        const approved = data.filter(tx => tx.isApproved === true);
+        const pending = data.filter(tx => tx.isApproved === false);
+  
+        setIsApproved(approved);
+        setIsPending(pending);
+  
+        console.log("Approved Transactions:", approved);
+        console.log("Pending Transactions:", pending);
+  
+        // Set first transaction correctly
+        if (approved.length > 0) {
+          setFirstTransaction(approved[0]); // Use 'approved' instead of 'isApproved'
+        }
       }
     } catch (error) {
       console.error(error);
     }
-  }
+  };
+  
+
+// Fetch transactions when the component mounts
+useEffect(() => {
+  getTransactions();
+}, []);
+
+  
+  // Fetch transactions when the component mounts
+  useEffect(() => {
+    getTransactions();
+  }, []);
+  
+  useEffect(() => {
+    console.log("First Transaction:", firstTransaction); // Check when it updates
+  }, [firstTransaction]);
+  
 
   useEffect(() => {
     getTransactions();
@@ -79,20 +118,84 @@ export default function DashAccountRecord() {
   <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
     {/* Main Content */}
     <div className="flex-1 p-6">
-      <Link to="/reciept">
+      <Link to="/all-transaction">
     <Button gradientDuoTone="purpleToBlue" outline className="ml-96">
-  View All Transaction 
+  View All Records 
 </Button>
 </Link>
       <h1 className="text-2xl font-semibold mb-6">Tithe Dashboard</h1>
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg flex items-center shadow-md">
         <FaMoneyBillWave className="text-green-400 text-2xl mr-2" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        {firstTransaction ? (
+    <>
+      {/* Title */}
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+        Last Tithe Record
+      </h2>
+
+      {/* Amount */}
+      <p className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        GHS {firstTransaction.amount}
+      </p>
+
+      {/* Payment Mode */}
+      <div className="flex items-center space-x-2 mb-2">
+        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+          Mode:
+        </span>
+        <span className="text-sm text-gray-900 dark:text-white">
+          {firstTransaction.mode}
+        </span>
+      </div>
+
+      {/* Period and Payment Month */}
+      <div className="flex items-center space-x-2 mb-2">
+        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+          Period:
+        </span>
+        <span className="text-sm text-gray-900 dark:text-white">
+          {firstTransaction.period} - {firstTransaction.paymentForMonth}
+        </span>
+      </div>
+
+      {/* Date & Time of Transaction */}
+      <div className="flex justify-between text-sm font-medium text-gray-600 dark:text-gray-300 mt-2">
+        {/* Created Date */}
         <div>
-          <h2 className="text-xl font-semibold">Last Tithe Record</h2>
-          <p className="text-3xl font-bold mt-2">GHS 350</p>
-          <p className="text-sm text-gray-900 dark:text-white">March - Offering</p>
+          <span className="mr-1">Paid On:</span>
+          <span className="text-gray-500 dark:text-white">
+            {new Date(firstTransaction.createdAt).toLocaleDateString("en-GB", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </span>
+        </div>
+
+        {/* Updated Time */}
+        <div>
+          <span className="ml-24">Updated:</span>
+          <span className="text-gray-900 dark:text-white">
+            {new Date(firstTransaction.updatedAt).toLocaleDateString("en-GB", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </span>
         </div>
       </div>
+    </>
+  ) : (
+    <p className="text-gray-600 dark:text-gray-400 text-center py-6">
+      No Tithe Record available
+    </p>
+  )}
+
+</div>
+
+      </div>
+          
 
       {/* Total Contributions */}
       <div className="p-6 bg-white dark:bg-gray-900 shadow-md rounded-lg mt-4">
@@ -220,8 +323,9 @@ export default function DashAccountRecord() {
   {/* Transaction History */}
   <div>
     <h2 className="text-lg font-semibold mb-4">Transaction History</h2>
-    <div className="h-[40vh] overflow-y-auto">
-      {transactions.map((tx) => (
+    
+    <div className="h-[80vh] overflow-y-auto">
+      {isApproved.map((tx) => (
         <div key={tx.id} className="p-3 border-b border-gray-700">
           <p className="text-sm">{tx.timestamp}</p>
           <p className="text-lg font-semibold">GHS {tx.amount}</p>
@@ -244,8 +348,9 @@ export default function DashAccountRecord() {
 </p>
         </div>
       ))}
-
-      <p className="text-sm text-blue-500 mt-2">View All Transactions</p>
+      <Link to="/all-transaction">
+      <p className="text-sm text-blue-500 mt-2">View All Records</p>
+      </Link>
     </div>
   </div>
 
@@ -255,31 +360,35 @@ export default function DashAccountRecord() {
   {/* Pending Transactions */}
   <div>
     <h2 className="text-lg font-semibold mb-4">Pending Transactions</h2>
-    <div className="h-[35vh] overflow-y-auto">
-      <div className="p-3 border-b border-gray-700">
-        <p className="text-sm">March 15, 2025 - 10:30 AM</p>
-        <p className="text-lg font-semibold text-yellow-500">GHS 150.00</p>
-        <p className="text-sm text-gray-900 dark:text-white">March - Offering</p>
-        <p className="text-sm text-gray-900 dark:text-white">Mobile Money</p>
-        <div className="mt-2 w-20 h-6 flex items-center justify-center bg-red-500 text-white text-xs font-semibold rounded-full">
+    <div className="h-[80vh] overflow-y-auto">
+    {isPending.map((tx) => (
+      <div key={tx.id} className="p-3 border-b border-gray-700">
+        <p className="text-sm">{tx.timestamp}</p>
+        <p className="text-lg font-semibold">GHS {tx.amount}</p>
+        <p className="text-sm text-gray-900 dark:text-white">
+          {tx.period} - {tx.paymentForMonth}
+        </p>
+        <p className="text-sm text-gray-900 dark:text-white">{tx.mode}</p>
+        <div className="mt-2 w-20 h-6 flex items-center justify-center bg-yellow-500 text-black text-xs font-semibold rounded-full">
           Pending
         </div>
+        <p className="text-sm text-blue-500 mt-2 cursor-pointer">
+          <Link
+            to={`/receipt/${tx._id}`}  // Corrected template literal
+            state={{ titheId: tx._id }}
+            className="text-sm text-blue-500"
+            onClick={() => setTitheId(tx._id)}  // Kept only one onClick
+          >
+            View Receipt
+          </Link>
+        </p>
+      
       </div>
-      <div className="p-3 border-b border-gray-700">
-        <p className="text-sm">March 14, 2025 - 5:45 PM</p>
-        <p className="text-lg font-semibold text-yellow-500">GHS 200.00</p>
-        <p className="text-sm text-gray-900 dark:text-white">March - Tithe</p>
-        <p className="text-sm text-gray-900 dark:text-white">Bank Transfer</p>
-        <div className="mt-2 w-20 h-6 flex items-center justify-center bg-red-500 text-white text-xs font-semibold rounded-full">
-          Pending
-        </div>
-      </div>
+    ))}
     </div>
     
-  </div>
-  
+   </div>
 </div>
-
 </div>
   )
 }

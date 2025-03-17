@@ -30,16 +30,17 @@ export const createTithe = async (req, res, next) => {
 };
 
 export const getTithe = async (req, res, next) => {
-    if(!req.user.isMember) {
+    if (!req.user.isMember) {
         return next(errorHandler(403, 'You must be a member to view tithes'));
     }
     try {
-        const tithes = await Tithe.find({ userID: req.user.id });
+        const tithes = await Tithe.find({ userID: req.user.id }).sort({ createdAt: -1 });
         res.status(200).json(tithes);
     } catch (error) {
         next(error);
     }
 };
+
 
 export const getTitheId = async (req, res, next) => {
     if(!req.user.isMember) {
