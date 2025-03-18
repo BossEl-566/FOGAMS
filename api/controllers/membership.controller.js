@@ -36,6 +36,9 @@ export const getMembership = async (req, res, next) => {
 }
 
 export const updateMembership = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, "You are not authorized to perform this action"));
+    }
     try {
         const updatedMembership = await Membership.findByIdAndUpdate(
             req.params.membershipId,

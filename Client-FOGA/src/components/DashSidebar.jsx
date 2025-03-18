@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Sidebar } from "flowbite-react";
 import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser, HiAnnotation, HiChartPie, HiFolderDownload } from "react-icons/hi";
 import { BiMessageRounded, BiChat } from "react-icons/bi";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { MdEventAvailable, MdOutlineAttachMoney } from "react-icons/md";
 import { Link, useLocation } from 'react-router-dom';
@@ -84,14 +85,23 @@ export default function DashSidebar() {
             </Link>
           )}
           {currentUser.isAdmin && (
+            <>
             <Link to='/dashboard?tab=daily-bible-message'>
               <Sidebar.Item active={tab === 'daily-bible-message'} href="#" icon={HiDocumentText} as='div'>
                 Daily Message
               </Sidebar.Item>
             </Link>
+            
+            </>
+            
           )}
           {currentUser.isAdmin && (
             <>
+            <Link to='/dashboard?tab=account'>
+              <Sidebar.Item active={tab === 'account'} href="#" icon={ FaMoneyBillTransfer } as='div'>
+               Church Account
+              </Sidebar.Item>
+            </Link>
               <Link to='/dashboard?tab=users'>
                 <Sidebar.Item
                   active={tab === 'users'}

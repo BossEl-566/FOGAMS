@@ -12,6 +12,7 @@ import DashEvents from '../components/DashEvents';
 import MembershipRequest from '../components/MembershipRequest';
 import DashAccountRecord from '../components/DashAccountRecord';
 import Chat from '../components/Chat';
+import ChurchAccount from '../components/ChurchAccount';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -50,6 +51,8 @@ export default function Dashboard() {
       {tab === 'message' && <Chat />}
       {/* tithe */}
       {tab === 'tithe' && <DashAccountRecord />}
+      {/* account */}
+      {tab === 'account' && <ChurchAccount />}
     </div>
   );
 }

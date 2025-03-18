@@ -11,10 +11,12 @@ import eventRoute from './routes/event.route.js'; // Event-related routes
 import membershipRoute from './routes/membership.route.js'; // Membership-related routes
 import messageRoute from './routes/message.route.js'; // Message-related routes
 import titheRoute from './routes/tithe.route.js'
+import churchAccountRoute from './routes/churchAccount.route.js'; // Church account routes
 import cookieParser from 'cookie-parser'; // Middleware to parse cookies
 import jwt from 'jsonwebtoken'; // JWT for authentication
 import { createServer } from 'http'; // HTTP server module
 import { Server } from 'socket.io'; // Socket.IO for real-time communication
+
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -95,6 +97,7 @@ app.use('/api/event', eventRoute); // Routes for events
 app.use('/api/membership', membershipRoute); // Routes for memberships
 app.use('/api/messages', messageRoute); // Routes for messages
 app.use('/api/tithe', titheRoute); // Routes for tithes
+app.use('/api/church-account', churchAccountRoute); // Routes for church account
 
 // Error handling middleware
 app.use((err, req, res, next) => {

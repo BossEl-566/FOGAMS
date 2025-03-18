@@ -61,3 +61,41 @@ export const getTitheId = async (req, res, next) => {
         next(error);
     }
 };
+
+export const editTithe = async (req, res, next) => {
+    if(!req.user.isMember || !req.user.isAdmin) {
+        return next(errorHandler(403, 'You must be a member to edit tithes'));
+    }
+    try {
+        const
+        { amount, period, weekOrMonth, paymentForMonth, mode } = req.body;
+        if(!amount || !period || !paymentForMonth || !mode) {
+            return next(errorHandler(400, 'All fields are required'));
+        }
+        const
+        updatedTithe = await Tithe.findByIdAndUpdate(
+            req.params.titheId,
+            {
+                $set: {
+                    amount,
+                    period,
+                    weekOrMonth,
+                    paymentForMonth,
+                    mode,
+                    isApproved: true,
+                },
+            },
+            { new: true }
+        );
+
+        if(!updatedTithe) {
+            return next(errorHandler(404, 'Tithe not found'));
+        }
+
+        res.status(200).json(updatedTithe);
+        
+    } catch (error) {
+        next(error);
+        
+    }
+};
