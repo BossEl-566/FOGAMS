@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const TitheSchema = new mongoose.Schema(
   {
+    username: {
+      type: String,
+      required: true,
+    },
     userID: {
       type: String,
       required: true,

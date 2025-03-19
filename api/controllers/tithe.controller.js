@@ -3,7 +3,7 @@ import Tithe from '../models/tithe.model.js';
 
 export const createTithe = async (req, res, next) => {
     try {
-        const { amount, period, weekOrMonth, paymentForMonth, mode, userID } = req.body;
+        const { amount, period, weekOrMonth, paymentForMonth, mode, userID, username } = req.body;
 
         if(!amount || !period || !paymentForMonth || !mode) {
             return next(errorHandler(400, 'All fields are required'));
@@ -14,6 +14,7 @@ export const createTithe = async (req, res, next) => {
         }
     
         const newTithe = new Tithe({
+        username,
         userID,
         amount,
         period,
@@ -43,7 +44,7 @@ export const getTithe = async (req, res, next) => {
 
 
 export const getTitheId = async (req, res, next) => {
-    if(!req.user.isMember) {
+    if(!req.user.isMember || !req.user.isAdmin) {
         return next(errorHandler(403, 'You must be a member to view tithes'));
     }
     try {
@@ -68,12 +69,8 @@ export const editTithe = async (req, res, next) => {
     }
     try {
         const
-        { amount, period, weekOrMonth, paymentForMonth, mode } = req.body;
-        if(!amount || !period || !paymentForMonth || !mode) {
-            return next(errorHandler(400, 'All fields are required'));
-        }
-        const
-        updatedTithe = await Tithe.findByIdAndUpdate(
+        { amount, period, weekOrMonth, paymentForMonth, mode } = req.body
+        const updatedTithe = await Tithe.findByIdAndUpdate(
             req.params.titheId,
             {
                 $set: {

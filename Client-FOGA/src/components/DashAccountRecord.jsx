@@ -14,6 +14,7 @@ const [isPending, setIsPending] = useState([]);
  const [titheId, setTitheId] = useState(null);
  const [firstTransaction, setFirstTransaction] = useState(null);
   const [formData, setFormData] = useState({
+    username: currentUser.username,
     userID: currentUser._id,
     amount: "",
     period: "weekly",
@@ -39,6 +40,7 @@ const [isPending, setIsPending] = useState([]);
         toast.error(data.message);
       } else {
         setFormData({  // Reset form after successful payment
+          username: currentUser.username,
           userID: currentUser._id,
           amount: "",
           period: "weekly",
