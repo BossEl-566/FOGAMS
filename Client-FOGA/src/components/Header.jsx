@@ -53,7 +53,7 @@ export default function Header() {
   };
 
   return (
-    <Navbar className='border-b-2'>
+    <Navbar className='border-b-2 print:hidden'> {/* Add print:hidden here */}
       <Link to='/' className='self-center whitespace-nowrap'>
         <div className='flex items-center'>
           <img src='/src/assets/assembliesOfGodLogo.png' alt='Assemblies of God Logo' width='30' height='20' />

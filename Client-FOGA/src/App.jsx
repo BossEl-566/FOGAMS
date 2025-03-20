@@ -25,7 +25,10 @@ import Search from './pages/Search';
 import AddEvent from './components/AddEvent';
 import RecieptPage from './pages/RecieptPage';
 import AllTransanction from './pages/AllTransanction';
+import AllTithe from './pages/AllTithe';
 import ChurchRecord from './pages/ChurchRecord';
+import ViewRecord from './pages/ViewRecord';
+import UpdateRecord from './pages/UpdateRecord';
 
 export default function App() {
   const {currentUser} = useSelector((state) => state.user);
@@ -59,8 +62,11 @@ export default function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/receipt/:recieptId" element={<RecieptPage />} />
+          <Route path="/view/:viewId" element={<ViewRecord />} />
+          <Route path="/edit/:editId" element={<UpdateRecord />} />
           <Route path="/all-transaction" element={<AllTransanction />} />
           <Route path="/new-church-record" element={<ChurchRecord />} />
+          <Route path="/all-tithes" element={<AllTithe />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/daily-bible-message" element={<DashDailyBibleMessage />} />

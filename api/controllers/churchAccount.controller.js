@@ -156,3 +156,93 @@ export const createTithe = async (req, res, next) => {
     }
 };
 
+export const getChurchRecord = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, 'You are not allowed to perform this task'));
+    }
+    try {
+        const churchRecord = await ChurchAccount.find().sort({ createdAt: -1 });
+        res.status(200).json(churchRecord);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getClickedChurchRecord = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, 'You are not allowed to perform this task'));
+    }
+    try {
+        const clickedChurchRecord = await ChurchAccount.findById(req.params.churchAccountId);
+        res.status(200).json(clickedChurchRecord);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const updateChurchRecord = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, 'You are not allowed to perform this task'));
+    }
+    try {
+        const { userId, nameOfThoseWhoPaid, thanksgiving, welfare, communityImpact, sundayOfferingFirstService, sundayOfferingSecondService, sundayOfferingThirdService, childrenServiceOffering, sundaySchool, midWeekOffering, fridayPrayerOffering, ifAnySpecialOfferingSpecify } = req.body;
+        const updatedChurchRecord = await ChurchAccount.findByIdAndUpdate(
+            req.params.churchAccountId,
+            {
+                $set: {
+                    userId,
+                    nameOfThoseWhoPaid,
+                    thanksgiving,
+                    welfare,
+                    communityImpact,
+                    sundayOfferingFirstService,
+                    sundayOfferingSecondService,
+                    sundayOfferingThirdService,
+                    childrenServiceOffering,
+                    sundaySchool,
+                    midWeekOffering,
+                    fridayPrayerOffering,
+                    ifAnySpecialOfferingSpecify,
+                },
+            },
+            { new: true }
+        );
+        res.status(200).json(updatedChurchRecord);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getAllTithe = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, 'You are not allowed to perform this task'));
+    }
+    try {
+        const tithes = await Tithe.find().sort({ createdAt: -1 });
+        res.status(200).json(tithes);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const updateTitheRecord = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, 'You are not allowed to perform this task'));
+    }
+    try {
+        const { amount } = req.body;
+        const updatedTithe = await Tithe.findByIdAndUpdate(
+            req.params.titheId,
+            {
+                $set: {
+                    amount,
+                },
+            },
+            { new: true }
+        );
+        res.status(200).json(updatedTithe);
+    } catch (error) {
+        next(error);
+    }
+};

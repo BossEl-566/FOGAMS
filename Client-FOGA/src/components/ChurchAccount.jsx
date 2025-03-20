@@ -1,42 +1,67 @@
-import React from 'react';
+import { Button } from 'flowbite-react';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
 export default function ChurchAccount() {
-  // Dummy data for demonstration
-  const lastWeekRecords = [
-    { name: 'John Doe', amount: 50, method: 'Mobile Money' },
-    { name: 'Jane Smith', amount: 100, method: 'Physical Cash' },
-  ];
+  const [records, setRecords] = useState([]);
+  const [firstRecord, setFirstRecord] = useState({});
+  const [secondRecord, setSecondRecord] = useState({});
 
-  const monthlyTithe = [
-    { name: 'John Doe', amount: 200 },
-    { name: 'Jane Smith', amount: 150 },
-  ];
+  const fetchRecords = async () => {
+    try {
+      const res = await fetch('api/church-account/get-church-record', {
+        method: 'GET',
+      });
+      const data = await res.json();
+      setRecords(data);
+      setFirstRecord(data[0]);
+      setSecondRecord(data[1]);
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to fetch records. Please try again.');
+    }
+  };
 
-  const yearlyTithe = [
-    { name: 'John Doe', amount: 2400 },
-    { name: 'Jane Smith', amount: 1800 },
-  ];
+  useEffect(() => {
+    fetchRecords();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6 w-full">
       {/* Header */}
       <header className="mb-8 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
             Church Account Dashboard
           </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Last modified: October 10, 2023
-          </p>
+          
+          {firstRecord && (
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Last modified:{" "}
+              {new Date(firstRecord.createdAt).toLocaleDateString("en-US", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })}
+            </p>
+            
+          )}
         </div>
+        <Link to="/all-tithes">
+        <Button
+            gradientDuoTone="purpleToBlue"
+            size="sm"
+            outline
+            className="mt-2 mr-2"
+          > view all tithes
+          </Button>
+          </Link>
         {/* Add New Record Button */}
         <Link to="/new-church-record">
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300"
-        >
-          Add New Record
-        </button>
+          <Button gradientDuoTone="purpleToBlue" outline>
+            Add New Record
+          </Button>
         </Link>
       </header>
 
@@ -49,106 +74,151 @@ export default function ChurchAccount() {
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
               Tithe Records
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Last Week</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {lastWeekRecords.length} People
-                </p>
+            {firstRecord && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Last Week</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {(firstRecord?.nameOfThoseWhoPaid?.length || 0)} People
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Total Amount</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    GHS{" "}
+                    {(
+                      (firstRecord.thanksgiving || 0) +
+                      (firstRecord.welfare || 0) +
+                      (firstRecord.communityImpact || 0) +
+                      (firstRecord.sundayOfferingFirstService || 0) +
+                      (firstRecord.sundayOfferingSecondService || 0) +
+                      (firstRecord.sundayOfferingThirdService || 0) +
+                      (firstRecord.childrenServiceOffering || 0) +
+                      (firstRecord.sundaySchool || 0) +
+                      (firstRecord.midWeekOffering || 0) +
+                      (firstRecord.fridayPrayerOffering || 0) +
+                      (firstRecord.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0) +
+                      (firstRecord.ifAnySpecialOfferingSpecify?.reduce((sum, event) => sum + (event.amount || 0), 0) || 0)
+                    ).toLocaleString()}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Total Amount</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  GHS{lastWeekRecords.reduce((sum, record) => sum + record.amount, 0)}
-                </p>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Special Appeals */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
-              Special Appeals
-            </h2>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <p className="text-gray-900 dark:text-white">Thanksgiving</p>
-                <p className="text-gray-600 dark:text-gray-400">GHS 500</p>
-              </div>
-              <div className="flex justify-between items-center">
-                <p className="text-gray-900 dark:text-white">Welfare</p>
-                <p className="text-gray-600 dark:text-gray-400">GHS 300</p>
-              </div>
-              <div className="flex justify-between items-center">
-                <p className="text-gray-900 dark:text-white">Community Impact</p>
-                <p className="text-gray-600 dark:text-gray-400">GHS 700</p>
+          {firstRecord && (
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+                Special Appeals
+              </h2>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Thanksgiving</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.thanksgiving || 0}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Welfare</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.welfare || 0}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Community Impact</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.communityImpact || 0}</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Offerings */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
-              Offerings
-            </h2>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <p className="text-gray-900 dark:text-white">Sunday Offering (1st Service)</p>
-                <p className="text-gray-600 dark:text-gray-400">GHS 1200</p>
-              </div>
-              <div className="flex justify-between items-center">
-                <p className="text-gray-900 dark:text-white">Sunday Offering (2nd Service)</p>
-                <p className="text-gray-600 dark:text-gray-400">GHS 900</p>
-              </div>
-              <div className="flex justify-between items-center">
-                <p className="text-gray-900 dark:text-white">Sunday Offering (3rd Service)</p>
-                <p className="text-gray-600 dark:text-gray-400">GHS 1100</p>
-              </div>
-              <div className="flex justify-between items-center">
-                <p className="text-gray-900 dark:text-white">Children Service Offering</p>
-                <p className="text-gray-600 dark:text-gray-400">GHS 400</p>
-              </div>
-              <div className="flex justify-between items-center">
-                <p className="text-gray-900 dark:text-white">Sunday School</p>
-                <p className="text-gray-600 dark:text-gray-400">GHS 300</p>
-              </div>
-              <div className="flex justify-between items-center">
-                <p className="text-gray-900 dark:text-white">Mid-Week Offering</p>
-                <p className="text-gray-600 dark:text-gray-400">GHS 500</p>
+          {firstRecord && (
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+                Offerings
+              </h2>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Sunday Offering (1st Service)</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.sundayOfferingFirstService || 0}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Sunday Offering (2nd Service)</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.sundayOfferingSecondService || 0}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Sunday Offering (3rd Service)</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.sundayOfferingThirdService || 0}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Children Service Offering</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.childrenServiceOffering || 0}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Sunday School</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.sundaySchool || 0}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Mid-Week Offering</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.midWeekOffering || 0}</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Right Section */}
         <div className="col-span-1">
           {/* Previous Week Records */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 w-full h-[80vh] overflow-y-auto">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
               Previous Week Records
             </h2>
             <div className="space-y-4">
-              {lastWeekRecords.map((record, index) => (
-                <div key={index} className="flex justify-between items-center">
+              {records.map((record) => (
+                <div
+                  key={record._id}
+                  className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0"
+                >
                   <div>
-                    <p className="text-gray-900 dark:text-white">{record.name}</p>
+                    <p className="text-gray-900 dark:text-white">
+                      {new Date(record.createdAt).toLocaleDateString("en-US", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {record.method}
+                      Total Amount: GHS{" "}
+                      {(
+                        (record.thanksgiving || 0) +
+                        (record.welfare || 0) +
+                        (record.communityImpact || 0) +
+                        (record.sundayOfferingFirstService || 0) +
+                        (record.sundayOfferingSecondService || 0) +
+                        (record.sundayOfferingThirdService || 0) +
+                        (record.childrenServiceOffering || 0) +
+                        (record.sundaySchool || 0) +
+                        (record.midWeekOffering || 0) +
+                        (record.fridayPrayerOffering || 0) +
+                        (record.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0) +
+                        (record.ifAnySpecialOfferingSpecify?.reduce((sum, event) => sum + (event.amount || 0), 0) || 0)
+                      ).toLocaleString()}
                     </p>
                   </div>
                   <div className="flex space-x-2">
-                    <a
-                      href={`/view/${record.name}`} // Replace with actual view link
-                      className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                    <Link
+                      to={`/view/${record._id}`}
+                      state={{ recordId: record._id }}
+                      className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
                     >
                       View
-                    </a>
-                    <a
-                      href={`/edit/${record.name}`} // Replace with actual edit link
-                      className="text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+                    </Link>
+                    <Link
+                      to={`/edit/${record._id}`}
+                      state={{ recordId: record._id }}
+                      className="text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors duration-200"
                     >
                       Edit
-                    </a>
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -160,21 +230,106 @@ export default function ChurchAccount() {
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
               Tithe Overview
             </h2>
-            <div className="space-y-4">
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Last Month</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  GHS{monthlyTithe.reduce((sum, record) => sum + record.amount, 0)}
-                </p>
+            {firstRecord && (
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Current Record</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    GHS{" "}
+                    {(
+                      (firstRecord.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0
+                    ).toLocaleString())}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Last Year</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  GHS{yearlyTithe.reduce((sum, record) => sum + record.amount, 0)}
-                </p>
+            )}
+            {secondRecord && (
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Previous Record</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    GHS{" "}
+                    {(
+                      (secondRecord.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0
+                    ).toLocaleString())}
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
+        </div>
+      </div>
+
+      {/* All Tithe Records Section */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-6 h-[80vh] overflow-y-auto">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+          All Tithe Records
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  Date
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Total Amount
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {records.map((record) => (
+                <tr
+                  key={record._id}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                >
+                  <td className="px-6 py-4">
+                    {new Date(record.createdAt).toLocaleDateString("en-US", {
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </td>
+                  <td className="px-6 py-4">
+                    GHS{" "}
+                    {(
+                      (record.thanksgiving || 0) +
+                      (record.welfare || 0) +
+                      (record.communityImpact || 0) +
+                      (record.sundayOfferingFirstService || 0) +
+                      (record.sundayOfferingSecondService || 0) +
+                      (record.sundayOfferingThirdService || 0) +
+                      (record.childrenServiceOffering || 0) +
+                      (record.sundaySchool || 0) +
+                      (record.midWeekOffering || 0) +
+                      (record.fridayPrayerOffering || 0) +
+                      (record.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0) +
+                      (record.ifAnySpecialOfferingSpecify?.reduce((sum, event) => sum + (event.amount || 0), 0) || 0)
+                    ).toLocaleString()}
+                  </td>
+                  <td className="px-6 py-4">
+                    <Link
+                      to={`/view/${record._id}`}
+                      state={{ recordId: record._id }}
+                      className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
+                    >
+                      View
+                    </Link>
+                    <Link
+                      to={`/edit/${record._id}`}
+                      state={{ recordId: record._id }}
+                      className="text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors duration-200 ml-2"
+                    >
+                      Edit
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

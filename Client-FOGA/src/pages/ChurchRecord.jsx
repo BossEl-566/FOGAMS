@@ -1,7 +1,5 @@
 import { Button, Modal } from 'flowbite-react';
-import { set } from 'mongoose';
 import React, { useEffect, useState } from 'react';
-import { use } from 'react';
 import toast from 'react-hot-toast';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
