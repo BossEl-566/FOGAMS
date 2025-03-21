@@ -12,6 +12,7 @@ import membershipRoute from './routes/membership.route.js'; // Membership-relate
 import messageRoute from './routes/message.route.js'; // Message-related routes
 import titheRoute from './routes/tithe.route.js'
 import churchAccountRoute from './routes/churchAccount.route.js'; // Church account routes
+import baptismRoute from './routes/baptism.route.js'; // Baptism-related routes
 import cookieParser from 'cookie-parser'; // Middleware to parse cookies
 import jwt from 'jsonwebtoken'; // JWT for authentication
 import { createServer } from 'http'; // HTTP server module
@@ -98,7 +99,7 @@ app.use('/api/membership', membershipRoute); // Routes for memberships
 app.use('/api/messages', messageRoute); // Routes for messages
 app.use('/api/tithe', titheRoute); // Routes for tithes
 app.use('/api/church-account', churchAccountRoute); // Routes for church account
-
+app.use('/api/baptism', baptismRoute); // Routes for baptism
 // Error handling middleware
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500; // Default to 500 if no status code is set
