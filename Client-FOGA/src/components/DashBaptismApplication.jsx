@@ -77,7 +77,7 @@ export default function DashBaptismApplication() {
             <div className="space-y-4">
               <TextInput type="text" placeholder="Name" value={username} onChange={(e) => setUserName(e.target.value)} />
               <TextInput type="number" placeholder="Age" value={age} onChange={(e) => setAge(e.target.value)} />
-              <Button gradientDuoTone="purpleToBlue" onClick={handleApply}>Apply</Button>
+              <Button gradientDuoTone="purpleToBlue" onClick={handleApply} outline>Apply</Button>
             </div>
           </div>
         )}
@@ -93,7 +93,7 @@ export default function DashBaptismApplication() {
                     <p>{applicant.username}</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">{applicant.age} years old</p>
                   </div>
-                  <Button gradientDuoTone="purpleToBlue" onClick={() => { setIsModalOpen(true); setApplicantId(applicant._id); }}>Baptize</Button>
+                  <Button gradientDuoTone="purpleToBlue" onClick={() => { setIsModalOpen(true); setApplicantId(applicant._id); }}outline>Baptize</Button>
                 </li>
               )) : <p className="text-gray-600 dark:text-gray-400">No applicants yet.</p>}
             </ul>
@@ -104,11 +104,11 @@ export default function DashBaptismApplication() {
       <Modal show={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <Modal.Header>Confirm Baptism</Modal.Header>
         <Modal.Body>
-          <p className="text-gray-900 dark:text-white">Are you sure you want to baptize this user?</p>
+          <p className="text-gray-900 dark:text-white">Are you sure you user is baptize?</p>
         </Modal.Body>
         <Modal.Footer>
           <Button color="gray" onClick={() => setIsModalOpen(false)}>Cancel</Button>
-          <Button gradientDuoTone="purpleToBlue" onClick={handleBaptize}>Confirm Baptism</Button>
+          <Button gradientDuoTone="purpleToBlue" onClick={handleBaptize} outline>Confirm Baptism</Button>
         </Modal.Footer>
       </Modal>
     </div>

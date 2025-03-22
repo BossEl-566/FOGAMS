@@ -2,11 +2,12 @@ import mongoose from "mongoose";
 
 const BaptismSchema = new mongoose.Schema(
   {
-    username: {
-      type: String,
-      required: true,
-    },
     userID: {
+        type: String,
+        required: true,
+        unique: true, 
+    },
+    username: {
       type: String,
       required: true,
     },
