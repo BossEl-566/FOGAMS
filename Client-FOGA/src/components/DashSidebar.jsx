@@ -4,6 +4,7 @@ import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable
 import { BiMessageRounded, BiChat } from "react-icons/bi";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { FaPray } from "react-icons/fa";
+import { FaPollH } from "react-icons/fa";
 import { MdEventAvailable, MdOutlineAttachMoney } from "react-icons/md";
 import { Link, useLocation } from 'react-router-dom';
 import { signoutSuccess } from '../radux/user/userSlice';
@@ -79,8 +80,12 @@ export default function DashSidebar() {
                 Baptism
               </Sidebar.Item>
             </Link>
+            <Link to='/dashboard?tab=poll'>
+              <Sidebar.Item active={tab === 'poll'} href="#" icon={FaPollH} as='div'>
+                Poll
+              </Sidebar.Item>
+            </Link>
             </>
-            
           )}
           {!currentUser.isMember && (
             <Link to='/dashboard?tab=join'>
