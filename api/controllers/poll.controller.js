@@ -135,3 +135,18 @@ export const getPollResults = async (req, res, next) => {
         next(error);
     }
 };
+
+export const deletePosition = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, 'You are not allowed to perform this task'));
+    }
+    try {
+        // Find and delete the position
+        await Position.findByIdAndDelete(req.params.positionId);
+
+        // Respond with success message
+        res.status(200).json({ message: 'Position deleted successfully' });
+    } catch (error) {
+        next(error);
+    }
+};

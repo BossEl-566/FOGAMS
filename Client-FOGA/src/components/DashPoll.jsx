@@ -16,6 +16,8 @@ export default function DashPoll() {
   const [selectedPollId, setSelectedPollId] = useState(''); // Poll ID for the modal
   const [selectedCandidateName, setSelectedCandidateName] = useState(''); // Candidate name for the modal
   const [visualData, setVisualData] = useState([]); // Data for visualization
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Delete modal state
+  const [pollToDelete, setPollToDelete] = useState(null); // Poll to delete
 
   // Fetch all polls for voting
   useEffect(() => {
@@ -76,6 +78,12 @@ export default function DashPoll() {
         setTitle('');
         setCandidates(['']);
         setExpiresAt('');
+        // Refresh polls list
+        const fetchResponse = await fetch('/api/poll/get');
+        if (fetchResponse.ok) {
+          const data = await fetchResponse.json();
+          setPolls(data);
+        }
       } else {
         throw new Error('Failed to create poll');
       }
@@ -94,6 +102,38 @@ export default function DashPoll() {
       setIsModalOpen(true);
     } else {
       toast.error('Please select a valid candidate.');
+    }
+  };
+
+  // Open delete confirmation modal
+  const openDeleteModal = (poll) => {
+    setPollToDelete(poll);
+    setIsDeleteModalOpen(true);
+  };
+
+  // Handle poll deletion
+  const handleDeletePoll = async () => {
+    if(!currentUser.isAdmin) return toast.error('You are not authorized to perform this action.');
+    if (!pollToDelete) return;
+    
+    try {
+      const response = await fetch(`/api/poll/delete/${pollToDelete._id}`, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        toast.success('Poll deleted successfully!');
+        // Remove the deleted poll from state
+        setPolls(polls.filter(p => p._id !== pollToDelete._id));
+        setVisualData(visualData.filter(p => p._id !== pollToDelete._id));
+      } else {
+        throw new Error('Failed to delete poll');
+      }
+    } catch (err) {
+      toast.error(`Error deleting poll: ${err.message}`);
+    } finally {
+      setIsDeleteModalOpen(false);
+      setPollToDelete(null);
     }
   };
 
@@ -146,6 +186,7 @@ export default function DashPoll() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 w-full">
       {/* Admin Panel */}
+      {currentUser.isAdmin && (
       <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Create New Poll</h2>
         <form onSubmit={handleCreatePoll}>
@@ -205,6 +246,7 @@ export default function DashPoll() {
           </button>
         </form>
       </div>
+      )}
 
       {/* Display All Polls for Voting */}
       <div className="space-y-6">
@@ -213,7 +255,17 @@ export default function DashPoll() {
 
           return (
             <div key={poll._id} className="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{poll.title}</h2>
+              <div className="flex justify-between items-start">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{poll.title}</h2>
+                {currentUser.isAdmin && (
+                  <button
+                    onClick={() => openDeleteModal(poll)}
+                    className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Candidates</label>
                 <div className="mt-2 space-y-2">
@@ -268,7 +320,15 @@ export default function DashPoll() {
 
             return (
               <div key={poll._id} className="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{poll.title}</h3>
+                <div className="flex justify-between items-start">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{poll.title}</h3>
+                  <button
+                    onClick={() => openDeleteModal(poll)}
+                    className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
+                  >
+                    Delete
+                  </button>
+                </div>
                 {/* Pie Chart */}
                 <div className="mb-4">
                   <h4 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Vote Distribution (Pie Chart)</h4>
@@ -285,7 +345,7 @@ export default function DashPoll() {
         </div>
       )}
 
-      {/* Confirmation Modal */}
+      {/* Vote Confirmation Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-96">
@@ -305,6 +365,32 @@ export default function DashPoll() {
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
                 Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-96">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Delete Poll</h3>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              Are you sure you want to delete the poll <strong>{pollToDelete?.title}</strong>? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeletePoll}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Delete
               </button>
             </div>
           </div>
