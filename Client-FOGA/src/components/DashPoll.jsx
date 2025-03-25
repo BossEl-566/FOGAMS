@@ -303,6 +303,9 @@ export default function DashPoll() {
       {currentUser.isAdmin && (
         <div className="space-y-6 mt-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Poll Results Visualization</h2>
+          <p className="text-gray-700 dark:text-gray-300">
+            Total Vote: {visualData.reduce((sum, poll) => sum + poll.candidates.reduce((s, c) => s + c.votes, 0), 0)}
+          </p>
           {visualData.map((poll) => {
             const totalVotes = poll.candidates.reduce((sum, candidate) => sum + candidate.votes, 0);
             const colors = generateColors(poll.candidates.length);
