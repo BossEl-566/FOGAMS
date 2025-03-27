@@ -15,6 +15,7 @@ import Chat from '../components/Chat';
 import ChurchAccount from '../components/ChurchAccount';
 import DashBaptismApplication from '../components/DashBaptismApplication';
 import DashPoll from '../components/DashPoll';
+import DashBooking from '../components/DashBooking';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -58,6 +59,7 @@ export default function Dashboard() {
       {/* baptism */}
       {tab === 'baptism' && <DashBaptismApplication />}
       {tab === 'poll' && <DashPoll />}
+      {tab === 'book' && <DashBooking />}
     </div>
   );
 }

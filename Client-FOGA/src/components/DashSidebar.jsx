@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Sidebar } from "flowbite-react";
 import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser, HiAnnotation, HiChartPie, HiFolderDownload } from "react-icons/hi";
 import { BiMessageRounded, BiChat } from "react-icons/bi";
+import { BsCalendarCheck } from "react-icons/bs"; 
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { FaPray } from "react-icons/fa";
 import { FaPollH } from "react-icons/fa";
@@ -83,6 +84,11 @@ export default function DashSidebar() {
             <Link to='/dashboard?tab=poll'>
               <Sidebar.Item active={tab === 'poll'} href="#" icon={FaPollH} as='div'>
                 Poll
+              </Sidebar.Item>
+            </Link>
+            <Link to='/dashboard?tab=book'>
+              <Sidebar.Item active={tab === 'book'} href="#" icon={BsCalendarCheck} as='div'>
+                Book Appointment
               </Sidebar.Item>
             </Link>
             </>

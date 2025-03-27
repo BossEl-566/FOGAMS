@@ -50,7 +50,10 @@ const [isPending, setIsPending] = useState([]);
         });
         console.log(data);
         toast.success("Payment successful");
-        window.location.reload();
+        fetch("/api/tithe/getTithe", {
+          method: "GET",
+        });
+        
       }
     } catch (error) {
       console.error(error);
