@@ -91,6 +91,11 @@ export default function DashSidebar() {
                 Book Appointment
               </Sidebar.Item>
             </Link>
+            <Link to='/dashboard?tab=anonymous'>
+              <Sidebar.Item active={tab === 'anonymous'} href="#" icon={BiMessageRounded} as='div'>
+                Anonymous Message
+              </Sidebar.Item>
+            </Link>
             </>
           )}
           {!currentUser.isMember && (
