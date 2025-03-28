@@ -15,6 +15,7 @@ import churchAccountRoute from './routes/churchAccount.route.js'; // Church acco
 import baptismRoute from './routes/baptism.route.js'; // Baptism-related routes
 import bookRoute from './routes/book.route.js'; // Book-related routes
 import pollRoute from './routes/poll.route.js'; // Poll-related routes
+import anonymousRoute from './routes/anonymous.route.js'; // Anonymouse-related routes
 import cookieParser from 'cookie-parser'; // Middleware to parse cookies
 import jwt from 'jsonwebtoken'; // JWT for authentication
 import { createServer } from 'http'; // HTTP server module
@@ -105,6 +106,7 @@ app.use('/api/baptism', baptismRoute); // Routes for baptism
 // Error handling middleware
 app.use('/api/poll', pollRoute); // Routes for polls
 app.use('/api/book', bookRoute); // Routes for books
+app.use('/api/anonymous', anonymousRoute); // Routes for anonymouse
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500; // Default to 500 if no status code is set
   const message = err.message || 'Internal Server Error'; // Default to generic error message
