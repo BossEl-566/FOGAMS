@@ -11,8 +11,10 @@ export default function DashBooking() {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedDateFilter, setSelectedDateFilter] = useState('');
     const [bookingId, setBookingId] = useState('');
+    const [viewingBookedMembers, setViewingBookedMembers] = useState(null);
   
     console.log(bookings);
+    console.log(viewingBookedMembers)
 
   // Fetch available slots on component mount
   useEffect(() => {
@@ -110,7 +112,7 @@ export default function DashBooking() {
     }
   };
 
-  const handleBookSlot = async (slotId) => {
+  const handleBookSlot = async (slotId, parentSlot) => {
     console.log(slotId);
     console.log(bookingId);
     try {
@@ -154,6 +156,48 @@ export default function DashBooking() {
       month: 'long',
       day: 'numeric'
     });
+  };
+
+  const fetchBookedMembers = async (slotId) => {
+    try {
+      const response = await fetch(`/api/book/get-names/${slotId}`);
+      if (!response.ok) throw new Error('Failed to fetch booked members');
+      const data = await response.json();
+      setViewingBookedMembers(data);
+    } catch (error) {
+      toast.error(error.message);
+      setViewingBookedMembers(null);
+    }
+  };
+  const handleDeleteSlot = async (slotId, bookingId) => {
+    console.log(bookingId);
+    console.log(slotId);
+    try {
+      setIsLoading(true);
+      const response = await fetch(`/api/book/delete/${bookingId}/${slotId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to delete time slot');
+      }
+  
+      toast.success('Time slot deleted successfully!');
+      // Refresh the availability list
+      const refreshResponse = await fetch('/api/book/get');
+      if (refreshResponse.ok) {
+        const data = await refreshResponse.json();
+        setBookings(data);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (currentUser.isPastor) {
@@ -242,37 +286,97 @@ export default function DashBooking() {
             </form>
           </div>
 
+          
           {/* Pastor's view of all availability */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
-            <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Your Availability</h2>
-            {availableSlots.length === 0 ? (
-              <p className="text-gray-600 dark:text-gray-400">No availability created yet</p>
-            ) : (
-              <div className="space-y-4">
-                {availableSlots.map((slot) => (
-                  <div key={slot.date} className="border-b border-gray-200 dark:border-gray-700 pb-4">
-                    <h3 className="font-medium text-lg text-gray-800 dark:text-white">
-                      {formatDate(slot.date)}
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                      {slot.timeSlots.map((timeSlot, idx) => (
-                        <div key={idx} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3">
-                          <div className="flex justify-between items-center">
-                            <span className="font-medium text-gray-800 dark:text-white">
-                              {timeSlot.startTime} - {timeSlot.endTime}
-                            </span>
-                            <span className="text-sm text-gray-600 dark:text-gray-300">
-                              {timeSlot.bookedBy.length} booked
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+<div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+  <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Your Availability</h2>
+  {availableSlots.length === 0 ? (
+    <p className="text-gray-600 dark:text-gray-400">No availability created yet</p>
+  ) : (
+    <div className="space-y-4">
+      {bookings.map((booking) => (
+  booking.availableSlots.map((slot) => (
+    <div key={slot._id} className="border-b border-gray-200 dark:border-gray-700 pb-4">
+      <div className="flex justify-between items-center">
+        <h3 className="font-medium text-lg text-gray-800 dark:text-white">
+          {formatDate(slot.date)}
+        </h3>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+        {slot.timeSlots.map((timeSlot) => (
+          <div key={timeSlot._id} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3">
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-800 dark:text-white">
+                {timeSlot.startTime} - {timeSlot.endTime}
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600 dark:text-gray-300">
+                  {timeSlot.bookedBy.length} booked
+                </span>
+                {timeSlot.bookedBy.length > 0 && (
+                  <button
+                    onClick={() => fetchBookedMembers(timeSlot._id)}
+                    className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+                  >
+                    View names
+                  </button>
+                )}
+                <button
+                  onClick={() => handleDeleteSlot(timeSlot._id, booking._id)}
+                  disabled={isLoading}
+                  className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 text-sm flex items-center gap-1"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Delete
+                </button>
               </div>
-            )}
+            </div>
           </div>
+        ))}
+      </div>
+    </div>
+  ))
+))}
+    </div>
+    
+  )}
+</div>
+{/* Booked Members Modal */}
+{viewingBookedMembers && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+          Booked Members
+        </h3>
+        <button
+          onClick={() => setViewingBookedMembers(null)}
+          className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div className="space-y-2">
+        {viewingBookedMembers.length > 0 ? (
+          viewingBookedMembers.map((member, index) => (
+            <div key={index} className="flex items-center gap-3 p-2 bg-gray-100 dark:bg-gray-700 rounded">
+              <span className="font-medium text-gray-800 dark:text-white">
+                {member.username}
+              </span>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-600 dark:text-gray-400">No members booked yet</p>
+        )}
+      </div>
+    </div>
+  </div>
+)}
         </div>
       </div>
     );
@@ -280,89 +384,82 @@ export default function DashBooking() {
 
   // Member view
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6 mb-8">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Pastor's Availability</h1>
-          
-          {/* Date filter */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Filter by Date
-            </label>
-            <input
-              type="date"
-              value={selectedDateFilter}
-              onChange={(e) => setSelectedDateFilter(e.target.value)}
-              className="w-full md:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-            />
-          </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 w-full">
+  <div className="max-w-3xl mx-auto">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6 mb-8">
+      <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Pastor's Availability</h1>
+      
+      {/* Date filter */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Filter by Date
+        </label>
+        <input
+          type="date"
+          value={selectedDateFilter}
+          onChange={(e) => setSelectedDateFilter(e.target.value)}
+          className="w-full md:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+        />
+      </div>
 
-          {isLoading ? (
-            <div className="flex justify-center items-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-            </div>
-          ) : filteredSlots.length === 0 ? (
-            <p className="text-gray-600 dark:text-gray-400 text-center py-8">
-              No available time slots found
-            </p>
-          ) : (
-            <div className="space-y-6">
-              {filteredSlots.map((slot) => (
-                <div key={slot?._id || slot?.date} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+      {isLoading ? (
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      ) : filteredSlots.length === 0 ? (
+        <p className="text-gray-600 dark:text-gray-400 text-center py-8">
+          No available time slots found
+        </p>
+      ) : (
+        <div className="space-y-6">
+          {bookings.map((booking) => (
+            booking.availableSlots
+              .filter(slot => 
+                selectedDateFilter ? slot.date === selectedDateFilter : true
+              )
+              .map((slot) => (
+                <div key={slot._id} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                   <div className="bg-blue-50 dark:bg-blue-900/30 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                     <h2 className="font-semibold text-lg text-gray-800 dark:text-white">
-                      {formatDate(slot?.date)}
+                      {formatDate(slot.date)}
                     </h2>
                   </div>
                   <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {slot?.timeSlots?.map((timeSlot) => (
-                      <div key={timeSlot?._id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 flex flex-col">
+                    {slot.timeSlots.map((timeSlot) => (
+                      <div key={timeSlot._id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 flex flex-col">
                         <div className="flex justify-between items-start mb-2">
                           <span className="font-medium text-gray-800 dark:text-white">
-                            {timeSlot?.startTime} - {timeSlot?.endTime}
+                            {timeSlot.startTime} - {timeSlot.endTime}
                           </span>
-                          {timeSlot?.bookedBy?.some(booking => booking.userId === currentUser._id) && (
+                          {timeSlot.bookedBy.some(booking => booking.userId === currentUser._id) && (
                             <span className="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full">
                               You're booked
                             </span>
                           )}
                         </div>
-                        {bookings?.map((booking) => ( // Loop through bookings
-                        <div key={booking._id}>
-                         {booking.availableSlots?.map((slot) => ( // Loop through availableSlots
-                            <div key={slot._id}>
-                            {slot.timeSlots?.map((timeSlot) => ( // Loop through timeSlots
                         <button
-            key={timeSlot._id}
-            id={timeSlot._id} // Setting the id dynamically
-            onClick={() => {
-              setBookingId(booking._id); // Update bookingId state
-              handleBookSlot(timeSlot._id, slot._id);
-            }}
-            disabled={timeSlot?.bookedBy?.some((booking) => booking.userId === currentUser._id) || isLoading}
-            className="mt-auto w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {timeSlot?.bookedBy?.some((booking) => booking.userId === currentUser._id) 
-              ? 'Already Booked' 
-              : 'Book Appointment'}
-          </button>
-        ))}
-      </div>
-    ))}
-  </div>
-))}
-
-
+                          onClick={() => {
+                            setBookingId(booking._id);
+                            handleBookSlot(timeSlot._id);
+                          }}
+                          disabled={timeSlot.bookedBy.some(booking => booking.userId === currentUser._id) || isLoading}
+                          className="mt-auto w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {timeSlot.bookedBy.some(booking => booking.userId === currentUser._id) 
+                            ? 'Already Booked' 
+                            : 'Book Appointment'}
+                        </button>
                       </div>
                     ))}
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              ))
+          ))}
         </div>
-      </div>
+      )}
     </div>
+  </div>
+</div>
   );
+  
 }

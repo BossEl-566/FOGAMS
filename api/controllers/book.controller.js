@@ -88,3 +88,67 @@ export const bookAppointment = async (req, res, next) => {
     
   }
 };
+
+export const getNames = async (req, res, next) => {
+  if(!req.user.isPastor) {
+    return next(errorHandler(403, 'You are not allowed to perform this task'));
+  }
+  try {
+    const { slotId } = req.params;
+
+    // Find the booking containing this time slot
+    const booking = await Booking.findOne({
+      'availableSlots.timeSlots._id': slotId
+    });
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Time slot not found' });
+    }
+
+    // Find the specific time slot
+    let bookedMembers = [];
+    booking.availableSlots.forEach(slot => {
+      slot.timeSlots.forEach(timeSlot => {
+        if (timeSlot._id.toString() === slotId) {
+          bookedMembers = timeSlot.bookedBy;
+        }
+      });
+    });
+
+    res.status(200).json(bookedMembers);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteSlot = async (req, res, next) => {
+  if (!req.user.isPastor) {
+    return next(errorHandler(403, 'You are not allowed to perform this task'));
+  }
+  try {
+    const { bookingId, slotId } = req.params;
+
+    // Find and update the booking document
+    const booking = await Booking.findOneAndUpdate(
+      { _id: bookingId, 'availableSlots.timeSlots._id': slotId },
+      { $pull: { 'availableSlots.$[].timeSlots': { _id: slotId } } },
+      { new: true }
+    );
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Slot not found' });
+    }
+
+    // Optional: Clean up empty date slots
+    await Booking.updateOne(
+      { _id: bookingId },
+      { $pull: { availableSlots: { timeSlots: { $size: 0 } } } }
+    );
+
+    res.status(200).json(booking);
+    
+  } catch (error) {
+    next(error);
+    
+  }
+};
