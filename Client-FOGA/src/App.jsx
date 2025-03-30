@@ -49,7 +49,7 @@ export default function App() {
       <ScrollToTop />
       <Header />
       <Routes>
-      <Route path="/" element={currentUser ? <Home /> : <SignIn />} />
+      <Route path="/" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
         
         <Route path="/about" element={<About />} />

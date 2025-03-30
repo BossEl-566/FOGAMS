@@ -101,7 +101,7 @@ export default function Header() {
             pill 
             onClick={() => dispatch(toggleTheme())}
           >
-            {theme === 'light' ? <FaSun className="md:text-sm" /> : <FaMoon className="md:text-sm" />}
+            {theme === 'light' ? <FaSun className="text-sm" /> : <FaMoon className="text-sm" />}
           </Button>
           
           <Button className='w-10 h-10' color='gray' pill onClick={toggleSearch}>
