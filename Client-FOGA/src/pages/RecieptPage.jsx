@@ -69,8 +69,8 @@ const ReceiptPage = () => {
         {/* Header with Logo */}
         <div className="flex flex-col items-center mb-6">
           <img src={logo} alt="Church Logo" className="h-20 w-auto" />
-          <h2 className="text-2xl font-bold dark:text-gray-200 text-gray-800 mt-4">
-            Fellowship of Grace Assemblies of God
+          <h2 className="text-2xl font-bold dark:text-gray-200 text-gray-800 mt-4 text-center">
+            Fellowship of Grace Assemblies of God- Pedu
           </h2>
           <h3 className="text-xl font-semibold dark:text-gray-200 text-gray-800 mt-2">Payment Receipt</h3>
         </div>

@@ -53,7 +53,7 @@ const [isPending, setIsPending] = useState([]);
         fetch("/api/tithe/getTithe", {
           method: "GET",
         });
-        
+
       }
     } catch (error) {
       console.error(error);
@@ -131,7 +131,7 @@ useEffect(() => {
       <h1 className="text-2xl font-semibold mb-6">Tithe Dashboard</h1>
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg flex items-center shadow-md">
         <FaMoneyBillWave className="text-green-400 text-2xl mr-2" />
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <div className="bg-white dark:bg-gray-800 p-6">
         {firstTransaction ? (
     <>
       {/* Title */}
