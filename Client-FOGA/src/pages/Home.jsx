@@ -9,6 +9,7 @@ import slide1 from '../assets/slide1.jpg';
 import slide2 from '../assets/slide2.jpg';
 import slide3 from '../assets/slide3.jpg';
 import slide4 from '../assets/slide4.jpg';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
   const sliderRef = useRef(null);
@@ -60,11 +61,6 @@ export default function Home() {
 
   return (
     <div className="w-full h-screen overflow-hidden relative font-['Poppins']">
-      {/* Add Poppins font to your Tailwind config or use a style tag */}
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-      `}</style>
-      
       <Slider 
         {...settings} 
         className="w-full h-full" 
@@ -99,13 +95,15 @@ export default function Home() {
               <p className="text-2xl md:text-3xl text-white mb-8 font-light">
                 {slide.text}
               </p>
+              <Link to="/how-to-join-us">
               <motion.button
-                className="px-10 py-4 bg-blue-600 text-white rounded-xl text-xl font-semibold shadow-lg hover:bg-blue-700 transition-colors pointer-events-auto"
+                className="px-10 py-4 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-xl text-xl font-semibold shadow-lg hover:shadow-yellow-400/40 transition-colors pointer-events-auto"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Join Church
               </motion.button>
+              </Link>
             </motion.div>
           </div>
         ))}
