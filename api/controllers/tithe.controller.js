@@ -1,4 +1,5 @@
 import Tithe from '../models/tithe.model.js';
+import { errorHandler } from '../utils/error.js';
 
 
 export const createTithe = async (req, res, next) => {
@@ -44,7 +45,7 @@ export const getTithe = async (req, res, next) => {
 
 
 export const getTitheId = async (req, res, next) => {
-    if(!req.user.isMember || !req.user.isAdmin) {
+    if(!req.user.isMember) {
         return next(errorHandler(403, 'You must be a member to view tithes'));
     }
     try {
