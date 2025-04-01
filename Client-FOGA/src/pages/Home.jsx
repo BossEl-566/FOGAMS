@@ -353,6 +353,444 @@ export default function Home() {
     </motion.div>
   </div>
 </section>
+{/* Upcoming Events & Daily Bible Message Section */}
+<section className="w-full py-20 bg-gray-50">
+  <div className="container mx-auto px-4">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      {/* Upcoming Events Column */}
+      <div className="lg:col-span-2">
+        <div className="text-center lg:text-left mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Upcoming Events
+          </h2>
+          <div className="w-24 h-1 bg-blue-600 mx-auto lg:mx-0 mb-6"></div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto lg:mx-0">
+            Join us for these special gatherings and experience God's presence
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Event Card 1 */}
+          <motion.div 
+            whileHover={{ y: -5 }}
+            className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100"
+          >
+            <div className="p-6">
+              <div className="flex items-center mb-4">
+                <div className="bg-blue-100 text-blue-800 rounded-lg px-4 py-2 mr-4">
+                  <div className="font-bold text-2xl">24</div>
+                  <div className="text-xs">JUNE</div>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Night of Worship</h3>
+                  <p className="text-blue-600">6:30 PM - Sanctuary</p>
+                </div>
+              </div>
+              <p className="text-gray-600 mb-4">
+                An evening of powerful worship and prophetic ministry with our worship team
+              </p>
+              <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+                Learn More →
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Event Card 2 */}
+          <motion.div 
+            whileHover={{ y: -5 }}
+            className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100"
+          >
+            <div className="p-6">
+              <div className="flex items-center mb-4">
+                <div className="bg-blue-100 text-blue-800 rounded-lg px-4 py-2 mr-4">
+                  <div className="font-bold text-2xl">30</div>
+                  <div className="text-xs">JUNE</div>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Youth Conference</h3>
+                  <p className="text-blue-600">9:00 AM - Fellowship Hall</p>
+                </div>
+              </div>
+              <p className="text-gray-600 mb-4">
+                Annual youth gathering with guest speaker Pastor Michael Johnson
+              </p>
+              <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+                Learn More →
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Event Card 3 */}
+          <motion.div 
+            whileHover={{ y: -5 }}
+            className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100"
+          >
+            <div className="p-6">
+              <div className="flex items-center mb-4">
+                <div className="bg-blue-100 text-blue-800 rounded-lg px-4 py-2 mr-4">
+                  <div className="font-bold text-2xl">07</div>
+                  <div className="text-xs">JULY</div>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Baptism Service</h3>
+                  <p className="text-blue-600">2:00 PM - Baptismal Pool</p>
+                </div>
+              </div>
+              <p className="text-gray-600 mb-4">
+                Celebration of new believers taking this important step of faith
+              </p>
+              <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+                Learn More →
+              </button>
+            </div>
+          </motion.div>
+
+          {/* View All Events Button */}
+          <div className="md:col-span-2 text-center mt-6">
+            <Link to="/events">
+              <motion.button
+                className="px-6 py-3 bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold rounded-lg transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                View All Upcoming Events
+              </motion.button>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Daily Bible Message Column */}
+      <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 h-fit sticky top-6">
+        <div className="relative">
+          <img 
+            src="/src/assets/daily-bible.jpg" // Replace with your image
+            alt="Daily Bible Message"
+            className="w-full h-48 object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+          <div className="absolute bottom-0 left-0 p-6">
+            <h3 className="text-2xl font-bold text-white">Daily Bible Message</h3>
+            <p className="text-white/90">Today's Spiritual Nourishment</p>
+          </div>
+        </div>
+
+        <div className="p-6">
+          <div className="flex items-center mb-4">
+            <div className="bg-blue-100 text-blue-800 rounded-lg px-3 py-1 mr-3">
+              <div className="font-medium text-sm">JUNE 20</div>
+            </div>
+            <div className="text-gray-500 text-sm">Psalm 119:105</div>
+          </div>
+
+          <h4 className="text-xl font-bold text-gray-900 mb-3">God's Word Illuminates</h4>
+          
+          <p className="text-gray-600 mb-4 line-clamp-3">
+            "Your word is a lamp for my feet, a light on my path." In times of uncertainty, 
+            God's Word provides clarity and direction. Just as a lamp illuminates a dark path, 
+            Scripture guides us through life's challenges...
+          </p>
+
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-gray-500">Pastor David Thompson</span>
+            <Link to="/daily-devotional/june-20-2024">
+              <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors flex items-center">
+                Read Full Message <span className="ml-1">→</span>
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{/* Weekly Services Section */}
+{/* Weekly Services Section */}
+<section className="w-full py-20 bg-white">
+  <div className="container mx-auto px-4">
+    <div className="text-center mb-16">
+      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Our Weekly Services
+      </h2>
+      <div className="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
+      <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        Join us as we worship, grow, and experience God's presence together
+      </p>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Sunday Services */}
+      <div className="space-y-6">
+        <h3 className="text-xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200 flex items-center">
+          <svg className="w-6 h-6 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Sunday Services
+        </h3>
+        
+        {/* Dawn Service */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+        >
+          <div className="relative h-48">
+            <img 
+              src="/src/assets/dawn-service.jpg" 
+              alt="Dawn Service"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 p-4">
+              <span className="bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full">
+                6:30 AM
+              </span>
+            </div>
+          </div>
+          <div className="p-6">
+            <h4 className="text-xl font-bold text-gray-900 mb-2">Glory Service</h4>
+            <p className="text-gray-600 mb-4">
+              Early morning worship for those who seek God at sunrise
+            </p>
+            <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+              Learn More →
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Family Service */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+        >
+          <div className="relative h-48">
+            <img 
+              src="/src/assets/family-service.jpg" 
+              alt="Family Service"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 p-4">
+              <span className="bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full">
+                8:00 AM
+              </span>
+            </div>
+          </div>
+          <div className="p-6">
+            <h4 className="text-xl font-bold text-gray-900 mb-2">Family Service</h4>
+            <p className="text-gray-600 mb-4">
+              Worship and teaching for all ages with children's ministry
+            </p>
+            <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+              Learn More →
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Youth Service */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+        >
+          <div className="relative h-48">
+            <img 
+              src="/src/assets/youth-service.jpg" 
+              alt="Youth & Teens Service"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 p-4">
+              <span className="bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full">
+                10:40 AM
+              </span>
+            </div>
+          </div>
+          <div className="p-6">
+            <h4 className="text-xl font-bold text-gray-900 mb-2">Youth & Teens Service</h4>
+            <p className="text-gray-600 mb-4">
+              Energetic worship and relevant teaching for young people
+            </p>
+            <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+              Learn More →
+            </button>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Midweek Services - Left Column */}
+      <div className="space-y-6">
+        <h3 className="text-xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200 flex items-center">
+          <svg className="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Midweek Services
+        </h3>
+
+        {/* Midweek Dawn Prayers */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+        >
+          <div className="relative h-48">
+            <img 
+              src="/src/assets/dawn-prayers.jpg" 
+              alt="Midweek Dawn Prayers"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 p-4">
+              <span className="bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full">
+                4:00 AM (Wen)
+              </span>
+            </div>
+          </div>
+          <div className="p-6">
+            <h4 className="text-xl font-bold text-gray-900 mb-2">Midweek Dawn Prayers</h4>
+            <p className="text-gray-600 mb-4">
+              Start your day with powerful prayer and intercession
+            </p>
+            <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+              Learn More →
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Wednesday Bible Study */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+        >
+          <div className="relative h-48">
+            <img 
+              src="/src/assets/bible-study.jpg" 
+              alt="Bible Study"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 p-4">
+              <span className="bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full">
+                6:00 PM
+              </span>
+            </div>
+          </div>
+          <div className="p-6">
+            <h4 className="text-xl font-bold text-gray-900 mb-2">Wednesday Bible Study</h4>
+            <p className="text-gray-600 mb-4">
+              Deep dive into God's Word with practical applications
+            </p>
+            <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+              Learn More →
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Thursday Help Line */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+        >
+          <div className="relative h-48">
+            <img 
+              src="/src/assets/help-line.jpg" 
+              alt="Help Line"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 p-4">
+              <span className="bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full">
+                10:00 AM - 12:00 PM
+              </span>
+            </div>
+          </div>
+          <div className="p-6">
+            <h4 className="text-xl font-bold text-gray-900 mb-2">Thursday Help Line</h4>
+            <p className="text-gray-600 mb-4">
+              Prayer and counseling support for those in need
+            </p>
+            <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+              Learn More →
+            </button>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Friday Prayer Service - Right Column */}
+      <div className="space-y-6">
+        <h3 className="text-xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200 flex items-center">
+          <svg className="w-6 h-6 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Friday Service
+        </h3>
+
+        {/* Friday Prayer Service */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+        >
+          <div className="relative h-48">
+            <img 
+              src="/src/assets/prayer-service.jpg" 
+              alt="Friday Prayer Service"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 p-4">
+              <span className="bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full">
+                6:00 PM
+              </span>
+            </div>
+          </div>
+          <div className="p-6">
+            <h4 className="text-xl font-bold text-gray-900 mb-2">Friday Prayer Service</h4>
+            <p className="text-gray-600 mb-4">
+              Powerful corporate prayer meeting to end the week
+            </p>
+            <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+              Learn More →
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Service Times Summary */}
+        <div className="bg-blue-50 rounded-xl p-6 border border-blue-100">
+          <h4 className="text-lg font-bold text-blue-800 mb-4">Service Times Summary</h4>
+          <ul className="space-y-3">
+            <li className="flex items-start">
+              <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-gray-700"><strong>Sunday:</strong> 6:30AM, 8:00AM, 10:40AM</span>
+            </li>
+            <li className="flex items-start">
+              <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-gray-700"><strong>Midweek Dawn:</strong> 5:30AM (Tue-Fri)</span>
+            </li>
+            <li className="flex items-start">
+              <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-gray-700"><strong>Wednesday:</strong> 6:00PM</span>
+            </li>
+            <li className="flex items-start">
+              <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-gray-700"><strong>Thursday:</strong> 10:00AM-12:00PM</span>
+            </li>
+            <li className="flex items-start">
+              <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-gray-700"><strong>Friday:</strong> 6:00PM</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
     </div>
   );
 }
