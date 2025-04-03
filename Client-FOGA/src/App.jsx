@@ -29,6 +29,11 @@ import AllTithe from './pages/AllTithe';
 import ChurchRecord from './pages/ChurchRecord';
 import ViewRecord from './pages/ViewRecord';
 import UpdateRecord from './pages/UpdateRecord';
+import ChildrenMin from './pages/ChildrenMin';
+import YouthMin from './pages/YouthMin';
+import WomenMin from './pages/WomenMin';
+import MenMin from './pages/MenMin';
+import SundaySchoolMin from './pages/SundaySchoolMin';
 
 export default function App() {
   const {currentUser} = useSelector((state) => state.user);
@@ -51,6 +56,11 @@ export default function App() {
       <Routes>
       <Route path="/" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/ministries/children" element={<ChildrenMin />} />
+        <Route path="/ministries/youth" element={<YouthMin />} />
+        <Route path="/ministries/women" element={<WomenMin />} />
+        <Route path="/ministries/men" element={<MenMin />} />
+        <Route path="/ministries/sunday-school" element={<SundaySchoolMin />} />
         
         <Route path="/about" element={<About />} />
         <Route path="/contact-us" element={<ContactUs />} />
