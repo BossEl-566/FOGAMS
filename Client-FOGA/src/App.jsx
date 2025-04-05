@@ -34,6 +34,18 @@ import YouthMin from './pages/YouthMin';
 import WomenMin from './pages/WomenMin';
 import MenMin from './pages/MenMin';
 import SundaySchoolMin from './pages/SundaySchoolMin';
+import DepCreativeArt from './pages/DepCreativeArt';
+import DepYoungSingles from './pages/DepYoungSingles';
+import DepWelfare from './pages/DepWelfare';
+import DepGuest from './pages/DepGuest';
+import DepCounseling from './pages/DepCounseling';
+import DepMedia from './pages/DepMedia';
+import DepFundraising from './pages/DepFundraising';
+import DepAnniversary from './pages/DepAnniversary';
+import DepProject from './pages/DepProject';
+import DepCommunity from './pages/DepCommunity';
+import DepProtocol from './pages/DepProtocol';
+import DepMissions from './pages/DepMissions';
 
 export default function App() {
   const {currentUser} = useSelector((state) => state.user);
@@ -61,6 +73,19 @@ export default function App() {
         <Route path="/ministries/women" element={<WomenMin />} />
         <Route path="/ministries/men" element={<MenMin />} />
         <Route path="/ministries/sunday-school" element={<SundaySchoolMin />} />
+        <Route path="/departments/creative-arts" element={<DepCreativeArt />} />
+        <Route path="/departments/young-singles" element={<DepYoungSingles />} />
+        <Route path="/departments/welfare" element={<DepWelfare />} />
+        <Route path="/departments/guest-experience" element={<DepGuest />} />
+        <Route path="/departments/counseling-visitation" element={<DepCounseling />} />
+        <Route path="/departments/media" element={<DepMedia />} />
+        <Route path="/departments/finance-fundraising" element={<DepFundraising />} />
+        <Route path="/departments/anniversary" element={<DepAnniversary />} />
+        <Route path="/departments/project-infrastructure" element={<DepProject />} />
+        <Route path="/departments/protocol-ushering" element={<DepProtocol />} />
+        <Route path="/departments/missions" element={<DepMissions />} />
+
+        <Route path="/departments/community-impact" element={<DepCommunity />} />
         
         <Route path="/about" element={<About />} />
         <Route path="/contact-us" element={<ContactUs />} />

@@ -247,93 +247,112 @@ export default function Header() {
           </button>
           
           {isDepartmentsOpen && (
-            <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-700">
-              <Link
-                to="/departments/creative-arts"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Creative Arts
-              </Link>
-              <Link
-                to="/departments/young-singles"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Young Singles
-              </Link>
-              <Link
-                to="/departments/welfare"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Welfare Department
-              </Link>
-              <Link
-                to="/departments/children"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Children’s Department
-              </Link>
-              <Link
-                to="/departments/media"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Media Committee
-              </Link>
-              <Link
-                to="/departments/finance-fundraising"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Finance & Fundraising
-              </Link>
-              <Link
-                to="/departments/anniversary"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Anniversary Committee
-              </Link>
-              <Link
-                to="/departments/guest-experience"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Guest Experience
-              </Link>
-              <Link
-                to="/departments/counseling-visitation"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Counseling & Visitation
-              </Link>
-              <Link
-                to="/departments/project-infrastructure"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Project & Infrastructure
-              </Link>
-              <Link
-                to="/departments/community-impact"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Community Impact Fund
-              </Link>
-              <Link
-                to="/departments/protocol-ushering"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsDepartmentsOpen(false)}
-              >
-                Protocol & Ushering
-              </Link>
-            </div>
-          )}
+  <div className="absolute left-0 mt-2 w-96 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-700 p-4">
+    <div className="grid grid-cols-2 gap-4">
+      {/* Departments Column */}
+      <div>
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 pb-1 border-b border-gray-200 dark:border-gray-700">
+          Departments
+        </h3>
+        <div className="space-y-1">
+          <Link
+            to="/departments/creative-arts"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Creative Arts
+          </Link>
+          <Link
+            to="/departments/young-singles"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Young Singles
+          </Link>
+          <Link
+            to="/departments/welfare"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Welfare Department
+          </Link>
+          <Link
+            to="/departments/missions"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Missions
+          </Link>
+          <Link
+            to="/departments/guest-experience"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Guest Experience
+          </Link>
+          <Link
+            to="/departments/counseling-visitation"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Counseling & Visitation
+          </Link>
+        </div>
+      </div>
+
+      {/* Committees Column */}
+      <div>
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 pb-1 border-b border-gray-200 dark:border-gray-700">
+          Committees
+        </h3>
+        <div className="space-y-1">
+          <Link
+            to="/departments/media"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Media Committee
+          </Link>
+          <Link
+            to="/departments/finance-fundraising"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Finance & Fundraising
+          </Link>
+          <Link
+            to="/departments/anniversary"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Anniversary Committee
+          </Link>
+          <Link
+            to="/departments/project-infrastructure"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Project & Infrastructure
+          </Link>
+          <Link
+            to="/departments/community-impact"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Community Impact Fund
+          </Link>
+          <Link
+            to="/departments/protocol-ushering"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Protocol & Ushering
+          </Link>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
         </div>
 
         {/* Ministries Dropdown */}
