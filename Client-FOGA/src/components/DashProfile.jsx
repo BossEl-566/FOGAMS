@@ -1,31 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Button, Modal, TextInput } from "flowbite-react";
+import { useSelector, useDispatch } from 'react-redux';
+import { Button, Card, TextInput } from 'flowbite-react';
 import { Client, Storage } from 'appwrite';
-import { updateStart, updateSuccess, updateFailure, deleteUserFailure, deleteUserSuccess, deleteUserStart, signoutSuccess } from '../radux/user/userSlice';
-import { useDispatch } from 'react-redux';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { updateStart, updateSuccess, updateFailure, signoutSuccess } from '../radux/user/userSlice';
 import { Eye, EyeOff } from 'lucide-react';
-import { toast } from 'react-hot-toast';  // Importing toast
+import { toast } from 'react-hot-toast';
 
 export default function DashProfile() {
-  const { currentUser, error, loading } = useSelector(state => state.user);
+  const { currentUser, loading } = useSelector(state => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [uploadImageError, setUploadImageError] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
-  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
-  const [updateUserError, setUpdateUserError] = useState(null);
   const [formData, setFormData] = useState({});
-  const [showModal, setShowModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const filePickerRef = useRef();
   const dispatch = useDispatch();
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImageFile(file); // Sets file information
-      setImageFileUrl(URL.createObjectURL(file)); // Generates a local preview URL
+      setImageFile(file);
+      setImageFileUrl(URL.createObjectURL(file));
     }
   };
 
@@ -38,31 +34,34 @@ export default function DashProfile() {
   const uploadImage = async () => {
     setImageFileUploading(true);
     const client = new Client()
-      .setEndpoint(import.meta.env.VITE_APPWRITE_API_ENDPOINT) // API Endpoint
-      .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);   // Project ID
+      .setEndpoint(import.meta.env.VITE_APPWRITE_API_ENDPOINT)
+      .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
 
     const storage = new Storage(client);
 
     try {
       const response = await storage.createFile(
-        import.meta.env.VITE_APPWRITE_BUCKET_ID, // Replace with your actual bucket ID
-        "unique()",  // Generate a unique file ID
-        imageFile    // File to upload
+        import.meta.env.VITE_APPWRITE_BUCKET_ID,
+        "unique()",
+        imageFile
       );
-      setUploadImageError(null);
+      
       const imageUrl = storage.getFilePreview(
         import.meta.env.VITE_APPWRITE_BUCKET_ID,
-        response.$id // File ID returned from the upload response
+        response.$id
       ).href;
 
-      setImageFileUrl(imageUrl); // Update state to show the image
+      setImageFileUrl(imageUrl);
       setFormData({ ...formData, profilePicture: imageUrl });
-      setImageFileUploading(false);
+      setUploadImageError(null);
+      toast.success('Profile picture uploaded successfully');
     } catch (error) {
       setUploadImageError('Image upload failed. Image should be less than 5MB.');
-      toast.error('Image upload failed. Image should be less than 5MB.'); // Use toast for error
+      toast.error('Image upload failed. Image should be less than 5MB.');
       setImageFile(null);
       setImageFileUrl(null);
+    } finally {
+      setImageFileUploading(false);
     }
   };
 
@@ -72,18 +71,15 @@ export default function DashProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUpdateUserError(null);
-    setUpdateUserSuccess(null);
     if (Object.keys(formData).length === 0) {
-      setUpdateUserError('No changes made');
-      toast.error('No changes made');  // Use toast for error
+      toast.error('No changes made');
       return;
     }
     if (imageFileUploading) {
-      setUpdateUserError('Please wait for image upload to complete');
-      toast.error('Please wait for image upload to complete');  // Use toast for error
+      toast.error('Please wait for image upload to complete');
       return;
     }
+    
     try {
       dispatch(updateStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
@@ -93,42 +89,17 @@ export default function DashProfile() {
         },
         body: JSON.stringify(formData),
       });
+      
       const data = await res.json();
       if (!res.ok) {
-        setUpdateUserError(data.message);
-        dispatch(updateFailure(data.message));
-        toast.error(data.message);  // Use toast for error
-        return;
-      } else {
-        dispatch(updateSuccess(data));
-        setUpdateUserSuccess('Profile updated successfully');
-        toast.success('Profile updated successfully');  // Use toast for success
+        throw new Error(data.message);
       }
+      
+      dispatch(updateSuccess(data));
+      toast.success('Profile updated successfully');
     } catch (error) {
       dispatch(updateFailure(error.message));
-      setUpdateUserError(error.message);
-      toast.error(error.message);  // Use toast for error
-    }
-  };
-
-  const handleDeleteUser = async () => {
-    setShowModal(false);
-    try {
-      dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: 'DELETE',
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        dispatch(deleteUserFailure(data.message));
-        toast.error(data.message);  // Use toast for error
-      } else {
-        dispatch(deleteUserSuccess(data));
-        toast.success('Account deleted successfully');  // Use toast for success
-      }
-    } catch (error) {
-      dispatch(deleteUserFailure(error.message));
-      toast.error(error.message);  // Use toast for error
+      toast.error(error.message);
     }
   };
 
@@ -137,86 +108,128 @@ export default function DashProfile() {
       const res = await fetch('api/user/signout', {
         method: 'POST',
       });
+      
       if (!res.ok) {
         const data = await res.json();
-        toast.error(data.message);  // Use toast for error
-      } else {
-        dispatch(signoutSuccess());
-        toast.success('Signed out successfully');  // Use toast for success
+        throw new Error(data.message);
       }
+      
+      dispatch(signoutSuccess());
+      toast.success('Signed out successfully');
     } catch (error) {
-      toast.error(error.message);  // Use toast for error
+      toast.error(error.message);
     }
   };
 
   return (
-    <div className='max-w-lg mx-auto p-3 w-full mb-20'>
-      <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input
-          type="file"
-          accept='image/*'
-          onChange={handleImageChange}
-          ref={filePickerRef}
-          hidden
-        />
-        <div
-          className="w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
-          onClick={() => filePickerRef.current.click()}
-        >
-          <img
-            src={imageFileUrl || currentUser.profilePicture}
-            alt="user"
-            className='rounded-full w-full object-cover h-full border-4 border-[lightgray]'
-          />
-        </div>
-        {uploadImageError && toast.error(uploadImageError)} {/* Use toast for error */}
-        <TextInput type='text' id='username' placeholder='username' defaultValue={currentUser.username} onChange={handleChange}/>
-        <TextInput type='email' id='email' placeholder='email' defaultValue={currentUser.email} onChange={handleChange} />
-        <div className="relative">
-          <TextInput
-            type={showPassword ? 'text' : 'password'}
-            id="password"
-            placeholder="password"
-            onChange={handleChange}
-          />
-          <span
-            className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <EyeOff /> : <Eye />}
-          </span>
-        </div>
-        <Button type='submit' outline gradientDuoTone="purpleToBlue" disabled={loading || imageFileUploading}>
-          {loading ? 'Loading...' : 'Update'}
-        </Button>
-      </form>
-      <div className="text-red-500 flex justify-between mt-5">
-        <span className='cursor-pointer hover:underline' onClick={()=>setShowModal(true)}>
-          Delete Account
-        </span>
-        <span onClick={handleSignout} className='cursor-pointer hover:underline'>
-          Sign Out
-        </span>
-      </div>
-      {updateUserSuccess && toast.success(updateUserSuccess)} {/* Use toast for success */}
-      {updateUserError && toast.error(updateUserError)} {/* Use toast for error */}
-      {error && toast.error(error)} {/* Use toast for error */}
-      <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
-        <Modal.Header/>
-        <Modal.Body>
-          <div className="text-center">
-            <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto'/>
-            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
-              Are you sure you want to delete your account? 
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button color='failure' onClick={handleDeleteUser}>Yes I'm Sure</Button>
-              <Button color='gray' onClick={() => setShowModal(false)}>Cancel</Button>
+    <div className="max-w-4xl mx-auto p-6">
+      <Card className="rounded-xl shadow-lg w-auto">
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Profile Picture Section */}
+          <div className="flex flex-col items-center md:w-1/3">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              ref={filePickerRef}
+              hidden
+            />
+            <div
+              className="w-40 h-40 cursor-pointer relative group"
+              onClick={() => filePickerRef.current.click()}
+            >
+              <img
+                src={imageFileUrl || currentUser.profilePicture}
+                alt="Profile"
+                className="w-full h-full object-cover rounded-full border-4 border-gray-200 dark:border-gray-600"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-white font-medium">Change Photo</span>
+              </div>
             </div>
+            {imageFileUploading && (
+              <p className="mt-2 text-sm text-blue-600">Uploading image...</p>
+            )}
+            {uploadImageError && (
+              <p className="mt-2 text-sm text-red-600">{uploadImageError}</p>
+            )}
           </div>
-        </Modal.Body>
-      </Modal>
+
+          {/* Profile Form Section */}
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Profile Settings</h2>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Username
+                </label>
+                <TextInput
+                  id="username"
+                  defaultValue={currentUser.username}
+                  onChange={handleChange}
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Email
+                </label>
+                <TextInput
+                  type="email"
+                  id="email"
+                  defaultValue={currentUser.email}
+                  onChange={handleChange}
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Password
+                </label>
+                <div className="relative">
+                  <TextInput
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    placeholder="••••••••"
+                    onChange={handleChange}
+                    className="w-full"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+                <p className="mt-1 text-xs text-gray-500">Leave blank to keep current password</p>
+              </div>
+
+              <div className="flex justify-end gap-4 pt-4">
+                <Button
+                  type="button"
+                  color="light"
+                  onClick={handleSignout}
+                  className="px-6"
+                >
+                  Sign Out
+                </Button>
+                <Button
+                  type="submit"
+                  gradientDuoTone="purpleToBlue"
+                  disabled={loading || imageFileUploading}
+                  className=""
+                outline>
+                  {loading ? 'Saving...' : 'Save Changes'}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 }
