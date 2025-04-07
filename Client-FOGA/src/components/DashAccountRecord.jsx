@@ -229,7 +229,7 @@ useEffect(() => {
     {/* Telecel Cash Card */}
     <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg flex flex-col items-center transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
       <img
-        src="src/assets/download.png"
+        src="src/assets/telecel-cash.jpg"
         alt="Telecel Cash"
         className="w-20 h-20 mb-2"
       />

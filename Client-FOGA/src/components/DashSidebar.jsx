@@ -93,7 +93,7 @@ export default function DashSidebar() {
             </Link>
             <Link to='/dashboard?tab=anonymous'>
               <Sidebar.Item active={tab === 'anonymous'} href="#" icon={BiMessageRounded} as='div'>
-                Anonymous Message
+              Message Box
               </Sidebar.Item>
             </Link>
             </>

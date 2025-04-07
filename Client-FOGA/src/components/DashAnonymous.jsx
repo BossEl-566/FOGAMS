@@ -21,7 +21,7 @@ export default function DashAnonymous() {
           const data = await response.json();
           setMessages(data);
         } catch (error) {
-          toast.error(error.message);
+          console.error(error);
         } finally {
           setIsLoading(false);
         }

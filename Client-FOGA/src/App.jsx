@@ -46,6 +46,8 @@ import DepProject from './pages/DepProject';
 import DepCommunity from './pages/DepCommunity';
 import DepProtocol from './pages/DepProtocol';
 import DepMissions from './pages/DepMissions';
+import Event from './pages/Event';
+import EventDetails from './pages/EventDetails';
 
 export default function App() {
   const {currentUser} = useSelector((state) => state.user);
@@ -94,7 +96,10 @@ export default function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/project" element={<Project />} />
         <Route path="/ministries" element={<Ministries />} />
+        <Route path="/events" element={<Event />} />
         <Route element={<PrivateRoute />}>
+          <Route path="/events/:eventId" element={<EventDetails />} />
+
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/receipt/:recieptId" element={<RecieptPage />} />
           <Route path="/view/:viewId" element={<ViewRecord />} />

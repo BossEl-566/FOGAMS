@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Slider from 'react-slick';
 import { motion } from 'framer-motion';
 import "slick-carousel/slick/slick.css"; 
@@ -10,10 +10,76 @@ import slide2 from '../assets/slide2.jpg';
 import slide3 from '../assets/slide3.jpg';
 import slide4 from '../assets/slide4.jpg';
 import { Link } from 'react-router-dom';
+import { HiLocationMarker } from 'react-icons/hi';
 
 export default function Home() {
   const sliderRef = useRef(null);
   const [expandedCard, setExpandedCard] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [eventId, setEventId] = useState(null);
+  const [message, setMessage] = useState(null);
+  
+
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/event/get');
+        if (!response.ok) {
+          throw new Error('Failed to fetch events');
+        }
+        const data = await response.json();
+        setEvents(data);
+        console.log(data);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    const fetchMessage = async () => {
+      try {
+        const response = await fetch("/api/get-daily-bible-message");
+        const data = await response.json();
+        const messages = data.dailyBibleMessage;
+
+        if (messages && messages.length > 0) {
+          const latest = messages[0];
+          setMessage(latest);
+          console.log("Latest message:", latest);
+        }
+      } catch (err) {
+        console.error("Error fetching daily message:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMessage();
+  }, []);
+  if (loading || !message) {
+    return (
+      <div className="p-6 text-center text-gray-500">
+        Loading daily message...
+      </div>
+    );
+  }
+ 
+  const date = new Date(message.createdAt);
+  const formattedDate = date.toLocaleString("default", {
+    month: "short",
+    day: "numeric",
+  }).toUpperCase();
+
 
   // Carousel settings
   const settings = {
@@ -199,7 +265,79 @@ export default function Home() {
         </Slider>
       </div>
 
-      {/* Fundamental Truths Section */}
+      
+      {/* Theme of the Year Section */}
+{/* Theme of the Year Section */}
+<section className="w-full py-20 bg-white">
+  <div className="container mx-auto px-4">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true }}
+      className="flex flex-col lg:flex-row items-center gap-12"
+    >
+      {/* Flier Image */}
+      <div className="w-full lg:w-1/2">
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          className="relative overflow-hidden rounded-2xl shadow-lg border border-gray-100"
+        >
+          <img 
+            src="/src/assets/theme-flier.jpg" // Replace with your actual image path
+            alt="2025 Church Theme: Pray Without Ceasing"
+            className="w-full h-auto object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        </motion.div>
+      </div>
+
+      {/* Theme Content */}
+      <div className="w-full lg:w-1/2 text-center lg:text-left">
+        <div className="text-blue-600 font-bold mb-4 tracking-wider">OUR 2025 THEME</div>
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          Pray Without Ceasing <br />
+          <span className="text-2xl md:text-3xl text-blue-700">For Supernatural Manifestation</span>
+        </h2>
+        
+        <div className="relative inline-block mb-8">
+          <div className="text-xl text-gray-700 italic bg-blue-50 px-6 py-4 rounded-lg">
+            "Rejoice always, pray without ceasing, give thanks in all circumstances; for this is the will of God in Christ Jesus for you."
+            <div className="text-right text-blue-600 mt-2 font-medium">1 Thessalonians 5:16-17</div>
+          </div>
+          <div className="absolute -bottom-3 right-0 w-24 h-1 bg-blue-500"></div>
+        </div>
+
+        <p className="text-lg text-gray-600 mb-8">
+          This year, we're committing to a lifestyle of persistent prayer that unlocks God's supernatural power in our lives, families, and community. Join us as we seek God's face continually and expect miraculous manifestations of His presence.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <Link to="/prayer-groups">
+            <motion.button
+              className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-md"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Join Prayer Groups
+            </motion.button>
+          </Link>
+          <Link to="/prayer-resources">
+            <motion.button
+              className="px-8 py-3 bg-white border-2 border-yellow-300 text-blue-600 hover:bg-blue-50 font-semibold rounded-lg transition-colors shadow-sm"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Prayer Resources
+            </motion.button>
+          </Link>
+        </div>
+      </div>
+    </motion.div>
+  </div>
+</section>
+{/* Fundamental Truths Section */}
       <section className="w-full py-16 bg-gradient-to-b from-blue-900 to-blue-950">
         <div className="container mx-auto px-4">
           <motion.div
@@ -282,77 +420,6 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-      {/* Theme of the Year Section */}
-{/* Theme of the Year Section */}
-<section className="w-full py-20 bg-white">
-  <div className="container mx-auto px-4">
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
-      className="flex flex-col lg:flex-row items-center gap-12"
-    >
-      {/* Flier Image */}
-      <div className="w-full lg:w-1/2">
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          className="relative overflow-hidden rounded-2xl shadow-lg border border-gray-100"
-        >
-          <img 
-            src="/src/assets/theme-flier.jpg" // Replace with your actual image path
-            alt="2025 Church Theme: Pray Without Ceasing"
-            className="w-full h-auto object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-        </motion.div>
-      </div>
-
-      {/* Theme Content */}
-      <div className="w-full lg:w-1/2 text-center lg:text-left">
-        <div className="text-blue-600 font-bold mb-4 tracking-wider">OUR 2025 THEME</div>
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-          Pray Without Ceasing <br />
-          <span className="text-2xl md:text-3xl text-blue-700">For Supernatural Manifestation</span>
-        </h2>
-        
-        <div className="relative inline-block mb-8">
-          <div className="text-xl text-gray-700 italic bg-blue-50 px-6 py-4 rounded-lg">
-            "Rejoice always, pray without ceasing, give thanks in all circumstances; for this is the will of God in Christ Jesus for you."
-            <div className="text-right text-blue-600 mt-2 font-medium">1 Thessalonians 5:16-17</div>
-          </div>
-          <div className="absolute -bottom-3 right-0 w-24 h-1 bg-blue-500"></div>
-        </div>
-
-        <p className="text-lg text-gray-600 mb-8">
-          This year, we're committing to a lifestyle of persistent prayer that unlocks God's supernatural power in our lives, families, and community. Join us as we seek God's face continually and expect miraculous manifestations of His presence.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-          <Link to="/prayer-groups">
-            <motion.button
-              className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-md"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Join Prayer Groups
-            </motion.button>
-          </Link>
-          <Link to="/prayer-resources">
-            <motion.button
-              className="px-8 py-3 bg-white border-2 border-yellow-300 text-blue-600 hover:bg-blue-50 font-semibold rounded-lg transition-colors shadow-sm"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Prayer Resources
-            </motion.button>
-          </Link>
-        </div>
-      </div>
-    </motion.div>
-  </div>
-</section>
 {/* Upcoming Events & Daily Bible Message Section */}
 <section className="w-full py-20 bg-gray-50">
   <div className="container mx-auto px-4">
@@ -369,141 +436,118 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Event Card 1 */}
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100"
-          >
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                <div className="bg-blue-100 text-blue-800 rounded-lg px-4 py-2 mr-4">
-                  <div className="font-bold text-2xl">24</div>
-                  <div className="text-xs">JUNE</div>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900">Night of Worship</h3>
-                  <p className="text-blue-600">6:30 PM - Sanctuary</p>
-                </div>
-              </div>
-              <p className="text-gray-600 mb-4">
-                An evening of powerful worship and prophetic ministry with our worship team
-              </p>
-              <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
-                Learn More →
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Event Card 2 */}
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100"
-          >
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                <div className="bg-blue-100 text-blue-800 rounded-lg px-4 py-2 mr-4">
-                  <div className="font-bold text-2xl">30</div>
-                  <div className="text-xs">JUNE</div>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900">Youth Conference</h3>
-                  <p className="text-blue-600">9:00 AM - Fellowship Hall</p>
-                </div>
-              </div>
-              <p className="text-gray-600 mb-4">
-                Annual youth gathering with guest speaker Pastor Michael Johnson
-              </p>
-              <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
-                Learn More →
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Event Card 3 */}
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100"
-          >
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                <div className="bg-blue-100 text-blue-800 rounded-lg px-4 py-2 mr-4">
-                  <div className="font-bold text-2xl">07</div>
-                  <div className="text-xs">JULY</div>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900">Baptism Service</h3>
-                  <p className="text-blue-600">2:00 PM - Baptismal Pool</p>
-                </div>
-              </div>
-              <p className="text-gray-600 mb-4">
-                Celebration of new believers taking this important step of faith
-              </p>
-              <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
-                Learn More →
-              </button>
-            </div>
-          </motion.div>
-
-          {/* View All Events Button */}
-          <div className="md:col-span-2 text-center mt-6">
-            <Link to="/events">
-              <motion.button
-                className="px-6 py-3 bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold rounded-lg transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                View All Upcoming Events
-              </motion.button>
-            </Link>
+        {loading ? (
+          <div className="text-center py-10">
+            <p className="text-gray-500">Loading events...</p>
           </div>
-        </div>
+        ) : error ? (
+          <div className="text-center py-10">
+            <p className="text-red-500">Error loading events: {error}</p>
+          </div>
+        ) : events.data.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {events.data.slice(0, 4).map((event) => {
+              const eventDate = new Date(event.date);
+              const day = eventDate.getDate();
+              const month = eventDate.toLocaleString('default', { month: 'short' }).toUpperCase();
+              const time = eventDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+              return (
+                <motion.div
+                  key={event._id}
+                  whileHover={{ y: -5 }}
+                  className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100"
+                >
+                  <div className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="bg-blue-100 text-blue-800 rounded-lg px-4 py-2 mr-4">
+                        <div className="font-bold text-2xl">{day}</div>
+                        <div className="text-xs">{month}</div>
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900">{event.title}</h3>
+                        <p className="text-blue-600">
+                        <HiLocationMarker /> {event.location}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-gray-600 mb-4">{event.description}</p>
+                    <Link to={`/events/${event._id}`} state={{ eventId: event._id }}>
+                      <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors" onClick={() => setEventId(event._id)}
+                      state={{ eventId: event._id }} // Pass the event ID to the next page
+                        >
+                        Learn More →
+                      </button>
+                    </Link>
+                  </div>
+                </motion.div>
+              );
+            })}
+
+            {/* View All Events Button */}
+            <div className="md:col-span-2 text-center mt-6">
+              <Link to="/events">
+                <motion.button
+                  className="px-6 py-3 bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold rounded-lg transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  View All Upcoming Events
+                </motion.button>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-10">
+            <p className="text-gray-500">No upcoming events found</p>
+          </div>
+        )}
       </div>
 
       {/* Daily Bible Message Column */}
       <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 h-fit sticky top-6">
-        <div className="relative">
-          <img 
-            src="/src/assets/daily-bible.jpg" // Replace with your image
-            alt="Daily Bible Message"
-            className="w-full h-48 object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 p-6">
-            <h3 className="text-2xl font-bold text-white">Daily Bible Message</h3>
-            <p className="text-white/90">Today's Spiritual Nourishment</p>
+      <div className="relative">
+        <img
+          src={message.image || "/src/assets/daily-bible.jpg"}
+          alt="Daily Bible Message"
+          className="w-full h-48 object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 p-6">
+          <h3 className="text-2xl font-bold text-white">Daily Bible Message</h3>
+          <p className="text-white/90">Today's Spiritual Nourishment</p>
+        </div>
+      </div>
+
+      <div className="p-6">
+        <div className="flex items-center mb-4">
+          <div className="bg-blue-100 text-blue-800 rounded-lg px-3 py-1 mr-3">
+            <div className="font-medium text-sm">{formattedDate}</div>
           </div>
+          <div className="text-gray-500 text-sm">{message.category}</div>
         </div>
 
-        <div className="p-6">
-          <div className="flex items-center mb-4">
-            <div className="bg-blue-100 text-blue-800 rounded-lg px-3 py-1 mr-3">
-              <div className="font-medium text-sm">JUNE 20</div>
-            </div>
-            <div className="text-gray-500 text-sm">Psalm 119:105</div>
-          </div>
+        <h4 className="text-xl font-bold text-gray-900 mb-3">{message.title}</h4>
 
-          <h4 className="text-xl font-bold text-gray-900 mb-3">God's Word Illuminates</h4>
-          
-          <p className="text-gray-600 mb-4 line-clamp-3">
-            "Your word is a lamp for my feet, a light on my path." In times of uncertainty, 
-            God's Word provides clarity and direction. Just as a lamp illuminates a dark path, 
-            Scripture guides us through life's challenges...
-          </p>
+        <p
+          className="text-gray-600 mb-4 line-clamp-3"
+          dangerouslySetInnerHTML={{ __html: message.content }}
+        />
 
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-500">Pastor David Thompson</span>
-            <Link to="/daily-devotional/june-20-2024">
-              <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors flex items-center">
-                Read Full Message <span className="ml-1">→</span>
-              </button>
-            </Link>
-          </div>
+        <div className="flex justify-between items-center">
+          <span className="text-sm text-gray-500">Shared by Admin</span>
+          <Link to={`/daily-bible-message/${message.slug}`}>
+            <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors flex items-center">
+              Read Full Message <span className="ml-1">→</span>
+            </button>
+          </Link>
         </div>
       </div>
     </div>
+    </div>
   </div>
 </section>
+
 {/* Weekly Services Section */}
 {/* Weekly Services Section */}
 <section className="w-full py-20 bg-white">
@@ -810,7 +854,7 @@ export default function Home() {
             <div>
               <h3 className="font-medium text-gray-900 mb-1">Phone Number</h3>
               <a href="tel:+1234567890" className="text-gray-600 hover:text-blue-600 transition-colors">
-                (+223) 24-629-0280
+                (+223) 24-629-0280 <br />
                 (+223) 55-423-4824
               </a>
             </div>
