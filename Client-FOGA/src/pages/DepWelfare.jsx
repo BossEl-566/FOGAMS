@@ -12,12 +12,12 @@ const DepWelfare = () => {
   ];
 
   const services = [
-    { title: "Weddings", description: "Support and coordination for church weddings", icon: "💒" },
-    { title: "Funerals", description: "Assistance with funeral arrangements and bereavement support", icon: "⚰️" },
-    { title: "Child Naming", description: "Celebrating new life in our church family", icon: "👶" },
-    { title: "Financial Support", description: "Temporary assistance for members in need", icon: "💰" },
-    { title: "Monthly Dues", description: "Collection of offerings every last week of the month", icon: "⏰" },
-    { title: "Member Care", description: "Looking after the wellbeing of all members", icon: "❤️" },
+    { title: "Weddings", description: "Support and coordination for church weddings", icon: '' },
+    { title: "Funerals", description: "Assistance with funeral arrangements and bereavement support", icon: '' },
+    { title: "Child Naming", description: "Celebrating new life in our church family", icon: '' },
+    { title: "Financial Support", description: "Temporary assistance for members in need", icon: '' },
+    { title: "Monthly Dues", description: "Collection of offerings every last week of the month", icon: '' },
+    { title: "Member Care", description: "Looking after the wellbeing of all members", icon: '' },
   ];
 
   const containerVariants = {
@@ -139,23 +139,6 @@ const DepWelfare = () => {
             <p>Collected every last Sunday of the month during service.</p>
           </div>
         </div>
-      </motion.div>
-
-      {/* Call to Action */}
-      <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        whileInView={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true }}
-        className="text-center"
-      >
-        <h2 className="text-2xl md:text-3xl font-bold text-purple-800 mb-4">Need Welfare Assistance?</h2>
-        <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-          Contact any of our welfare team members or visit the church office for support.
-        </p>
-        <button className="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-          Contact Welfare Team
-        </button>
       </motion.div>
     </div>
   );

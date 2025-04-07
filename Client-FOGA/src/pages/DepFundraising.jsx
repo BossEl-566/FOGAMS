@@ -213,62 +213,7 @@ const DepFundraising = () => {
           </div>
         </div>
       </section>
-
-      {/* Stats */}
-      <section className="py-20 bg-gradient-to-r from-blue-900 to-green-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="p-6"
-              >
-                <motion.div 
-                  className="text-5xl font-bold mb-2"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    transition: { duration: 2, repeat: Infinity, repeatDelay: 1 }
-                  }}
-                >
-                  {stat.value}
-                </motion.div>
-                <div className="text-blue-200 uppercase text-sm tracking-wider">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
-          <div className="md:flex">
-            <div className="md:w-1/2 bg-gradient-to-br from-blue-600 to-green-600 p-8 text-white flex flex-col justify-center">
-              <h2 className="text-2xl font-bold mb-4">Financial Partnership</h2>
-              <p className="mb-6">Join us in building God's kingdom through financial stewardship</p>
-              <div className="flex space-x-4">
-                <button className="bg-white text-blue-600 hover:bg-gray-100 font-bold py-2 px-6 rounded-full text-sm transition-all duration-300">
-                  Give Now
-                </button>
-                <button className="border border-white text-white hover:bg-white/10 font-bold py-2 px-6 rounded-full text-sm transition-all duration-300">
-                  Learn More
-                </button>
-              </div>
-            </div>
-            <div className="md:w-1/2 bg-gray-50 p-8">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Business Proposals</h2>
-              <p className="text-gray-600 mb-6">Have a kingdom business idea? Let's collaborate</p>
-              <button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-bold py-2 px-6 rounded-full text-sm transition-all duration-300">
-                Submit Proposal
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      
     </div>
   );
 };

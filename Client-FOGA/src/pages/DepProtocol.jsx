@@ -246,43 +246,6 @@ const DepProtocol = () => {
         </div>
       </section>
 
-      {/* Join Us */}
-      <section className="py-20 bg-gradient-to-r from-purple-800 to-blue-800 text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold mb-6"
-          >
-            Serve With Us
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto"
-          >
-            Join our team in creating welcoming, orderly worship experiences
-          </motion.p>
-          <motion.div
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="flex flex-col sm:flex-row justify-center gap-4"
-          >
-            <button className="bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-              Volunteer Now
-            </button>
-            <button className="bg-transparent hover:bg-white/10 text-white border border-white font-bold py-3 px-8 rounded-full transition-all duration-300">
-              Learn More
-            </button>
-          </motion.div>
-        </div>
-      </section>
     </div>
   );
 };

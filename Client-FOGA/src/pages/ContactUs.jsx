@@ -1,16 +1,28 @@
 import React from 'react';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
+import churchBg from '../assets/community-event.jpg'; // Replace with your image path
 
 export default function ContactUs() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-blue-700 to-purple-600 py-20 text-white">
-        <div className="container mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Our Church</h1>
-          <p className="text-xl md:text-2xl max-w-2xl mx-auto">We'd love to hear from you. Reach out for prayer, questions, or just to say hello!</p>
-        </div>
-      </div>
+      <div
+  className="relative bg-cover bg-center bg-no-repeat py-20 text-white"
+  style={{
+    backgroundImage: `url(${churchBg})`
+  }}
+>
+  {/* Gradient Overlay */}
+  <div className="absolute inset-0 bg-black opacity-80"></div>
+
+  <div className="relative container mx-auto px-6 text-center">
+    <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Fellowship Of Grace A/G Church</h1>
+    <p className="text-xl md:text-2xl max-w-2xl mx-auto">
+      We'd love to hear from you. Reach out for prayer, questions, or just to say hello!
+    </p>
+  </div>
+</div>
+
 
       {/* Main Content */}
       <div className="container mx-auto px-6 py-16">
@@ -143,17 +155,6 @@ export default function ContactUs() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Prayer Request CTA */}
-      <div className="bg-blue-50 py-16">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Need Prayer?</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">We believe in the power of prayer. Submit your prayer request and our team will pray for you.</p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200">
-            Submit Prayer Request
-          </button>
         </div>
       </div>
     </div>

@@ -477,38 +477,6 @@ export default function DepCreativeArt() {
           ))}
         </div>
       </section>
-
-      {/* Call to Action */}
-      <motion.section 
-        initial={{ scale: 0.95, opacity: 0 }}
-        whileInView={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        className="py-20 px-4 text-center bg-gradient-to-r from-red-800 to-purple-800"
-      >
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold mb-6">READY TO UNLEASH YOUR CREATIVITY?</h2>
-          <p className="text-xl mb-8">
-            Whether you're a seasoned artist or just discovering your gifts, we have a place for you in our creative family.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-yellow-500 text-black px-8 py-4 rounded-full text-lg font-bold shadow-lg flex items-center"
-            >
-              Join a Team <span className="ml-2">→</span>
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-transparent border-2 border-white px-8 py-4 rounded-full text-lg font-bold shadow-lg flex items-center"
-            >
-              Attend Our Next Event <span className="ml-2">📅</span>
-            </motion.button>
-          </div>
-        </div>
-      </motion.section>
     </div>
   );
 }

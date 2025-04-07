@@ -81,6 +81,16 @@ export default function About() {
           image: "/images/mary-opoku.jpg"
         },
         {
+          name: "Lay Pastor Asiedu Ompong",
+          role: "School Ministry",
+          image: "/images/Asiedu.jpg"
+        },
+        {
+          name: "Lay Pastor Patrick Offei",
+          role: "School Ministry",
+          image: "/images/Patrick.jpg"
+        },
+        {
           name: "Pastor Eric Botchwey",
           role: "Youth Ministry",
           image: "/images/eric-botchwey.jpg"
@@ -90,6 +100,7 @@ export default function About() {
           role: "Operations (Executive Pastor)",
           image: "/images/george-aidoo.jpg"
         }
+
       ]
     },
     {
@@ -608,33 +619,7 @@ export default function About() {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <div className="bg-gradient-to-r from-blue-700 to-purple-600 rounded-xl overflow-hidden shadow-xl">
-          <div className="flex flex-col md:flex-row">
-            <div className="md:w-1/3">
-              <img 
-                src="/images/charles-atia.jpg" 
-                alt="Rev. Charles Atia"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="md:w-2/3 p-8 text-white">
-              <div className="flex items-center mb-4">
-                <FaChurch className="text-3xl mr-4 text-white opacity-80" />
-                <h3 className="text-3xl font-bold">Senior Pastor</h3>
-              </div>
-              <h4 className="text-2xl font-bold mb-2">Reverend Charles Atia</h4>
-              <p className="text-blue-100 mb-4">Spiritual Leader & Visionary</p>
-              <p className="mb-4">
-                With [X] years of faithful ministry, Reverend Atia provides spiritual guidance and leadership 
-                to our congregation. His vision for [mention key vision points] has shaped our church's growth.
-              </p>
-              <div className="flex items-center text-blue-100">
-                <FaPhone className="mr-2" />
-                <span>Contact: +233 XX XXX XXXX</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </motion.div>
       <motion.section 
       className="py-16 bg-white"
@@ -713,7 +698,7 @@ export default function About() {
 
         {/* Committee Section */}
         <motion.div 
-          className="mt-20 bg-gradient-to-r from-blue-700 to-purple-600 rounded-xl p-8 text-white"
+          className="mt-20 bg-slate-900 rounded-xl p-8 text-white"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -753,61 +738,7 @@ export default function About() {
         </motion.div>
       </div>
     </motion.section>
-    {/* Out of Town Pastors Section */}
-<div className="mt-12">
-  <h3 className="text-2xl font-bold text-gray-800 mb-8 flex items-center">
-    <FaMapMarkerAlt className="text-green-600 mr-3" />
-    Lay Pastors Serving Out of Town
-  </h3>
-  
-  <div className="grid md:grid-cols-2 gap-8">
-    {/* Pastor Patrick Offei */}
-    <div className="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow border-l-4 border-green-500">
-      <div className="relative h-48 overflow-hidden">
-        <img 
-          src="/images/patrick-offei.jpg" 
-          alt="Lay Pastor Patrick Offei"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 p-6">
-          <h4 className="text-xl font-bold text-white">Lay Pastor Patrick Offei</h4>
-          <p className="text-green-200">Currently serving in Accra</p>
-        </div>
-      </div>
-      <div className="p-6">
-        <p className="text-gray-600">Faithful servant supporting our church's mission from another location</p>
-        <div className="mt-4 flex items-center">
-          <FaPhone className="text-green-600 mr-2" />
-          <span className="text-gray-700">Contact: +233 XX XXX XXXX</span>
-        </div>
-      </div>
-    </div>
-
-    {/* Pastor Asiedu Ompong */}
-    <div className="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow border-l-4 border-green-500">
-      <div className="relative h-48 overflow-hidden">
-        <img 
-          src="/images/asiedu-ompong.jpg" 
-          alt="Lay Pastor Asiedu Ompong"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 p-6">
-          <h4 className="text-xl font-bold text-white">Lay Pastor Asiedu Ompong</h4>
-          <p className="text-green-200">Currently serving in Kumasi</p>
-        </div>
-      </div>
-      <div className="p-6">
-        <p className="text-gray-600">Dedicated minister extending our church's reach to other regions</p>
-        <div className="mt-4 flex items-center">
-          <FaPhone className="text-green-600 mr-2" />
-          <span className="text-gray-700">Contact: +233 XX XXX XXXX</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+    
     </div>
   );
 }

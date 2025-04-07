@@ -384,38 +384,6 @@ export default function DepYoungSingles() {
           ))}
         </div>
       </section>
-
-      {/* Call to Action */}
-      <motion.section 
-        initial={{ scale: 0.95, opacity: 0 }}
-        whileInView={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        className="py-20 px-4 text-center bg-gradient-to-r from-purple-600 to-pink-500 text-white"
-      >
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold mb-6">READY TO JOIN OUR SISTERHOOD?</h2>
-          <p className="text-xl mb-8">
-            Whether you're new to faith or have been walking with Christ for years, you have a place here.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white text-purple-800 px-8 py-4 rounded-full text-lg font-bold shadow-lg"
-            >
-              Become a Member
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-transparent border-2 border-white px-8 py-4 rounded-full text-lg font-bold shadow-lg"
-            >
-              Contact Our Leaders
-            </motion.button>
-          </div>
-        </div>
-      </motion.section>
     </div>
   );
 }
