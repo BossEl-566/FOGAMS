@@ -20,6 +20,7 @@ import cookieParser from 'cookie-parser'; // Middleware to parse cookies
 import jwt from 'jsonwebtoken'; // JWT for authentication
 import { createServer } from 'http'; // HTTP server module
 import { Server } from 'socket.io'; // Socket.IO for real-time communication
+import { getVerse, BOOK } from 'bible-kjv';
 
 
 dotenv.config(); // Load environment variables from .env file
@@ -89,6 +90,26 @@ io.on("connection", (socket) => {
   });
 
   // Custom events can be added here
+});
+
+app.get('/api/bible', (req, res) => {
+  const { book, chapter, verse } = req.query;
+
+  if (!book || !chapter || !verse) {
+    return res.status(400).json({ error: 'Please provide book, chapter, and verse' });
+  }
+
+  const bookEnum = BOOK[book];
+  if (!bookEnum) {
+    return res.status(400).json({ error: 'Invalid book name. Use names like John, Genesis, etc.' });
+  }
+
+  try {
+    const result = getVerse(bookEnum, parseInt(chapter), parseInt(verse));
+    res.json({ book, chapter, verse, text: result });
+  } catch (err) {
+    res.status(500).json({ error: 'Could not retrieve verse' });
+  }
 });
 
 // API Routes

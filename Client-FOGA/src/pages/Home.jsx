@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import { motion } from 'framer-motion';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import SkeletonLoader from '../components/SkeletonLoader';
 
 // Import your images
 import slide1 from '../assets/slide1.jpg';
@@ -15,7 +16,7 @@ import { HiLocationMarker } from 'react-icons/hi';
 export default function Home() {
   const sliderRef = useRef(null);
   const [expandedCard, setExpandedCard] = useState(null);
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState({ data: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [eventId, setEventId] = useState(null);
@@ -69,7 +70,7 @@ export default function Home() {
   if (loading || !message) {
     return (
       <div className="p-6 text-center text-gray-500">
-        Loading daily message...
+        <SkeletonLoader />
       </div>
     );
   }
