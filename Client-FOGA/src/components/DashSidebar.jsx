@@ -10,6 +10,7 @@ import { FaPollH } from "react-icons/fa";
 import { MdEventAvailable, MdOutlineAttachMoney } from "react-icons/md";
 import { Link, useLocation } from 'react-router-dom';
 import { signoutSuccess } from '../radux/user/userSlice';
+import { BiNotepad } from "react-icons/bi";
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
@@ -100,6 +101,11 @@ export default function DashSidebar() {
             <Link to='/dashboard?tab=bible'>
               <Sidebar.Item active={tab === 'bible'} href="#" icon={FaBookBible} as='div'>
               Bible
+              </Sidebar.Item>
+            </Link>
+            <Link to='/dashboard?tab=notepad'>
+              <Sidebar.Item active={tab === 'notepad'} href="#" icon={BiNotepad} as='div'>
+              Notepad
               </Sidebar.Item>
             </Link>
 

@@ -48,6 +48,7 @@ import DepProtocol from './pages/DepProtocol';
 import DepMissions from './pages/DepMissions';
 import Event from './pages/Event';
 import EventDetails from './pages/EventDetails';
+import Notepad from './pages/Notepad';
 
 export default function App() {
   const {currentUser} = useSelector((state) => state.user);
@@ -107,6 +108,7 @@ export default function App() {
           <Route path="/all-transaction" element={<AllTransanction />} />
           <Route path="/new-church-record" element={<ChurchRecord />} />
           <Route path="/all-tithes" element={<AllTithe />} />
+          <Route path="/create/notepad" element={<Notepad />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/daily-bible-message" element={<DashDailyBibleMessage />} />
