@@ -49,6 +49,7 @@ import DepMissions from './pages/DepMissions';
 import Event from './pages/Event';
 import EventDetails from './pages/EventDetails';
 import Notepad from './pages/Notepad';
+import ViewNotepad from './pages/ViewNotepad';
 
 export default function App() {
   const {currentUser} = useSelector((state) => state.user);
@@ -109,6 +110,7 @@ export default function App() {
           <Route path="/new-church-record" element={<ChurchRecord />} />
           <Route path="/all-tithes" element={<AllTithe />} />
           <Route path="/create/notepad" element={<Notepad />} />
+          <Route path="/notepad/:notepadId" element={<ViewNotepad />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/daily-bible-message" element={<DashDailyBibleMessage />} />
