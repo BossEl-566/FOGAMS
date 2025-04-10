@@ -16,8 +16,8 @@ export default function About() {
           {
             name: "Reverend Charles Atia",
             role: "Senior Pastor",
-            bio: "Our spiritual leader and visionary, guiding Fellowship of Grace A/G with wisdom and dedication for [X] years.",
-            image: "/images/charles-atia.jpg"
+            bio: "Rev. Charles Atia, the Senior Pastor of the Fellowship of Grace Assemblies of God, Pedu, Cape Coast.He is graced by God to rightly divide the word of truth and stir up revival in the body of Christ.The Lord through him has been a blessing to many churches as well us youth groups across the length and breath of Ghana. He currently serves as Sunday School Director, Central Region A and Adjunct faculty with the Assemblies of God Theological Seminary - Kormantse. He holds a Master of Art degree from the Global University, a bachelor of Commerce degree from the Univ. Of Cape Coast, Diploma in theology from the Assemblies of God Theological Seminary.He is married to Lydia Atia, the regional Finance and Admin Officer for Scripture Union - Central Region and they are blessed with 2 children Wineloyah , and Winepanga",
+            image: "src/assets/charles-atia.jpg"
           }
         ]
       },
@@ -121,6 +121,10 @@ export default function About() {
           role: "Youth Ministry President",
           image: "/images/hawawu-kassim.jpg"
         },
+        {name: "Mrs Joyce Baaba Twentoh",
+        role: "Children Ministry President",
+        image: "/images/joyce-twentoh.jpg"
+        },
         {
           name: "Mr. Francis Ansah",
           role: "Creative Arts President",
@@ -165,7 +169,7 @@ export default function About() {
     {
       icon: <FaHeart className="text-4xl text-white" />,
       title: "Love",
-      description: "Demonstrating Christ's love in all our relationships"
+      description: "Love for God"
     },
     {
       icon: <FaCross className="text-4xl text-white" />,
@@ -383,8 +387,7 @@ export default function About() {
                 <h3 className="text-2xl font-bold text-gray-800">Our Mission</h3>
               </div>
               <p className="text-lg text-gray-700 pl-16">
-                "To glorify God by making disciples of Jesus Christ through worship, 
-                fellowship, evangelism, and service to our community."
+                "As an agency of the Lord, FOGA is committed to helping people from all walks of life know the love of God, and to demonstrate it in the same way that Christ did."
               </p>
             </motion.div>
 
@@ -401,8 +404,7 @@ export default function About() {
                 <h3 className="text-2xl font-bold text-gray-800">Our Vision</h3>
               </div>
               <p className="text-lg text-gray-700 pl-16">
-                "To be a thriving, multicultural community where lives are transformed by the Gospel, 
-                families are strengthened, and believers are equipped to impact their world for Christ."
+                "To be a centre for building energized community of Christians who respond to God’s heartbeat by influencing and touching the lives of people groups."
               </p>
             </motion.div>
           </div>
@@ -484,7 +486,7 @@ export default function About() {
     >
       <div className="lg:w-1/3">
         <img 
-          src="/images/rev-koomson.jpg" 
+          src="src/assets/rev-koomson.jpg" 
           alt="Rev. Dr. Isaac Koomson - Founder"
           className="w-full h-full object-cover"
         />
@@ -676,7 +678,7 @@ export default function About() {
                       <img 
                         src={member.image} 
                         alt={member.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                       <div className="absolute bottom-0 left-0 p-6">

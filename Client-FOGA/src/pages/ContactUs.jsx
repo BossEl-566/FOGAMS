@@ -1,8 +1,53 @@
 import React from 'react';
+import { useState } from 'react';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
 import churchBg from '../assets/community-event.jpg'; // Replace with your image path
 
 export default function ContactUs() {
+  const [formData, setFormData] = useState({
+      name: '',
+      email: '',
+      subject: '',
+      message: ''
+    });
+  
+    const [submissionStatus, setSubmissionStatus] = useState({
+      isSubmitting: false,
+      isSuccess: false,
+      error: null
+    });
+  
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setSubmissionStatus({ isSubmitting: true, isSuccess: false, error: null });
+  
+      try {
+        // Replace with your actual form submission endpoint
+        const response = await fetch('/api/contact/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+  
+        setSubmissionStatus({ isSubmitting: false, isSuccess: true, error: null });
+        setFormData({ name: '', email: '', subject: '', message: '' }); // Reset form
+      } catch (error) {
+        setSubmissionStatus({ isSubmitting: false, isSuccess: false, error: error.message });
+      }
+    };
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -31,15 +76,29 @@ export default function ContactUs() {
           <div className="lg:w-1/2">
             <div className="bg-white rounded-xl shadow-lg p-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">Send Us a Message</h2>
-              <form className="space-y-6">
+              {submissionStatus.isSuccess && (
+                <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg">
+                  Thank you for your message! We'll get back to you soon.
+                </div>
+              )}
+              {submissionStatus.error && (
+                <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
+                  Error: {submissionStatus.error}
+                </div>
+              )}
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Your Name</label>
                     <input 
                       type="text" 
                       id="name" 
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="John Doe"
+                      required
                     />
                   </div>
                   <div>
@@ -47,8 +106,12 @@ export default function ContactUs() {
                     <input 
                       type="email" 
                       id="email" 
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="john@example.com"
+                      required
                     />
                   </div>
                 </div>
@@ -57,24 +120,33 @@ export default function ContactUs() {
                   <input 
                     type="text" 
                     id="subject" 
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="What's this about?"
+                    required
                   />
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-gray-700 font-medium mb-2">Your Message</label>
                   <textarea 
                     id="message" 
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
                     rows="5" 
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Type your message here..."
+                    required
                   ></textarea>
                 </div>
                 <button 
                   type="submit" 
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 disabled:opacity-50"
+                  disabled={submissionStatus.isSubmitting}
                 >
-                  Send Message
+                  {submissionStatus.isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             </div>
@@ -92,7 +164,7 @@ export default function ContactUs() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800">Our Location</h3>
-                    <p className="text-gray-600">123 Faith Avenue, Grace City, GC 12345</p>
+                    <p className="text-gray-600">Fellowship of Grace Assemblies of God, Cape Coast. Opposite Cape FM.</p>
                   </div>
                 </div>
                 <div className="flex items-start">
@@ -101,7 +173,7 @@ export default function ContactUs() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800">Phone Number</h3>
-                    <p className="text-gray-600">(123) 456-7890</p>
+                    <p className="text-gray-600">(+233)24-039-5732</p>
                   </div>
                 </div>
                 <div className="flex items-start">
@@ -110,7 +182,7 @@ export default function ContactUs() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800">Email Address</h3>
-                    <p className="text-gray-600">info@faithcommunitychurch.org</p>
+                    <p className="text-gray-600">agghfoga.pedu@gmail.com</p>
                   </div>
                 </div>
                 <div className="flex items-start">
