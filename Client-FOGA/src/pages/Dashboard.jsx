@@ -19,6 +19,7 @@ import DashBooking from '../components/DashBooking';
 import DashAnonymous from '../components/DashAnonymous';
 import DashBible from '../components/DashBible';
 import DashNotepad from '../components/DashNotepad';
+import DashContact from '../components/DashContact';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -66,6 +67,7 @@ export default function Dashboard() {
       {tab === 'anonymous' && <DashAnonymous />}
       {tab === 'bible' && <DashBible />}
       {tab === 'notepad' && <DashNotepad />}
+      {tab === 'contact' && <DashContact />}
     </div>
   );
 }

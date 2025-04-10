@@ -20,3 +20,33 @@ export const createContact = async (req, res) => {
         console.error(error);
     }
 }
+
+export const getContactMessages = async (req, res) => {
+    try {
+        const messages = await Contact.find().sort({ createdAt: -1 });
+        res.status(200).json(messages);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+        console.error(error);
+    }
+}
+
+export const deleteContactMessage = async (req, res) => {
+    // Check if the user is a pastor or admin
+    if (!req.user.isPastor && !req.user.isAdmin) {
+        return res.status(403).json({ error: 'You are not authorized to perform this action' });
+    }
+    try {
+        const { messageId } = req.params;
+        const deletedMessage = await Contact.findByIdAndDelete(messageId);
+
+        if (!deletedMessage) {
+            return res.status(404).json({ error: 'Message not found' });
+        }
+
+        res.status(200).json({ message: 'Message deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+        console.error(error);
+    }
+}

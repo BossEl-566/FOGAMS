@@ -6,6 +6,7 @@ import { FaBookBible } from "react-icons/fa6";
 import { BsCalendarCheck } from "react-icons/bs"; 
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { FaPray } from "react-icons/fa";
+import { MdOutlineContactSupport } from "react-icons/md";
 import { FaPollH } from "react-icons/fa";
 import { MdEventAvailable, MdOutlineAttachMoney } from "react-icons/md";
 import { Link, useLocation } from 'react-router-dom';
@@ -179,6 +180,15 @@ export default function DashSidebar() {
                   as='div'
                 >
                   Member Requests
+                </Sidebar.Item>
+              </Link>
+              <Link to='/dashboard?tab=contact'>
+                <Sidebar.Item
+                  active={tab === 'contact'}
+                  icon={MdOutlineContactSupport}
+                  as='div'
+                >
+                  Contact
                 </Sidebar.Item>
               </Link>
 
