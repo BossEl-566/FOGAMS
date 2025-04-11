@@ -201,28 +201,40 @@ export default function ContactUs() {
 
             {/* Google Map */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-              <iframe 
-                title="Church Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215256842494!2d-73.98810768459378!3d40.74844047932787!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQ0JzU0LjQiTiA3M8KwNTknMTMuNyJX!5e0!3m2!1sen!2sus!4v1623862345678!5m2!1sen!2sus" 
-                width="100%" 
-                height="300" 
-                style={{ border: 0 }} 
-                allowFullScreen="" 
-                loading="lazy"
-              ></iframe>
+            <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.2858949474497!2d-1.2775667!3d5.1297198!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfddfebb728ffd69%3A0x5521eee7ea8a954!2sFellowship%20of%20Grace%20-%20Assemblies%20of%20God%20Church!5e0!3m2!1sen!2sgh!4v1712838152785!5m2!1sen!2sgh"
+    width="100%"
+    height="450"
+    style={{ border: 0 }}
+    allowFullScreen=""
+    loading="lazy"
+    referrerPolicy="no-referrer-when-downgrade"
+    title="Fellowship of Grace Map"
+  ></iframe>
+
             </div>
 
             {/* Social Media */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-800 mb-4">Connect With Us</h2>
               <div className="flex space-x-4">
-                <a href="#" className="bg-blue-700 text-white p-3 rounded-full hover:bg-blue-800 transition duration-200">
-                  <FaFacebook size={20} />
-                </a>
-                <a href="#" className="bg-pink-600 text-white p-3 rounded-full hover:bg-pink-700 transition duration-200">
+              <a
+  href="https://web.facebook.com/foga.pedu.7"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="bg-blue-700 text-white p-3 rounded-full hover:bg-blue-800 transition duration-200"
+>
+  <FaFacebook size={20} />
+</a>
+
+                <a href="https://www.instagram.com/agfogapedu/" className="bg-pink-600 text-white p-3 rounded-full hover:bg-pink-700 transition duration-200"
+                  target="_blank"
+                  rel="noopener noreferrer">
                   <FaInstagram size={20} />
                 </a>
-                <a href="#" className="bg-red-600 text-white p-3 rounded-full hover:bg-red-700 transition duration-200">
+                <a href="https://www.youtube.com/@fellowshipofgraceassemblyp2160" className="bg-red-600 text-white p-3 rounded-full hover:bg-red-700 transition duration-200"
+                  target="_blank"
+                  rel="noopener noreferrer">
                   <FaYoutube size={20} />
                 </a>
               </div>

@@ -16,7 +16,7 @@ export default function About() {
           {
             name: "Reverend Charles Atia",
             role: "Senior Pastor",
-            bio: "Rev. Charles Atia, the Senior Pastor of the Fellowship of Grace Assemblies of God, Pedu, Cape Coast.He is graced by God to rightly divide the word of truth and stir up revival in the body of Christ.The Lord through him has been a blessing to many churches as well us youth groups across the length and breath of Ghana. He currently serves as Sunday School Director, Central Region A and Adjunct faculty with the Assemblies of God Theological Seminary - Kormantse. He holds a Master of Art degree from the Global University, a bachelor of Commerce degree from the Univ. Of Cape Coast, Diploma in theology from the Assemblies of God Theological Seminary.He is married to Lydia Atia, the regional Finance and Admin Officer for Scripture Union - Central Region and they are blessed with 2 children Wineloyah , and Winepanga",
+            bio: "Rev. Charles Atia is the Senior Pastor of Fellowship of Grace Assemblies of God, Pedu, Cape Coast. He is gifted in preaching and inspiring revival, and has impacted churches and youth groups across Ghana. He also serves as Sunday School Director for Central Region A and teaches at the Assemblies of God Theological Seminary. He holds degrees from Global University and UCC. Rev. Atia is married to Lydia Atia, a Scripture Union officer, and they have two children, Wineloyah and Winepanga",
             image: "src/assets/charles-atia.jpg"
           }
         ]
@@ -700,7 +700,7 @@ export default function About() {
 
         {/* Committee Section */}
         <motion.div 
-          className="mt-20 bg-slate-900 rounded-xl p-8 text-white"
+          className="mt-20 bg-blue-800 rounded-xl p-8 text-white"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
