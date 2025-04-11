@@ -50,6 +50,7 @@ import Event from './pages/Event';
 import EventDetails from './pages/EventDetails';
 import Notepad from './pages/Notepad';
 import ViewNotepad from './pages/ViewNotepad';
+import Gallery from './pages/Gallery';
 
 export default function App() {
   const {currentUser} = useSelector((state) => state.user);
@@ -77,7 +78,7 @@ export default function App() {
         <Route path="/ministries/women" element={<WomenMin />} />
         <Route path="/ministries/men" element={<MenMin />} />
         <Route path="/ministries/sunday-school" element={<SundaySchoolMin />} />
-        <Route path="/departments/creative-arts" element={<DepCreativeArt />} />
+        <Route path="/ministries/creative-arts" element={<DepCreativeArt />} />
         <Route path="/departments/young-singles" element={<DepYoungSingles />} />
         <Route path="/departments/welfare" element={<DepWelfare />} />
         <Route path="/departments/guest-experience" element={<DepGuest />} />
@@ -88,6 +89,7 @@ export default function App() {
         <Route path="/departments/project-infrastructure" element={<DepProject />} />
         <Route path="/departments/protocol-ushering" element={<DepProtocol />} />
         <Route path="/departments/missions" element={<DepMissions />} />
+        <Route path="/gallery" element={<Gallery />} />
 
         <Route path="/departments/community-impact" element={<DepCommunity />} />
         

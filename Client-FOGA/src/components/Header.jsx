@@ -252,16 +252,9 @@ export default function Header() {
       {/* Departments Column */}
       <div>
         <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 pb-1 border-b border-gray-200 dark:border-gray-700">
-          Departments
+          Service Group
         </h3>
         <div className="space-y-1">
-          <Link
-            to="/departments/creative-arts"
-            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-            onClick={() => setIsDepartmentsOpen(false)}
-          >
-            Creative Arts
-          </Link>
           <Link
             to="/departments/young-singles"
             className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
@@ -296,6 +289,20 @@ export default function Header() {
             onClick={() => setIsDepartmentsOpen(false)}
           >
             Counseling & Visitation
+          </Link>
+          <Link
+            to="/departments/protocol-ushering"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Protocol & Ushering
+          </Link>
+          <Link
+            to="/gallery"
+            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            onClick={() => setIsDepartmentsOpen(false)}
+          >
+            Gallery
           </Link>
         </div>
       </div>
@@ -341,13 +348,7 @@ export default function Header() {
           >
             Community Impact Fund
           </Link>
-          <Link
-            to="/departments/protocol-ushering"
-            className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-            onClick={() => setIsDepartmentsOpen(false)}
-          >
-            Protocol & Ushering
-          </Link>
+          
         </div>
       </div>
     </div>
@@ -402,6 +403,14 @@ export default function Header() {
               >
                 Sunday School
               </Link>
+              <Link
+  to="/ministries/creative-arts"
+  className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+  onClick={() => setIsMinistriesOpen(false)}
+>
+  Creative Arts
+</Link>
+
             </div>
           )}
         </div>
