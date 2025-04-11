@@ -9,28 +9,28 @@ export default function DepYoungSingles() {
     {
       name: 'MISS MARIAN-STELLA ARMAH',
       role: 'PRESIDENT',
-      image: '/images/marian-stella.jpg',
+      image: '/src/assets/marian-stella.jpg',
       bio: 'Dedicated to empowering young women through biblical principles and practical life skills.',
       symbol: '👑'
     },
     {
       name: 'MRS. SANDRA COBBINAH',
       role: 'SECRETARY',
-      image: '/images/sandra.jpg',
+      image: '/src/assets/sandra.jpg',
       bio: 'Organizes events and keeps our ministry running smoothly with grace and efficiency.',
       symbol: '📝'
     },
     {
       name: 'MISS BRIDGET MAWULI',
       role: 'TREASURER',
-      image: '/images/bridget.jpg',
+      image: '/src/assets/bridget.jpg',
       bio: 'Manages our resources wisely to further our mission of purity and purpose.',
       symbol: '💰'
     },
     {
       name: 'MISS EMMA ESSIEN',
       role: 'ORGANIZER',
-      image: '/images/emma.jpg',
+      image: '/src/assets/emma.jpg',
       bio: 'Creates meaningful fellowship opportunities that build sisterhood in Christ.',
       symbol: '🎯'
     }
@@ -43,7 +43,7 @@ export default function DepYoungSingles() {
       icon: '💍',
       verse: '1 Timothy 4:12',
       description: 'We explore what it means to live a life of purity while waiting on God\'s timing for marriage. Our discussions focus on maintaining emotional, physical, and spiritual integrity.',
-      image: '/images/purity.jpg'
+      image: '/src/assets/purity.jpg'
     },
     {
       id: 'identity',
@@ -51,7 +51,7 @@ export default function DepYoungSingles() {
       icon: '👑',
       verse: '2 Corinthians 5:17',
       description: 'Discovering who you are in Christ before seeking identity in relationships. We study how God sees us and how to build self-worth on His unchanging truth.',
-      image: '/images/identity.jpg'
+      image: '/src/assets/identity.jpg'
     },
     {
       id: 'fashion',
@@ -59,7 +59,7 @@ export default function DepYoungSingles() {
       icon: '👗',
       verse: '1 Peter 3:3-4',
       description: 'Monthly workshops on dressing beautifully while honoring God. Learn how to express your personality through fashion that reflects inner godliness.',
-      image: '/images/fashion.jpg'
+      image: '/src/assets/fashion.jpg'
     },
     {
       id: 'fellowship',
@@ -67,7 +67,7 @@ export default function DepYoungSingles() {
       icon: '👭',
       verse: 'Ecclesiastes 4:9-10',
       description: 'Building authentic Christian friendships that encourage spiritual growth. We organize retreats, Bible studies, and mentorship opportunities.',
-      image: '/images/fellowship.jpg'
+      image: '/src/assets/fellowship.jpg'
     }
   ];
 
@@ -87,10 +87,10 @@ export default function DepYoungSingles() {
   ];
 
   const galleryImages = [
-    '/images/young-singles-1.jpg',
-    '/images/young-singles-2.jpg',
-    '/images/young-singles-3.jpg',
-    '/images/young-singles-4.jpg'
+    '/src/assets/young-singles-1.jpg',
+    '/src/assets/young-singles-2.jpg',
+    '/src/assets/young-singles-3.jpg',
+    '/src/assets/young-singles-4.jpg'
   ];
 
   const upcomingEvents = [
@@ -102,53 +102,46 @@ export default function DepYoungSingles() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50 text-purple-900">
       {/* Hero Section */}
-      <header className="relative h-screen flex items-center justify-center bg-gradient-to-r from-purple-700 to-pink-600 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/cross-pattern.png')] opacity-10"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-purple-900/30 to-transparent"></div>
-        
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
-        >
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-lg">
-            YOUNG SINGLES
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 text-purple-100 font-light max-w-2xl mx-auto">
-            Cultivating purity, purpose, and godly femininity while we wait on the Lord
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 bg-white text-purple-800 font-bold rounded-full shadow-lg"
-            >
-              Join Our Community
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 bg-transparent border-2 border-white text-white font-bold rounded-full shadow-lg"
-            >
-              Upcoming Events
-            </motion.button>
-          </div>
-        </motion.div>
+      <header className="relative h-screen flex items-center justify-center bg-[url('/src/assets/young-singles.jpg')] bg-cover bg-center overflow-hidden">
+  <div className="absolute inset-0 bg-purple-950/50"></div> {/* Dark overlay for contrast */}
 
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          <div className="animate-bounce">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </div>
-        </motion.div>
-      </header>
+  <motion.div 
+    initial={{ opacity: 0, y: 50 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8 }}
+    className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+  >
+    <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white">
+  <span style={{ textShadow: '0 0 10px #fff, 0 0 20px #9333ea' }} className="text-white">
+    YOUNG
+  </span>{' '}
+  <span style={{ textShadow: '0 0 10px #9333ea, 0 0 20px #9333ea' }} className="text-purple-500">
+    SINGLES
+  </span>
+</h1>
+
+    <p className="text-xl md:text-2xl mb-8 text-white font-light max-w-2xl mx-auto">
+      Cultivating purity, purpose, and godly femininity while we wait on the Lord
+    </p>
+    <div className="flex flex-wrap justify-center gap-4">
+      {/* Add buttons or links here if needed */}
+    </div>
+  </motion.div>
+
+  <motion.div 
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ delay: 1, duration: 0.8 }}
+    className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+  >
+    <div className="animate-bounce">
+      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+    </div>
+  </motion.div>
+</header>
+
 
       {/* Mission Statement */}
       <section className="py-16 px-4 max-w-6xl mx-auto">
@@ -210,7 +203,7 @@ export default function DepYoungSingles() {
             <ul className="space-y-4">
               {upcomingEvents.map((event, index) => (
                 <li key={index} className="flex items-start border-b border-purple-100 pb-3">
-                  <span className="text-purple-500 mr-3">{event.icon}</span>
+                  
                   <div>
                     <h4 className="font-bold">{event.title}</h4>
                     <p className="text-sm text-purple-700">{event.date} | {event.location}</p>
@@ -244,7 +237,7 @@ export default function DepYoungSingles() {
                 whileTap={{ scale: 0.95 }}
                 className={`px-6 py-3 rounded-full font-medium transition-all ${activeTab === topic.id ? 'bg-purple-600 text-white' : 'bg-white text-purple-700 hover:bg-purple-100'}`}
               >
-                <span className="mr-2">{topic.icon}</span> {topic.title}
+                {topic.title}
               </motion.button>
             ))}
           </div>
@@ -260,7 +253,7 @@ export default function DepYoungSingles() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div>
                   <div className="flex items-center mb-4">
-                    <span className="text-3xl mr-3">{topic.icon}</span>
+                    
                     <h3 className="text-2xl font-bold">{topic.title}</h3>
                   </div>
                   <p className="italic text-purple-600 mb-4">"{topic.verse}"</p>
@@ -372,7 +365,6 @@ export default function DepYoungSingles() {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-purple-900/70 to-transparent p-4">
-                  <span className="text-2xl text-white">{member.symbol}</span>
                 </div>
               </div>
               <div className="p-6">
