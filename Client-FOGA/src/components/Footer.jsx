@@ -79,11 +79,12 @@ export default function FooterCom() {
               </div>
               <div className="flex items-start">
                 <BsPhone className="mt-1 mr-3 flex-shrink-0" />
-                <span>+233 123 456 789</span>
+                <span>+233 24 039 5732</span>
               </div>
               <div className="pt-2">
                 <p className="text-sm">Aba Walker Road</p>
-                <p className="text-sm">Cape Coast, Ghana</p>
+                <p className="text-sm">Opposite Cape FM</p>
+                <p className="text-sm">Cape Coast -Pedu, Ghana</p>
               </div>
             </div>
           </div>
@@ -94,7 +95,7 @@ export default function FooterCom() {
         <div className="w-full flex flex-col md:flex-row justify-between items-center">
           <Footer.Copyright 
             href="#" 
-            by="Fellowship of Grace Assemblies of God, Cape Coast" 
+            by="Fellowship of Grace Assemblies of God-Pedu, Cape Coast" 
             year={new Date().getFullYear()}
             className="text-gray-500 dark:text-gray-400"
           />

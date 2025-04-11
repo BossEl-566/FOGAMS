@@ -164,7 +164,7 @@ export default function ContactUs() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800">Our Location</h3>
-                    <p className="text-gray-600">Fellowship of Grace Assemblies of God, Cape Coast. Opposite Cape FM.</p>
+                    <p className="text-gray-600">Fellowship of Grace Assemblies of God, Cape Coast- Pedu. Opposite Cape FM.</p>
                   </div>
                 </div>
                 <div className="flex items-start">
@@ -191,8 +191,9 @@ export default function ContactUs() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800">Service Times</h3>
-                    <p className="text-gray-600">Sunday: 9:00 AM & 11:00 AM</p>
-                    <p className="text-gray-600">Wednesday Bible Study: 7:00 PM</p>
+                    <p className="text-gray-600">Sunday: 6:00 AM & 7:00 AM & 10:45 AM</p>
+                    <p className="text-gray-600">Wednesday Bible Study: 6:00 PM</p>
+                    <p className="text-gray-600">Friday Prayer Meeting: 6:00 PM</p>
                   </div>
                 </div>
               </div>
