@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import anniversaryBg from '../assets/anniversary.jpg'; // adjust the path as needed
+
 
 const DepAnniversary = () => {
   const teamMembers = [
@@ -113,33 +115,37 @@ const DepAnniversary = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-yellow-50">
       {/* Hero Section */}
-      <div className="relative py-24 px-4 sm:px-6 lg:px-8 text-center bg-[url('https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1412&q=80')] bg-cover bg-center">
-        <div className="absolute inset-0 bg-purple-900/70"></div>
-        <div className="relative z-10 max-w-4xl mx-auto">
-          <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-bold text-white mb-6"
-          >
-            <span className="text-shadow-lg shadow-yellow-300">CHURCH ANNIVERSARY</span>
-          </motion.h1>
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.3 }}
-            className="h-1 w-32 bg-yellow-400 mx-auto mb-8"
-          ></motion.div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 1 }}
-            className="text-xl md:text-2xl text-yellow-200 max-w-3xl mx-auto"
-          >
-            Celebrating {new Date().getFullYear() - 1960} Years of Faith, Legacy, and Community Impact
-          </motion.p>
-        </div>
-      </div>
+      <div
+  className="relative py-24 px-4 sm:px-6 lg:px-8 text-center bg-cover bg-center"
+  style={{ backgroundImage: `url(${anniversaryBg})` }}
+>
+  <div className="absolute inset-0 bg-purple-900/70"></div>
+  <div className="relative z-10 max-w-4xl mx-auto">
+    <motion.h1 
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="text-5xl md:text-7xl font-bold text-white mb-6"
+    >
+      <span className="text-shadow-lg shadow-yellow-300">CHURCH ANNIVERSARY</span>
+    </motion.h1>
+    <motion.div
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      transition={{ delay: 0.3 }}
+      className="h-1 w-32 bg-yellow-400 mx-auto mb-8"
+    ></motion.div>
+    <motion.p
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.6, duration: 1 }}
+      className="text-xl md:text-2xl text-yellow-200 max-w-3xl mx-auto"
+    >
+      Celebrating {new Date().getFullYear() - 1960} Years of Faith, Legacy, and Community Impact
+    </motion.p>
+  </div>
+</div>
+
 
       {/* Anniversary Team */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -228,54 +234,6 @@ const DepAnniversary = () => {
                 </motion.div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Upcoming Events */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-4xl font-bold text-center text-purple-900 mb-16"
-          >
-            <span className="relative inline-block">
-              Anniversary Events
-              <span className="absolute bottom-0 left-0 w-full h-2 bg-yellow-400"></span>
-            </span>
-          </motion.h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {upcomingEvents.map((event, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-gradient-to-b from-purple-50 to-white rounded-xl shadow-md overflow-hidden border border-purple-100 hover:shadow-lg transition-all duration-300"
-              >
-                <div className="h-3 bg-gradient-to-r from-purple-600 to-yellow-500"></div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-purple-900 mb-3">{event.title}</h3>
-                  <div className="flex items-center text-purple-700 mb-2">
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                    {event.date}
-                  </div>
-                  <div className="flex items-center text-purple-600">
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    {event.time}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
