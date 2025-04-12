@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser, HiAnnotation, HiChartPie, HiFolderDownload } from "react-icons/hi";
+import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser, HiAnnotation, HiChartPie, HiFolderDownload, HiX } from "react-icons/hi";
 import { BiMessageRounded, BiChat } from "react-icons/bi";
 import { FaBookBible } from "react-icons/fa6";
 import { BsCalendarCheck } from "react-icons/bs"; 
@@ -16,12 +16,15 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { FaUserPlus } from "react-icons/fa";
+import { HiMenuAlt2 } from "react-icons/hi";
 
 export default function DashSidebar() {
   const location = useLocation();
   const { currentUser } = useSelector(state => state.user);
   const [tab, setTab] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const dispatch = useDispatch();
+  const sidebarRef = useRef(null);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -30,6 +33,20 @@ export default function DashSidebar() {
       setTab(tabFromUrl);
     }
   }, [location.search]);
+
+  // Close sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSignout = async () => {
     try {
@@ -40,165 +57,206 @@ export default function DashSidebar() {
         console.log(data.message);
       } else {
         dispatch(signoutSuccess());
-        toast.success('Successfully signed out!');  // Toast notification on successful sign-out
-        // Redirect to login page or perform other actions here
+        toast.success('Successfully signed out!');
+        setIsSidebarOpen(false);
       }
     } catch (error) {
       console.log(error.message);
-      toast.error('An error occurred during sign out.');  // Toast notification for error
+      toast.error('An error occurred during sign out.');
     }
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
+  // Wrapper function for sidebar items that closes the sidebar
+  const SidebarLink = ({ to, tabValue, children, ...props }) => (
+    <Link 
+      to={to} 
+      onClick={() => {
+        setTab(tabValue);
+        closeSidebar();
+      }}
+      {...props}
+    >
+      {children}
+    </Link>
+  );
+
   return (
-    <Sidebar className='w-full md:w-56'>
-      <Sidebar.Items>
-        {currentUser && currentUser.isAdmin && (
-          <Sidebar.ItemGroup className='flex flex-col gap-1'>
-            <Link to='/dashboard?tab=dash'>
-              <Sidebar.Item active={tab === 'dash' || !tab} href="#" icon={HiChartPie} as='div'>
-                Dashboard
-              </Sidebar.Item>
-            </Link>
-          </Sidebar.ItemGroup>
-        )}
-        <Sidebar.ItemGroup className='flex flex-col gap-1'>
-          <Link to='/dashboard?tab=profile'>
-            <Sidebar.Item active={tab === 'profile'} href="#" icon={HiUser} label={currentUser.isAdmin ? 'Admin' : 'User'} labelColor='dark' as='div'>
-              Profile
-            </Sidebar.Item>
-          </Link>
-          {currentUser.isMember && (
-            <>
-            <Link to='/dashboard?tab=message'>
-              <Sidebar.Item active={tab === 'message'} href="#" icon={BiChat} as='div'>
-                Chat
-              </Sidebar.Item>
-            </Link>
-            <Link to='/dashboard?tab=tithe'>
-              <Sidebar.Item active={tab === 'tithe'} href="#" icon={ MdOutlineAttachMoney } as='div'>
-                Account
-              </Sidebar.Item>
-            </Link>
-            <Link to='/dashboard?tab=baptism'>
-              <Sidebar.Item active={tab === 'baptism'} href="#" icon={FaPray} as='div'>
-                Baptism
-              </Sidebar.Item>
-            </Link>
-            <Link to='/dashboard?tab=poll'>
-              <Sidebar.Item active={tab === 'poll'} href="#" icon={FaPollH} as='div'>
-                Poll
-              </Sidebar.Item>
-            </Link>
-            <Link to='/dashboard?tab=book'>
-              <Sidebar.Item active={tab === 'book'} href="#" icon={BsCalendarCheck} as='div'>
-                Book Appointment
-              </Sidebar.Item>
-            </Link>
-            <Link to='/dashboard?tab=anonymous'>
-              <Sidebar.Item active={tab === 'anonymous'} href="#" icon={BiMessageRounded} as='div'>
-              Message Box
-              </Sidebar.Item>
-            </Link>
-            <Link to='/dashboard?tab=bible'>
-              <Sidebar.Item active={tab === 'bible'} href="#" icon={FaBookBible} as='div'>
-              Bible
-              </Sidebar.Item>
-            </Link>
-            <Link to='/dashboard?tab=notepad'>
-              <Sidebar.Item active={tab === 'notepad'} href="#" icon={BiNotepad} as='div'>
-              Notepad
-              </Sidebar.Item>
-            </Link>
+    <>
+      {/* Mobile menu button */}
+      <button
+        onClick={toggleSidebar}
+        className="fixed md:hidden z-50 p-2 m-2 rounded-lg bg-gray-100 dark:bg-gray-700"
+      >
+        {isSidebarOpen ? <HiX className="w-6 h-6" /> : <HiMenuAlt2 className="w-6 h-6" />}
+      </button>
 
-            </>
-          )}
-          {!currentUser.isMember && (
-            <Link to='/dashboard?tab=join'>
-              <Sidebar.Item active={tab === 'join'} href="#" icon={HiTable}>
-                Join Church
+      {/* Sidebar with responsive classes */}
+      <div 
+        ref={sidebarRef}
+        className={`fixed md:relative z-40 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out`}
+      >
+        <Sidebar className='w-64 h-screen fixed md:w-56'>
+          <Sidebar.Items>
+            {currentUser && currentUser.isAdmin && (
+              <Sidebar.ItemGroup className='flex flex-col gap-1'>
+                <SidebarLink to='/dashboard?tab=dash' tabValue='dash'>
+                  <Sidebar.Item active={tab === 'dash' || !tab} href="#" icon={HiChartPie} as='div'>
+                    Dashboard
+                  </Sidebar.Item>
+                </SidebarLink>
+              </Sidebar.ItemGroup>
+            )}
+            <Sidebar.ItemGroup className='flex flex-col gap-1'>
+              <SidebarLink to='/dashboard?tab=profile' tabValue='profile'>
+                <Sidebar.Item active={tab === 'profile'} href="#" icon={HiUser} label={currentUser.isAdmin ? 'Admin' : 'User'} labelColor='dark' as='div'>
+                  Profile
+                </Sidebar.Item>
+              </SidebarLink>
+              {currentUser.isMember && (
+                <>
+                <SidebarLink to='/dashboard?tab=message' tabValue='message'>
+                  <Sidebar.Item active={tab === 'message'} href="#" icon={BiChat} as='div'>
+                    Chat
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=tithe' tabValue='tithe'>
+                  <Sidebar.Item active={tab === 'tithe'} href="#" icon={ MdOutlineAttachMoney } as='div'>
+                    Account
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=baptism' tabValue='baptism'>
+                  <Sidebar.Item active={tab === 'baptism'} href="#" icon={FaPray} as='div'>
+                    Baptism
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=poll' tabValue='poll'>
+                  <Sidebar.Item active={tab === 'poll'} href="#" icon={FaPollH} as='div'>
+                    Poll
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=book' tabValue='book'>
+                  <Sidebar.Item active={tab === 'book'} href="#" icon={BsCalendarCheck} as='div'>
+                    Book Appointment
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=anonymous' tabValue='anonymous'>
+                  <Sidebar.Item active={tab === 'anonymous'} href="#" icon={BiMessageRounded} as='div'>
+                  Message Box
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=bible' tabValue='bible'>
+                  <Sidebar.Item active={tab === 'bible'} href="#" icon={FaBookBible} as='div'>
+                  Bible
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=notepad' tabValue='notepad'>
+                  <Sidebar.Item active={tab === 'notepad'} href="#" icon={BiNotepad} as='div'>
+                  Notepad
+                  </Sidebar.Item>
+                </SidebarLink>
+                </>
+              )}
+              {!currentUser.isMember && (
+                <SidebarLink to='/dashboard?tab=join' tabValue='join'>
+                  <Sidebar.Item active={tab === 'join'} href="#" icon={HiTable}>
+                    Join Church
+                  </Sidebar.Item>
+                </SidebarLink>
+              )}
+              {currentUser.isAdmin && (
+                <>
+                <SidebarLink to='/dashboard?tab=daily-bible-message' tabValue='daily-bible-message'>
+                  <Sidebar.Item active={tab === 'daily-bible-message'} href="#" icon={HiDocumentText} as='div'>
+                    Daily Message
+                  </Sidebar.Item>
+                </SidebarLink>
+                </>
+              )}
+              {currentUser.isAdmin && (
+                <>
+                <SidebarLink to='/dashboard?tab=account' tabValue='account'>
+                  <Sidebar.Item active={tab === 'account'} href="#" icon={ FaMoneyBillTransfer } as='div'>
+                   Church Account
+                  </Sidebar.Item>
+                </SidebarLink>
+                  <SidebarLink to='/dashboard?tab=users' tabValue='users'>
+                    <Sidebar.Item
+                      active={tab === 'users'}
+                      icon={HiOutlineUserGroup}
+                      as='div'
+                    >
+                      Users
+                    </Sidebar.Item>
+                  </SidebarLink>
+                  <SidebarLink to='/dashboard?tab=comments' tabValue='comments'>
+                    <Sidebar.Item
+                      active={tab === 'comments'}
+                      icon={HiAnnotation}
+                      as='div'
+                    >
+                      Comments
+                    </Sidebar.Item>
+                  </SidebarLink>
+                  <SidebarLink to='/dashboard?tab=resources' tabValue='resources'>
+                    <Sidebar.Item
+                      active={tab === 'resources'}
+                      icon={HiFolderDownload}
+                      as='div'
+                    >
+                      Resources
+                    </Sidebar.Item>
+                  </SidebarLink>
+                  <SidebarLink to='/dashboard?tab=events' tabValue='events'>
+                    <Sidebar.Item
+                      active={tab === 'events'}
+                      icon={MdEventAvailable}
+                      as='div'
+                    >
+                      Upcoming Events
+                    </Sidebar.Item>
+                  </SidebarLink>
+                  <SidebarLink to='/dashboard?tab=membership' tabValue='membership'>
+                    <Sidebar.Item
+                      active={tab === 'membership'}
+                      icon={FaUserPlus}
+                      as='div'
+                    >
+                      Member Requests
+                    </Sidebar.Item>
+                  </SidebarLink>
+                  <SidebarLink to='/dashboard?tab=contact' tabValue='contact'>
+                    <Sidebar.Item
+                      active={tab === 'contact'}
+                      icon={MdOutlineContactSupport}
+                      as='div'
+                    >
+                      Contact
+                    </Sidebar.Item>
+                  </SidebarLink>
+                </>
+              )}
+              <Sidebar.Item 
+                onClick={() => {
+                  handleSignout();
+                  closeSidebar();
+                }} 
+                icon={HiArrowSmRight} 
+                as='div'
+              >
+                Sign Out
               </Sidebar.Item>
-            </Link>
-          )}
-          {currentUser.isAdmin && (
-            <>
-            <Link to='/dashboard?tab=daily-bible-message'>
-              <Sidebar.Item active={tab === 'daily-bible-message'} href="#" icon={HiDocumentText} as='div'>
-                Daily Message
-              </Sidebar.Item>
-            </Link>
-            
-            </>
-            
-          )}
-          {currentUser.isAdmin && (
-            <>
-            <Link to='/dashboard?tab=account'>
-              <Sidebar.Item active={tab === 'account'} href="#" icon={ FaMoneyBillTransfer } as='div'>
-               Church Account
-              </Sidebar.Item>
-            </Link>
-              <Link to='/dashboard?tab=users'>
-                <Sidebar.Item
-                  active={tab === 'users'}
-                  icon={HiOutlineUserGroup}
-                  as='div'
-                >
-                  Users
-                </Sidebar.Item>
-              </Link>
-              <Link to='/dashboard?tab=comments'>
-                <Sidebar.Item
-                  active={tab === 'comments'}
-                  icon={HiAnnotation}
-                  as='div'
-                >
-                  Comments
-                </Sidebar.Item>
-              </Link>
-              <Link to='/dashboard?tab=resources'>
-                <Sidebar.Item
-                  active={tab === 'resources'}
-                  icon={HiFolderDownload}
-                  as='div'
-                >
-                  Resources
-                </Sidebar.Item>
-              </Link>
-              <Link to='/dashboard?tab=events'>
-                <Sidebar.Item
-                  active={tab === 'events'}
-                  icon={MdEventAvailable}
-                  as='div'
-                >
-                  Upcoming Events
-                </Sidebar.Item>
-              </Link>
-              <Link to='/dashboard?tab=membership'>
-                <Sidebar.Item
-                  active={tab === 'membership'}
-                  icon={FaUserPlus}
-                  as='div'
-                >
-                  Member Requests
-                </Sidebar.Item>
-              </Link>
-              <Link to='/dashboard?tab=contact'>
-                <Sidebar.Item
-                  active={tab === 'contact'}
-                  icon={MdOutlineContactSupport}
-                  as='div'
-                >
-                  Contact
-                </Sidebar.Item>
-              </Link>
-
-            </>
-          )}
-          <Sidebar.Item onClick={handleSignout} icon={HiArrowSmRight} as='div'>
-            Sign Out
-          </Sidebar.Item>
-        </Sidebar.ItemGroup>
-      </Sidebar.Items>
-    </Sidebar>
+            </Sidebar.ItemGroup>
+          </Sidebar.Items>
+        </Sidebar>
+      </div>
+    </>
   );
 }

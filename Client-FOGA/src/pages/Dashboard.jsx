@@ -24,6 +24,7 @@ import DashContact from '../components/DashContact';
 export default function Dashboard() {
   const location = useLocation();
   const [tab, setTab] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -33,41 +34,73 @@ export default function Dashboard() {
     }
   }, [location.search]);
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
   return (
     <div className='min-h-screen flex flex-col md:flex-row'>
-      <div className="md:w-56">
-        {/* Sidebar */}
-        <DashSidebar />
+      {/* Sidebar */}
+      <div className={`${sidebarOpen ? 'block' : 'hidden'} md:block md:w-56 fixed md:relative z-30`}>
+        <DashSidebar 
+          isSidebarOpen={sidebarOpen} 
+          toggleSidebar={toggleSidebar} 
+          closeSidebar={closeSidebar}
+        />
       </div>
-      {/* Profile */}
-      {tab === 'profile' && <DashProfile />}
-      {tab === 'join' && <DashJoinChurch />}
-      {/* Daily Bible Message */}
-      {tab === 'daily-bible-message' && <DashMainPageDBM />} 
-      {/* user */}
-      {tab === 'users' && <DashUsers />}
-      {/* comment */}
-      {tab === 'comments' && <DashComment />}
-      {/* dashboard */}
-      {tab === 'dash' && <DashboardComp />}
-      {/* resources */}
-      {tab === 'resources' && <DashResource />}
-      {/* events */}
-      {tab === 'events' && <DashEvents />}
-      {tab === 'membership' && <MembershipRequest />}
-      {tab === 'message' && <Chat />}
-      {/* tithe */}
-      {tab === 'tithe' && <DashAccountRecord />}
-      {/* account */}
-      {tab === 'account' && <ChurchAccount />}
-      {/* baptism */}
-      {tab === 'baptism' && <DashBaptismApplication />}
-      {tab === 'poll' && <DashPoll />}
-      {tab === 'book' && <DashBooking />}
-      {tab === 'anonymous' && <DashAnonymous />}
-      {tab === 'bible' && <DashBible />}
-      {tab === 'notepad' && <DashNotepad />}
-      {tab === 'contact' && <DashContact />}
+      
+      {/* Mobile menu button */}
+      <button
+        onClick={toggleSidebar}
+        className="md:hidden fixed z-40 p-2 m-2 rounded-lg bg-gray-100 dark:bg-gray-700"
+      >
+        {sidebarOpen ? (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        )}
+      </button>
+
+      {/* Main content */}
+      <div className="flex-1 p-4 md:ml-0 mt-12 md:mt-0">
+        {/* Profile */}
+        {tab === 'profile' && <DashProfile />}
+        {tab === 'join' && <DashJoinChurch />}
+        {/* Daily Bible Message */}
+        {tab === 'daily-bible-message' && <DashMainPageDBM />} 
+        {/* user */}
+        {tab === 'users' && <DashUsers />}
+        {/* comment */}
+        {tab === 'comments' && <DashComment />}
+        {/* dashboard */}
+        {tab === 'dash' && <DashboardComp />}
+        {/* resources */}
+        {tab === 'resources' && <DashResource />}
+        {/* events */}
+        {tab === 'events' && <DashEvents />}
+        {tab === 'membership' && <MembershipRequest />}
+        {tab === 'message' && <Chat />}
+        {/* tithe */}
+        {tab === 'tithe' && <DashAccountRecord />}
+        {/* account */}
+        {tab === 'account' && <ChurchAccount />}
+        {/* baptism */}
+        {tab === 'baptism' && <DashBaptismApplication />}
+        {tab === 'poll' && <DashPoll />}
+        {tab === 'book' && <DashBooking />}
+        {tab === 'anonymous' && <DashAnonymous />}
+        {tab === 'bible' && <DashBible />}
+        {tab === 'notepad' && <DashNotepad />}
+        {tab === 'contact' && <DashContact />}
+      </div>
     </div>
   );
 }

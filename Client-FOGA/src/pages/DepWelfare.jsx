@@ -16,7 +16,7 @@ const DepWelfare = () => {
     { title: "Funerals", description: "Assistance with funeral arrangements and bereavement support", icon: '' },
     { title: "Child Naming", description: "Celebrating new life in our church family", icon: '' },
     { title: "Financial Support", description: "Temporary assistance for members in need", icon: '' },
-    { title: "Monthly Dues", description: "Collection of offerings every last week of the month", icon: '' },
+    { title: "Monthly Contribution", description: "Collection of offerings every last week of the month", icon: '' },
     { title: "Member Care", description: "Looking after the wellbeing of all members", icon: '' },
   ];
 
@@ -135,7 +135,7 @@ const DepWelfare = () => {
             community in times of need and celebration.
           </p>
           <div className="bg-white text-purple-900 p-6 rounded-xl">
-            <h3 className="font-bold text-lg mb-2">Monthly Welfare Dues</h3>
+            <h3 className="font-bold text-lg mb-2">Welfare Contributions</h3>
             <p>Collected every last Sunday of the month during service.</p>
           </div>
         </div>

@@ -23,12 +23,43 @@ export default function FooterCom() {
               Fellowship of Grace Assemblies of God, Cape Coast. Opposite Cape FM.
             </p>
             <div className="flex space-x-4">
-              <Footer.Icon href="#" icon={BsFacebook} className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"/>
-              <Footer.Icon href="#" icon={BsInstagram} className="text-gray-600 hover:text-pink-600 dark:text-gray-400 dark:hover:text-pink-400 transition-colors"/>
-              <Footer.Icon href="#" icon={BsTelegram} className="text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"/>
-              <Footer.Icon href="#" icon={BsYoutube} className="text-gray-600 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 transition-colors"/>
-              <Footer.Icon href="#" icon={BsTwitterX} className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors"/>
-            </div>
+  <Footer.Icon 
+    href="https://web.facebook.com/foga.pedu.7" 
+    icon={BsFacebook} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
+  />
+  <Footer.Icon 
+    href="https://www.instagram.com/agfogapedu/" 
+    icon={BsInstagram} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="text-gray-600 hover:text-pink-600 dark:text-gray-400 dark:hover:text-pink-400 transition-colors"
+  />
+  <Footer.Icon 
+    href="#" 
+    icon={BsTelegram} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
+  />
+  <Footer.Icon 
+    href="https://www.youtube.com/@fellowshipofgraceassemblyp2160" 
+    icon={BsYoutube} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="text-gray-600 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
+  />
+  <Footer.Icon 
+    href="https://x.com/foga_pedu" 
+    icon={BsTwitterX} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors"
+  />
+</div>
+
           </div>
 
           {/* Quick Links Column */}
@@ -75,7 +106,7 @@ export default function FooterCom() {
             <div className="space-y-3 text-gray-600 dark:text-gray-400">
               <div className="flex items-start">
                 <BsEnvelope className="mt-1 mr-3 flex-shrink-0" />
-                <span>info@foga.org</span>
+                <span>agghfoga.pedu@gmail.com</span>
               </div>
               <div className="flex items-start">
                 <BsPhone className="mt-1 mr-3 flex-shrink-0" />
