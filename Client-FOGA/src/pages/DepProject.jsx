@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const DepProject = () => {
   // Sample project images (replace with your actual images)
@@ -144,12 +145,7 @@ const DepProject = () => {
             transition={{ delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <button className="bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
-              Donate Now
-            </button>
-            <button className="bg-transparent hover:bg-white/10 text-white border border-white font-bold py-3 px-8 rounded-lg transition-all duration-300">
-              View Plans
-            </button>
+    
           </motion.div>
         </div>
       </div>
@@ -180,7 +176,7 @@ const DepProject = () => {
                 <img 
                   src={image} 
                   alt={`Church project ${index + 1}`}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  className="w-full h-56 object-contain hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="bg-white p-4">
@@ -415,9 +411,11 @@ const DepProject = () => {
             <p className="text-white/80 mb-6 max-w-2xl mx-auto">
               All donations are tax-deductible and will be acknowledged with official receipts.
             </p>
+            <Link to="/contact-us" className="inline-block mb-4">
             <button className="bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
               Request Donation Information
             </button>
+            </Link>
           </motion.div>
         </div>
       </section>

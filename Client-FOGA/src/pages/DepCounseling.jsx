@@ -179,26 +179,6 @@ const DepCounseling = () => {
           </div>
         </section>
 
-        {/* Request Assistance - Split Section */}
-        <section className="mb-16">
-          <div className="flex flex-col md:flex-row rounded-xl overflow-hidden shadow-xl">
-            <div className="md:w-1/2 bg-indigo-800 p-8 md:p-12 text-white">
-              <h2 className="text-2xl font-bold mb-4">Request Counseling</h2>
-              <p className="mb-6 text-indigo-100">Confidential one-on-one sessions with our trained counselors</p>
-              <button className="bg-white text-indigo-800 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition-all duration-300">
-                Contact a Counselor
-              </button>
-            </div>
-            <div className="md:w-1/2 bg-blue-800 p-8 md:p-12 text-white">
-              <h2 className="text-2xl font-bold mb-4">Schedule Visitation</h2>
-              <p className="mb-6 text-blue-100">For homebound members, hospital visits, or special circumstances</p>
-              <button className="bg-white text-blue-800 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition-all duration-300">
-                Request a Visit
-              </button>
-            </div>
-          </div>
-        </section>
-
         {/* Confidentiality Notice */}
         <div className="text-center text-sm text-gray-500 mb-12">
           <p>All counseling conversations are held in strict confidence according to pastoral ethics.</p>

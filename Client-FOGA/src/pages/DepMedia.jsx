@@ -1,13 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const DepMedia = () => {
   // Media equipment images for hero section
   const heroImages = [
     "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80", // Camera setup
     "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80", // Audio mixer
-    "https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1412&q=80", // Lighting
-    "https://images.unsplash.com/photo-1461784180009-06fa8c873769?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"  // Headphones
+    "https://unsplash.com/photos/man-in-black-crew-neck-shirt-holding-black-dslr-camera-H84so_4re8o", // Lighting
+    "https://unsplash.com/photos/man-in-black-crew-neck-t-shirt-standing-in-front-of-people-_xJqCQgkpLc"  // Headphones
   ];
 
   const teamMembers = [
@@ -175,9 +176,11 @@ const DepMedia = () => {
             }}
             className="mt-12 rounded-full"
           >
+            <Link to="/gallery">
             <button className="bg-white text-gray-900 hover:bg-gray-200 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
               Explore Our Work
             </button>
+            </Link>
           </motion.div>
         </div>
       </div>
@@ -328,9 +331,11 @@ const DepMedia = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
               viewport={{ once: true }}
             >
+              <Link to="/contact-us">
               <button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                 Connect With Us
               </button>
+              </Link>
             </motion.div>
           </div>
         </div>

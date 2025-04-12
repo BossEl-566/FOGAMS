@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function DepMissions() {
   // Gallery images data - replace placeholder divs with your actual images
@@ -314,9 +315,11 @@ export default function DepMissions() {
         We're always looking for passionate individuals to join us in spreading the Gospel. 
         Whether you can commit to regular service or occasional volunteering, your gifts are needed.
       </p>
+      <Link to='/contact-us'>
       <button className="bg-white text-blue-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">
         Apply to Serve
       </button>
+      </Link>
     </div>
   </div>
 </div>
