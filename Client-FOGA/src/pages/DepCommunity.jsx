@@ -77,6 +77,13 @@ const DepCommunity = () => {
     }
   ];
 
+  const scrollToDonationSection = () => {
+    const donationSection = document.getElementById('donation-section');
+    if (donationSection) {
+      donationSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50">
       {/* Hero Section */}
@@ -109,11 +116,11 @@ const DepCommunity = () => {
             transition={{ delay: 0.8 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <button className="bg-yellow-400 hover:bg-yellow-300 text-green-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
+            <button 
+              onClick={scrollToDonationSection}
+              className="bg-yellow-400 hover:bg-yellow-300 text-green-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            >
               Make an Impact
-            </button>
-            <button className="bg-transparent hover:bg-white/10 text-white border border-white font-bold py-3 px-8 rounded-full transition-all duration-300">
-              Our Programs
             </button>
           </motion.div>
         </div>
@@ -319,41 +326,113 @@ const DepCommunity = () => {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-20 bg-gradient-to-r from-green-700 to-green-900 text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* Donation Section */}
+      <section id="donation-section" className="py-20 bg-green-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold mb-6"
+            className="text-3xl md:text-4xl font-bold text-center mb-16"
           >
-            Ready to Make a Difference?
+            <span className="relative inline-block pb-2">
+              Make a Financial Impact
+              <span className="absolute bottom-0 left-0 w-full h-1 bg-yellow-400"></span>
+            </span>
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="text-xl text-green-100 mb-8 max-w-2xl mx-auto"
-          >
-            Your support creates ripples of change throughout our community
-          </motion.p>
-          <motion.div
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="flex flex-col sm:flex-row justify-center gap-4"
-          >
-            <button className="bg-yellow-400 hover:bg-yellow-300 text-green-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-              Donate Now
-            </button>
-            <button className="bg-transparent hover:bg-white/10 text-white border border-white font-bold py-3 px-8 rounded-full transition-all duration-300">
-              Contact Our Team
-            </button>
-          </motion.div>
+
+          <div className="max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20"
+            >
+              <h3 className="text-2xl font-bold mb-6 text-center">Bank Account Details</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div>
+                  <h4 className="text-xl font-semibold mb-4 text-yellow-300">Local Transfers (GHS)</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-green-100 font-medium">Bank Name:</p>
+                      <p className="text-white">Ghana Commercial Bank</p>
+                    </div>
+                    <div>
+                      <p className="text-green-100 font-medium">Account Name:</p>
+                      <p className="text-white">DEP COMMUNITY IMPACT FUND</p>
+                    </div>
+                    <div>
+                      <p className="text-green-100 font-medium">Account Number:</p>
+                      <p className="text-white">6011134567890</p>
+                    </div>
+                    <div>
+                      <p className="text-green-100 font-medium">Branch:</p>
+                      <p className="text-white">Kasoa Main Branch</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-xl font-semibold mb-4 text-yellow-300">International Transfers (USD)</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-green-100 font-medium">Bank Name:</p>
+                      <p className="text-white">Standard Chartered Bank Ghana</p>
+                    </div>
+                    <div>
+                      <p className="text-green-100 font-medium">Account Name:</p>
+                      <p className="text-white">DEP COMMUNITY IMPACT FUND</p>
+                    </div>
+                    <div>
+                      <p className="text-green-100 font-medium">Account Number:</p>
+                      <p className="text-white">0213456789012</p>
+                    </div>
+                    <div>
+                      <p className="text-green-100 font-medium">SWIFT Code:</p>
+                      <p className="text-white">SCBLGHAC</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h3 className="text-2xl font-bold mb-6 text-center mt-12">Mobile Money Options</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-white/5 rounded-lg p-6 text-center">
+                  <div className="text-4xl mb-4">📱</div>
+                  <h4 className="font-bold mb-2">MTN Mobile Money</h4>
+                  <p className="text-green-100 mb-1">Number: 0244 123 4567</p>
+                  <p className="text-sm text-green-200">Name: DEP COMMUNITY FUND</p>
+                </div>
+                
+                <div className="bg-white/5 rounded-lg p-6 text-center">
+                  <div className="text-4xl mb-4">📱</div>
+                  <h4 className="font-bold mb-2">Vodafone Cash</h4>
+                  <p className="text-green-100 mb-1">Number: 0200 123 4567</p>
+                  <p className="text-sm text-green-200">Name: DEP COMMUNITY FUND</p>
+                </div>
+                
+                <div className="bg-white/5 rounded-lg p-6 text-center">
+                  <div className="text-4xl mb-4">📱</div>
+                  <h4 className="font-bold mb-2">AirtelTigo Money</h4>
+                  <p className="text-green-100 mb-1">Number: 0277 123 4567</p>
+                  <p className="text-sm text-green-200">Name: DEP COMMUNITY FUND</p>
+                </div>
+              </div>
+
+              <div className="mt-12 text-center">
+                <p className="text-green-100 mb-6">
+                  Your generous donations help us continue our community empowerment programs and transform lives.
+                </p>
+                <button className="bg-yellow-400 hover:bg-yellow-300 text-green-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
+                  I've Made a Donation
+                </button>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
     </div>

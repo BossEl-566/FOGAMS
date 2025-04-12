@@ -279,44 +279,6 @@ const DepAnniversary = () => {
           </div>
         </div>
       </section>
-
-      {/* Call to Action */}
-      <section className="py-20 bg-gradient-to-r from-purple-800 to-purple-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold text-white mb-6"
-          >
-            Join the Celebration!
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto"
-          >
-            Be part of our anniversary activities and help create lasting memories
-          </motion.p>
-          <motion.div
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="flex flex-col sm:flex-row justify-center gap-4"
-          >
-            <button className="bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-              Volunteer
-            </button>
-            <button className="bg-white hover:bg-gray-100 text-purple-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-              Event Details
-            </button>
-          </motion.div>
-        </div>
-      </section>
     </div>
   );
 };
