@@ -50,6 +50,7 @@ import EventDetails from './pages/EventDetails';
 import Notepad from './pages/Notepad';
 import ViewNotepad from './pages/ViewNotepad';
 import Gallery from './pages/Gallery';
+import PrayerGuide from './pages/PrayerGuide';
 
 export default function App() {
   const {currentUser} = useSelector((state) => state.user);
@@ -89,6 +90,7 @@ export default function App() {
         <Route path="/departments/protocol-ushering" element={<DepProtocol />} />
         <Route path="/departments/missions" element={<DepMissions />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/prayer-guide" element={<PrayerGuide />} />
 
         <Route path="/departments/community-impact" element={<DepCommunity />} />
         

@@ -324,13 +324,13 @@ export default function Home() {
               Join Prayer Groups
             </motion.button>
           </Link>
-          <Link to="/prayer-resources">
+          <Link to="/prayer-guide">
             <motion.button
               className="px-8 py-3 bg-white border-2 border-yellow-300 text-blue-600 hover:bg-blue-50 font-semibold rounded-lg transition-colors shadow-sm"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Prayer Resources
+              Prayer Guide
             </motion.button>
           </Link>
         </div>
