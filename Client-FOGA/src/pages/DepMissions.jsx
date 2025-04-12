@@ -55,14 +55,16 @@ export default function DepMissions() {
             <div className="md:w-1/2 mb-10 md:mb-0">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">Missions Department</h1>
               <p className="text-xl mb-8">Bringing the light of God's word to schools, prisons, hospitals, and the streets at dawn.</p>
-              <button className="bg-white text-blue-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">
-                Join Our Mission
-              </button>
             </div>
             <div className="md:w-1/2 flex justify-center">
-              <div className="w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-white bg-gray-300 flex items-center justify-center">
-                <span className="text-gray-500">Head of Missions Photo</span>
-              </div>
+            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-white bg-gray-300 overflow-hidden">
+  <img
+    src="/src/assets/mission.jpg"
+    alt="Head of Missions"
+    className="w-full h-full object-cover"
+  />
+</div>
+
             </div>
           </div>
         </div>
@@ -258,6 +260,66 @@ export default function DepMissions() {
           </div>
         </div>
       </div>
+      {/* Leadership and Team Section */}
+<div className="py-16 bg-white">
+  <div className="container mx-auto px-6">
+    <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">Our Leadership & Team</h2>
+    
+    {/* Department Head */}
+    <div className="flex flex-col md:flex-row items-center justify-center mb-16 bg-blue-50 rounded-xl p-8">
+      <div className="md:w-1/3 mb-6 md:mb-0 flex justify-center">
+        <div className="w-48 h-48 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border-4 border-white shadow-lg">
+          <span className="text-gray-500">Head Photo</span>
+        </div>
+      </div>
+      <div className="md:w-2/3 md:pl-10 text-center md:text-left">
+        <h3 className="text-2xl font-bold text-blue-800 mb-2">Pastor John Doe</h3>
+        <p className="text-lg text-gray-600 mb-4">Head of Missions Department</p>
+        <p className="text-gray-700 mb-4">
+          With over 15 years of missionary experience, Pastor John leads our team with passion and dedication, 
+          ensuring we fulfill our calling to spread the Gospel to all corners of society.
+        </p>
+      </div>
+    </div>
+
+    {/* Team Members */}
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {[
+        { name: "Sarah Johnson", role: "School Missions Coordinator", years: 7 },
+        { name: "Michael Brown", role: "Prison Ministry Leader", years: 10 },
+        { name: "David Wilson", role: "Hospital Chaplain", years: 5 },
+        { name: "Grace Mwangi", role: "Dawn Outreach Director", years: 8 },
+        { name: "James Peterson", role: "Volunteer Coordinator", years: 4 },
+        { name: "Mary Williams", role: "Prayer Team Leader", years: 6 },
+        { name: "Robert Kimani", role: "Logistics Manager", years: 3 },
+        { name: "Elizabeth Taylor", role: "Training Coordinator", years: 9 },
+      ].map((member, index) => (
+        <div key={index} className="bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+          <div className="h-48 bg-gray-200 flex items-center justify-center">
+            <span className="text-gray-500">Member Photo</span>
+          </div>
+          <div className="p-4 text-center">
+            <h3 className="text-xl font-semibold text-gray-800">{member.name}</h3>
+            <p className="text-gray-600 text-sm mb-2">{member.role}</p>
+            <p className="text-gray-500 text-xs">Serving for {member.years} year{member.years !== 1 ? 's' : ''}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Join Team CTA */}
+    <div className="mt-16 text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 shadow-lg">
+      <h3 className="text-2xl font-bold mb-4">Join Our Missions Team</h3>
+      <p className="mb-6 max-w-2xl mx-auto">
+        We're always looking for passionate individuals to join us in spreading the Gospel. 
+        Whether you can commit to regular service or occasional volunteering, your gifts are needed.
+      </p>
+      <button className="bg-white text-blue-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">
+        Apply to Serve
+      </button>
+    </div>
+  </div>
+</div>
     </div>
   );
 }

@@ -4,10 +4,11 @@ import { motion } from 'framer-motion';
 const DepProject = () => {
   // Sample project images (replace with your actual images)
   const projectImages = [
-    "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80",
-    "https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+    "/src/assets/church-project.jpg",
+    "/src/assets/church-project1.jpg",
+    "/src/assets/church-project2.jpg"
   ];
+  
 
   const teamMembers = [
     { 
@@ -103,10 +104,10 @@ const DepProject = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 1, 0] }}
               transition={{ 
-                duration: 12,
+                duration: 24,
                 repeat: Infinity,
-                repeatDelay: 2,
-                delay: index * 4
+                repeatDelay: 4,
+                delay: index * 10
               }}
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${img})` }}
@@ -152,6 +153,59 @@ const DepProject = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Project Gallery Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <motion.h2
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16"
+        >
+          Project Gallery
+        </motion.h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projectImages.map((image, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <div className="aspect-w-16 aspect-h-9">
+                <img 
+                  src={image} 
+                  alt={`Church project ${index + 1}`}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="bg-white p-4">
+                <p className="text-gray-700 text-center">Project Phase {index + 1}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Gallery Navigation */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          viewport={{ once: true }}
+          className="mt-12 flex justify-center space-x-4"
+        >
+          <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-all">
+            View All Photos
+          </button>
+          <button className="bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-medium py-2 px-4 rounded-lg transition-all">
+            Construction Timeline
+          </button>
+        </motion.div>
+      </section>
 
       {/* Project Overview */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -199,7 +253,6 @@ const DepProject = () => {
             className="bg-white p-1 rounded-xl shadow-2xl"
           >
             <div className="rounded-lg overflow-hidden">
-              {/* Replace with actual project rendering or image */}
               <div className="bg-gray-200 h-96 flex items-center justify-center">
                 <span className="text-gray-500">Architectural Rendering</span>
               </div>

@@ -9,7 +9,6 @@ import ContactUs from './pages/ContactUs';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import About from './pages/About';
-import Project from './pages/Project';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Ministries from './pages/Ministries';
@@ -98,7 +97,6 @@ export default function App() {
         
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/project" element={<Project />} />
         <Route path="/ministries" element={<Ministries />} />
         <Route path="/events" element={<Event />} />
         <Route element={<PrivateRoute />}>

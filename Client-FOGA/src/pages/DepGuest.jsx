@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const DepGuest = () => {
   const leadershipTeam = [
@@ -207,9 +208,11 @@ const DepGuest = () => {
         <p className="text-gray-600 mb-8">
           Our Guest Experience team is always looking for welcoming faces to help newcomers feel at home.
         </p>
+        <Link to="/contact-us" className="inline-block">
         <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow transition-all duration-300">
           Join the Guest Experience Team
         </button>
+        </Link>
       </motion.div>
     </div>
   );
