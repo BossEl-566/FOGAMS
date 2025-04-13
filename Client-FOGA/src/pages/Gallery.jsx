@@ -1,18 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiZoomIn, FiHeart, FiShare2, FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
+import BaptismImage from '../assets/Baptism.jpg'; // adjust the path as needed
+import BaptismImage1 from '../assets/Baptism1.jpg'; // adjust the path as needed
+import ChoirImage from '../assets/Choir.jpg'; // adjust the path as needed
 
 // Sample images - replace with your actual image imports
 const churchImages = [
-  { id: 1, src: 'https://source.unsplash.com/random/800x600?church', alt: 'Church Building', category: 'Building', description: 'Our beautiful church building' },
+  { id: 1, src: 'https://source.unsplash.com/random/800x600?church', alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
   { id: 2, src: 'https://source.unsplash.com/random/800x600?worship', alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
-  { id: 3, src: 'https://source.unsplash.com/random/800x600?baptism', alt: 'Baptism', category: 'Sacraments', description: 'Baptism service' },
-  { id: 4, src: 'https://source.unsplash.com/random/800x600?choir', alt: 'Choir', category: 'Music', description: 'Church choir performance' },
-  { id: 5, src: 'https://source.unsplash.com/random/800x600?bible', alt: 'Bible Study', category: 'Groups', description: 'Weekly bible study' },
-  { id: 6, src: 'https://source.unsplash.com/random/800x600?wedding', alt: 'Wedding', category: 'Events', description: 'Church wedding ceremony' },
-  { id: 7, src: 'https://source.unsplash.com/random/800x600?community', alt: 'Community', category: 'Outreach', description: 'Community service day' },
-  { id: 8, src: 'https://source.unsplash.com/random/800x600?children', alt: 'Children', category: 'Ministries', description: 'Children\'s ministry' },
-  { id: 9, src: 'https://source.unsplash.com/random/800x600?cross', alt: 'Cross', category: 'Symbols', description: 'Church cross' },
+  { id: 3, src: BaptismImage, alt: 'Baptism', category: 'Sacraments', description: 'Baptism service' },
+  { id: 4, src: BaptismImage1, alt: 'Baptism', category: 'Sacraments', description: 'Holy Spirit Baptism' },
+  { id: 5, src: ChoirImage, alt: 'Choir', category: 'Ministries', description: 'Church choir performance' },
+  { id: 6, src: 'https://source.unsplash.com/random/800x600?bible', alt: 'Bible Study', category: 'Groups', description: 'Weekly bible study' },
+  { id: 7, src: 'https://source.unsplash.com/random/800x600?wedding', alt: 'Wedding', category: 'Events', description: 'Church wedding ceremony' },
+  { id: 8, src: 'https://source.unsplash.com/random/800x600?community', alt: 'Community', category: 'Outreach', description: 'Community service day' },
+  { id: 9, src: 'https://source.unsplash.com/random/800x600?children', alt: 'Children', category: 'Ministries', description: 'Children\'s ministry' },
+  { id: 10, src: 'https://source.unsplash.com/random/800x600?cross', alt: 'Cross', category: 'Symbols', description: 'Church cross' },
 ];
 
 const GalleryCard = ({ image, onClick }) => {
@@ -306,7 +310,7 @@ const ChurchGallery = () => {
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
           {/* Category Filters */}
           <div className="flex flex-wrap justify-center gap-3">
-            {['All', 'Services', 'Events', 'Ministries', 'Sacraments', 'Community', 'Building'].map((category) => (
+            {['All', 'Services', 'Events', 'Ministries', 'Sacraments', 'Community', 'Family'].map((category) => (
               <motion.button
                 key={category}
                 whileHover={{ scale: 1.05 }}

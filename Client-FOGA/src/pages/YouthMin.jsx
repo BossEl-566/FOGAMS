@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
+import { Link } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -168,24 +169,6 @@ const YouthMin = () => {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
-      <motion.button 
-        className="px-10 py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-full shadow-2xl relative overflow-hidden group"
-        animate={{
-          boxShadow: [
-            "0 20px 25px -5px rgba(236, 72, 153, 0.3), 0 10px 10px -5px rgba(236, 72, 153, 0.2)",
-            "0 20px 25px -5px rgba(139, 92, 246, 0.4), 0 10px 10px -5px rgba(139, 92, 246, 0.3)",
-            "0 20px 25px -5px rgba(236, 72, 153, 0.3), 0 10px 10px -5px rgba(236, 72, 153, 0.2)"
-          ]
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      >
-        <span className="relative z-10">Join Us Now</span>
-        <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-      </motion.button>
     </motion.div>
 
     {/* Scrolling indicator */}
@@ -575,13 +558,7 @@ const YouthMin = () => {
               Whether you're new to faith or looking to grow deeper, we'd love to have you!
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 bg-white text-purple-800 font-bold rounded-full shadow-lg"
-              >
-                Visit This Sunday
-              </motion.button>
+              <Link to="/contact-us" className="inline-block">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -589,6 +566,7 @@ const YouthMin = () => {
               >
                 Contact Our Team
               </motion.button>
+              </Link>
             </div>
           </motion.div>
         </div>

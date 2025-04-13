@@ -38,7 +38,7 @@ export default function ChildrenMin() {
         className="relative bg-gradient-to-br from-blue-500 to-pur-600 text-white py-16 px-4 text-center overflow-hidden border-b-8 border-yellow-300"
       >
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-md">Kids For Christ</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-md">FOGA Kids For Christ</h1>
           <p className="text-xl md:text-2xl mb-8">Where faith and fun come together!</p>
           <motion.button 
             whileHover={{ scale: 1.05 }}
@@ -310,35 +310,6 @@ export default function ChildrenMin() {
           </motion.div>
         )}
       </div>
-
-      {/* Footer with Animation */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className="bg-blue-700 text-white py-12 px-4 mt-12"
-      >
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <h4 className="text-xl font-bold mb-4">Contact Us</h4>
-            <p className="mb-2">children@church.org</p>
-            <p>(123) 456-7890</p>
-          </div>
-          <div>
-            <h4 className="text-xl font-bold mb-4">Sunday Services</h4>
-            <p className="mb-2">Children's Church: 11:00 AM</p>
-            <p>Sunday School: 9:30 AM</p>
-          </div>
-          <div>
-            <h4 className="text-xl font-bold mb-4">Location</h4>
-            <p className="mb-2">123 Faith Avenue</p>
-            <p>City, State 12345</p>
-          </div>
-        </div>
-        <div className="max-w-6xl mx-auto pt-8 mt-8 border-t border-blue-600 text-center">
-          <p>© {new Date().getFullYear()} [Church Name] Children's Ministry</p>
-        </div>
-      </motion.footer>
     </div>
   );
 }
