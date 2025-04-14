@@ -46,7 +46,7 @@ const churchImages = [
   { id: 15, src: Community4, alt: 'Community', category: 'Community', description: 'Community gathering' },
   { id: 16, src: 'https://source.unsplash.com/random/800x600?celebration', alt: 'Celebration', category: 'Events', description: 'Church celebration' },
   { id: 17, src: Ministries, alt: 'Service', category: 'Ministries', description: 'Church service' },
-  { id: 18, src: 'https://source.unsplash.com/random/800x600?youth', alt: 'Youth Group', category: 'Community', description: 'Youth group meeting' },
+  { id: 18, src: 'https://source.unsplash.com/random/800x600?yout', alt: 'Youth Group', category: 'Community', description: 'Youth group meeting' },
   { id: 19, src: Family1, alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
   { id: 20, src: Family2, alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
   { id: 21, src: Ministries1, alt: 'Service', category: 'Ministries', description: 'Church service' },
