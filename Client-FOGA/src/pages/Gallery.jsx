@@ -3,20 +3,59 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiZoomIn, FiHeart, FiShare2, FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
 import BaptismImage from '../assets/Baptism.jpg'; // adjust the path as needed
 import BaptismImage1 from '../assets/Baptism1.jpg'; // adjust the path as needed
+import BaptismImage2 from '../assets/Baptism2.jpg'; // adjust the path as needed
 import ChoirImage from '../assets/Choir.jpg'; // adjust the path as needed
+import Community from '../assets/Community.jpg'; // adjust the path as needed
+import Community1 from '../assets/Community1.jpg'; // adjust the path as needed
+import Community2 from '../assets/Community2.jpg'; // adjust the path as needed
+import Community4 from '../assets/Community4.jpg'; // adjust the path as needed
+import Event from '../assets/Events.jpg'; // adjust the path as needed
+import Family from '../assets/family.jpg'; // adjust the path as needed
+import Family1 from '../assets/family1.jpg'; // adjust the path as needed
+import Family2 from '../assets/family2.jpg'; // adjust the path as needed
+import Ministries from '../assets/Ministries.jpg'; // adjust the path as needed
+import Ministries1 from '../assets/Ministries1.jpg'; // adjust the path as needed
+import Ministries2 from '../assets/Ministries2.jpg'; // adjust the path as needed
+import Ministries3 from '../assets/Ministries3.jpg'; // adjust the path as needed
+import Services from '../assets/Services.jpg'; // adjust the path as needed
+import Services1 from '../assets/Services1.jpg'; // adjust the path as needed
+import Services2 from '../assets/Services2.jpg'; // adjust the path as needed
+import Services3 from '../assets/Services3.jpg'; // adjust the path as needed
+
+
+
+
 
 // Sample images - replace with your actual image imports
 const churchImages = [
-  { id: 1, src: 'https://source.unsplash.com/random/800x600?church', alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
-  { id: 2, src: 'https://source.unsplash.com/random/800x600?worship', alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
+  { id: 1, src: Family, alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
+  { id: 2, src: Services, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
   { id: 3, src: BaptismImage, alt: 'Baptism', category: 'Sacraments', description: 'Baptism service' },
   { id: 4, src: BaptismImage1, alt: 'Baptism', category: 'Sacraments', description: 'Holy Spirit Baptism' },
-  { id: 5, src: ChoirImage, alt: 'Choir', category: 'Ministries', description: 'Church choir performance' },
+  { id: 5, src: ChoirImage, alt: 'Choir', category: 'Community', description: 'Church choir performance' },
   { id: 6, src: 'https://source.unsplash.com/random/800x600?bible', alt: 'Bible Study', category: 'Groups', description: 'Weekly bible study' },
-  { id: 7, src: 'https://source.unsplash.com/random/800x600?wedding', alt: 'Wedding', category: 'Events', description: 'Church wedding ceremony' },
+  { id: 7, src: Event, alt: 'Wedding', category: 'Events', description: 'Church wedding ceremony' },
   { id: 8, src: 'https://source.unsplash.com/random/800x600?community', alt: 'Community', category: 'Outreach', description: 'Community service day' },
-  { id: 9, src: 'https://source.unsplash.com/random/800x600?children', alt: 'Children', category: 'Ministries', description: 'Children\'s ministry' },
+
+  
   { id: 10, src: 'https://source.unsplash.com/random/800x600?cross', alt: 'Cross', category: 'Symbols', description: 'Church cross' },
+  { id: 11, src: BaptismImage2, alt: 'Baptism', category: 'Sacraments', description: 'Baptism service' },
+  { id: 12, src: Community, alt: 'Community', category: 'Community', description: 'Community gathering' },
+  { id: 13, src: Community1, alt: 'Community', category: 'Community', description: 'Community gathering' },
+  { id: 14, src: Community2, alt: 'Community', category: 'Community', description: 'Community gathering' },
+  { id: 15, src: Community4, alt: 'Community', category: 'Community', description: 'Community gathering' },
+  { id: 16, src: 'https://source.unsplash.com/random/800x600?celebration', alt: 'Celebration', category: 'Events', description: 'Church celebration' },
+  { id: 17, src: Ministries, alt: 'Service', category: 'Ministries', description: 'Church service' },
+  { id: 18, src: 'https://source.unsplash.com/random/800x600?youth', alt: 'Youth Group', category: 'Community', description: 'Youth group meeting' },
+  { id: 19, src: Family1, alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
+  { id: 20, src: Family2, alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
+  { id: 21, src: Ministries1, alt: 'Service', category: 'Ministries', description: 'Church service' },
+  { id: 22, src: Ministries2, alt: 'Service', category: 'Ministries', description: 'Church service' },
+  { id: 23, src: Ministries3, alt: 'Service', category: 'Ministries', description: 'Church service' },
+  { id: 24, src: Services1, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
+  { id: 25, src: Services2, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
+  { id: 26, src: Services3, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
+
 ];
 
 const GalleryCard = ({ image, onClick }) => {
@@ -310,7 +349,7 @@ const ChurchGallery = () => {
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
           {/* Category Filters */}
           <div className="flex flex-wrap justify-center gap-3">
-            {['All', 'Services', 'Events', 'Ministries', 'Sacraments', 'Community', 'Family'].map((category) => (
+            {['All', 'Services', 'Events', 'Community', 'Sacraments', 'Family', 'Ministries'].map((category) => (
               <motion.button
                 key={category}
                 whileHover={{ scale: 1.05 }}
