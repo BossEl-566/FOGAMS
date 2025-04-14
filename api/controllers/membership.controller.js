@@ -2,18 +2,20 @@ import Membership from '../models/membership.model.js';
 import { errorHandler } from '../utils/error.js';
 
 export const createMembership = async (req, res, next) => {
-    const { fullname, contact, email, userId } = req.body;
+    const { fullname, contact, email, userId, birthDay, birthMonth } = req.body;
 
-    if (!fullname || !contact || !email) {
+    if (!fullname || !contact || !email || !userId || !birthDay || !birthMonth) {
         return next(errorHandler(400, "Name, contact, and email are required"));
     }
 
     try {
         const newMembership = new Membership({
-            fullname, // Ensure correct field name
+            fullname, 
             contact,
             email,
-            userId
+            userId,
+            birthDay,
+            birthMonth,
         });
 
         const membership = await newMembership.save();

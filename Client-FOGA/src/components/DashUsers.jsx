@@ -1,185 +1,230 @@
-import { Button, Modal, Table } from 'flowbite-react'
-import React, { useState } from 'react'
-import { useEffect } from 'react'
-import { HiOutlineExclamationCircle } from 'react-icons/hi'
-import { useSelector } from 'react-redux'
-import { FaCheck, FaTimes } from 'react-icons/fa'
-import { toast } from 'react-hot-toast'
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { FaCheck, FaTimes, FaSearch, FaUserEdit, FaTrash } from 'react-icons/fa';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { toast } from 'react-hot-toast';
+import { Modal, Button, Badge, Card, Avatar } from 'flowbite-react';
+import { TextInput } from 'flowbite-react';
 
+export default function MembersDashboard() {
+  const { currentUser } = useSelector(state => state.user);
+  const [members, setMembers] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [showMore, setShowMore] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
-export default function DashUsers() {
-  const { currentUser} = useSelector(state => state.user)
-  const [users, setUsers] = useState([])
-  const [showMore, setShowMore] = useState(true)
-  const [showModal, setShowModal] = useState(false)
-  const [userIdToDelete, setUserIdToDelete] = useState('') 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch(`/api/user/getusers`);
-        const data = await res.json();
-        if(res.ok) {
-          setUsers(data.users)
-          if(data.users.length < 9) {
+        // Fetch members
+        const membersRes = await fetch('/api/membership/get');
+        const membersData = await membersRes.json();
+        
+        // Fetch users
+        const usersRes = await fetch('/api/user/getusers');
+        const usersData = await usersRes.json();
+        
+        if (membersRes.ok && usersRes.ok) {
+          // Filter members where member: true and combine with user data
+          const activeMembers = membersData.filter(member => member.member);
+          const combinedData = activeMembers.map(member => {
+            const user = usersData.users.find(u => u._id === member.userId);
+            return {
+              ...member,
+              profilePicture: user?.profilePicture || '',
+              username: user?.username || '',
+              isAdmin: user?.isAdmin || false,
+              isPastor: user?.isPastor || false,
+              isDeptHead: user?.isDeptHead || false,
+              isMember: user?.isMember || false
+            };
+          });
+          
+          setMembers(combinedData);
+          setUsers(usersData.users);
+          if (combinedData.length < 9) {
             setShowMore(false);
           }
-        
+        }
+      } catch (error) {
+        toast.error("Failed to fetch data!");
+        console.error(error.message);
       }
-     } catch (error) {
-      toast.error("Failed to fetch users!")
-        console.log(error.message)
-        
-      }
-  }
-  if(currentUser.isAdmin) {
-    fetchUsers()
-  }
+    };
 
-}, [currentUser._id])
-
-const handleShowMore = async () => {
-  const startIndex = users.length;
-  try {
-    const res = await fetch(`/api/user/getusers?startIndex=${startIndex}`);
-    const data = await res.json();
-    if(res.ok) {
-      setUsers((prev) => [...prev, ...data.users]);
-      if(data.users.length < 9) {
-        setShowMore(false);
-        
-      }
+    if (currentUser.isAdmin) {
+      fetchData();
     }
-    
-    
-  } catch (error) {
-    console.log(error.message)
-    toast.error("Failed to load more users!")
-    
-  }
- 
-}
-const handleDeleteUser = async () => {
-  try {
-    const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
-      method: 'DELETE',
-    });
-    const data = await res.json();
-      if(res.ok) {
-        setUsers((prev) => prev.filter(user => user._id !== userIdToDelete));
-        setShowModal(false);
-        toast.success("User deleted successfully!")
-      } else {
-        toast.error(data.message || "Failed to delete user.")
-        console.log(data.message)
+  }, [currentUser._id]);
+
+  const handleShowMore = async () => {
+    const startIndex = members.length;
+    try {
+      const res = await fetch(`/api/membership?startIndex=${startIndex}`);
+      const data = await res.json();
+      if (res.ok) {
+        const newMembers = data.filter(member => member.member);
+        setMembers(prev => [...prev, ...newMembers]);
+        if (newMembers.length < 9) {
+          setShowMore(false);
+        }
       }
+    } catch (error) {
+      console.error(error.message);
+      toast.error("Failed to load more members!");
+    }
+  };
 
-  } catch (error) {
-    toast.error("Error deleting user!")
-    console.log(error.message)
-    
-  }
-}
+  const handleDeleteUser = async () => {
+    try {
+      const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMembers(prev => prev.filter(member => member.userId !== userIdToDelete));
+        setShowModal(false);
+        toast.success("User deleted successfully!");
+      } else {
+        toast.error(data.message || "Failed to delete user.");
+        console.error(data.message);
+      }
+    } catch (error) {
+      toast.error("Error deleting user!");
+      console.error(error.message);
+    }
+  };
 
+  const filteredMembers = members.filter(member => 
+    member.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-blue-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {
-        currentUser.isAdmin && users.length > 0 ? (
-          <>
-          <Table hoverable className='shadow-md'>
-              <Table.Head>
-                <Table.HeadCell>DATE CREATED</Table.HeadCell>
-                <Table.HeadCell>USER IMAGE</Table.HeadCell>
-                <Table.HeadCell>USERNAME</Table.HeadCell>
-                <Table.HeadCell>EMAIL</Table.HeadCell>
-                <Table.HeadCell>ADMIN</Table.HeadCell>
-                <Table.HeadCell>PASTOR</Table.HeadCell>
-                <Table.HeadCell>DEPT HEAD</Table.HeadCell>
-                <Table.HeadCell>MEMBER</Table.HeadCell>
-                <Table.HeadCell>DELETE</Table.HeadCell>
-                <Table.HeadCell>
-                  <span>EDIT</span>
-                </Table.HeadCell>
-              </Table.Head>
-              {users.map((user) => (
-                <Table.Body className='divide-y' key={user._id}>
-                  <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell>{new Intl.DateTimeFormat("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    }).format(new Date(user.createdAt))}</Table.Cell>
-                  <Table.Cell>
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Church Members</h1>
+        <p className="text-gray-600 dark:text-gray-300 mt-2">
+          Manage all active members of the church
+        </p>
+      </div>
 
-                <img src={user.profilePicture} alt={user.username} className='w-20 h-10 object-cover bg-gray-500 rounded-full' />
-                    
-                  </Table.Cell>
-                  <Table.Cell>
+      <Card className="mb-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="w-full md:w-1/3">
+            <TextInput
+              type="text"
+              placeholder="Search members..."
+              rightIcon={FaSearch}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <Badge color="blue" className="text-sm">
+            Total Members: {members.length}
+          </Badge>
+        </div>
+      </Card>
 
-                    {user.username}
-                    </Table.Cell>
-                  <Table.Cell>
+      {filteredMembers.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredMembers.map((member) => (
+            <Card key={member._id} className="hover:shadow-lg transition-shadow">
+              <div className="flex flex-col items-center text-center">
+                <Avatar
+                  img={member.profilePicture || '/default-profile.png'}
+                  alt={member.fullname}
+                  rounded
+                  size="xl"
+                  className="mb-4"
+                />
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+                  {member.fullname}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">{member.email}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  Birthday: {member.birthMonth}/{member.birthDay}
+                </p>
 
-                    {user.email}
+                <div className="flex gap-2 mt-3 flex-wrap justify-center">
+                  {member.isAdmin && (
+                    <Badge color="purple" icon={member.isAdmin ? FaCheck : FaTimes}>
+                      Admin
+                    </Badge>
+                  )}
+                  {member.isPastor && (
+                    <Badge color="indigo" icon={member.isPastor ? FaCheck : FaTimes}>
+                      Pastor
+                    </Badge>
+                  )}
+                  {member.isDeptHead && (
+                    <Badge color="pink" icon={member.isDeptHead ? FaCheck : FaTimes}>
+                      Dept Head
+                    </Badge>
+                  )}
+                  <Badge color="green" icon={member.isMember ? FaCheck : FaTimes}>
+                    Member
+                  </Badge>
+                </div>
 
-                    </Table.Cell>
-                    <Table.Cell>
-
-{user.isAdmin ? (<FaCheck className='text-green-500'/>) : (<FaTimes className='text-red-500'/>)}
-
-</Table.Cell>
-<Table.Cell>
-
-{user.isPastor ? (<FaCheck className='text-green-500'/>) : (<FaTimes className='text-red-500'/>)}
-
-</Table.Cell>
-<Table.Cell>
-
-{user.isDeptHead ? (<FaCheck className='text-green-500'/>) : (<FaTimes className='text-red-500'/>)}
-
-</Table.Cell>
-<Table.Cell>
-
-{user.isMember ? (<FaCheck className='text-green-500'/>) : (<FaTimes className='text-red-500'/>)}
-
-</Table.Cell>
-
-                  <Table.Cell>
-                    <button className='bg-red-500 text-white p-2 rounded-md' onClick={() => {
+                <div className="flex gap-3 mt-4">
+                  <Button outline gradientDuoTone="purpleToBlue" size="sm">
+                    <FaUserEdit className="mr-2" /> Edit
+                  </Button>
+                  <Button
+                    outline
+                    gradientDuoTone="pinkToOrange"
+                    size="sm"
+                    onClick={() => {
                       setShowModal(true);
-                      setUserIdToDelete(user._id);
-                    }}>Delete</button>
-                  </Table.Cell>
-                  <Table.Cell>
+                      setUserIdToDelete(member.userId);
+                    }}
+                  >
+                    <FaTrash className="mr-2" /> Delete
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <Card className="text-center py-12">
+          <p className="text-gray-500 dark:text-gray-400">
+            {searchTerm ? 'No matching members found' : 'There are no members yet!'}
+          </p>
+        </Card>
+      )}
 
-                    <span className='text-blue-500 hover:underline'>Edit</span>
+      {showMore && (
+        <div className="text-center mt-8">
+          <Button gradientDuoTone="cyanToBlue" onClick={handleShowMore}>
+            Load More Members
+          </Button>
+        </div>
+      )}
 
-                  </Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-                ))}
-          </Table>
-          {showMore && (<button className='w-full text-teal-500 self-center text-sm py-7' onClick={handleShowMore}>Show More</button>)}
-          </>
-        ) : (
-          <p>There are no user yet!</p>
-        )}
-            <Modal show={showModal} onClose={()=>setShowModal(false)} popup size='md'>
-        <Modal.Header/>
+      <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">
+        <Modal.Header />
         <Modal.Body>
           <div className="text-center">
-            <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto'/>
-            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
-              Are you sure you want to delete this user? 
+            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+            <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this member?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color='failure' onClick={handleDeleteUser}>Yes I'm Sure</Button>
-              <Button color='gray' onClick={()=>setShowModal(false)}>Cancel</Button>
+              <Button color="failure" onClick={handleDeleteUser}>
+                Yes, I'm sure
+              </Button>
+              <Button color="gray" onClick={() => setShowModal(false)}>
+                Cancel
+              </Button>
             </div>
           </div>
-          </Modal.Body>
+        </Modal.Body>
       </Modal>
-
     </div>
-  )
+  );
 }

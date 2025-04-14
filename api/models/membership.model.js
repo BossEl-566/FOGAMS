@@ -22,6 +22,14 @@ const membershipSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    birthDay: {
+        type: Number, 
+        required: true,
+    },
+    birthMonth: {
+        type: Number, 
+        required: true,
+    },
 }, { timestamps: true });
 
 const Membership = mongoose.model('Membership', membershipSchema);

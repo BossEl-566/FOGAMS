@@ -1,80 +1,221 @@
-import { useState, useEffect } from "react";
-import { FaUser, FaPhone, FaEnvelope } from "react-icons/fa";
+import { useState } from "react";
+import { FaUser, FaPhone, FaEnvelope, FaCalendarAlt, FaChevronDown } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
+import countries from "country-telephone-data"; // or your preferred country data source
 
 export default function MembershipForm() {
   const { currentUser } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
     fullname: "",
+    countryCode: "+233", // Default to US
     contact: "",
     email: "",
+    birthDay: "",
+    birthMonth: "",
   });
-  console.log(formData);
+
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
 
   const handleChange = (e) => {
-    if (e.target.name === "contact" && !/^[0-9]*$/.test(e.target.value)) return;
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if ((name === "contact" || name === "birthDay" || name === "birthMonth") && !/^[0-9]*$/.test(value)) return;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const selectCountry = (code) => {
+    setFormData({ ...formData, countryCode: code });
+    setShowCountryDropdown(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.fullname || !formData.contact || !formData.email) {
-        setError("All fields are required");
-        return;
+    const { fullname, countryCode, contact, email, birthDay, birthMonth } = formData;
+
+    if (!fullname || !contact || !email || !birthDay || !birthMonth) {
+      setError("Please fill in all fields");
+      return;
     }
+
     setError("");
+    setIsSubmitting(true);
+    
     try {
-        const response = await fetch('/api/membership/create', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                userId: currentUser._id,
-                fullname: formData.fullname,  // Make sure this matches the backend
-                contact: formData.contact,
-                email: formData.email,
-            }),
-        });
+      const response = await fetch('/api/membership/create', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: currentUser._id,
+          fullname,
+          contact: `${countryCode}${contact}`,
+          email,
+          birthDay: parseInt(birthDay),
+          birthMonth: parseInt(birthMonth),
+        }),
+      });
 
-        if (!response.ok) {
-            throw new Error("Failed to submit membership");
-        }
-        toast.success("Membership submitted successfully!");
-        setFormData({ fullname: "", contact: "", email: "" });
+      if (!response.ok) throw new Error("Failed to submit membership");
+
+      toast.success("Membership submitted successfully!");
+      setFormData({
+        fullname: "",
+        countryCode: "+1",
+        contact: "",
+        email: "",
+        birthDay: "",
+        birthMonth: "",
+      });
     } catch (error) {
-        console.error("Error submitting membership:", error);
-        toast.error("Request has already been submitted");
+      console.error("Error submitting membership:", error);
+      toast.error(error.message || "Request has already been submitted");
+    } finally {
+      setIsSubmitting(false);
     }
-};
-
+  };
 
   return (
-    <div className='max-w-lg mx-auto p-3 w-full mb-20'>
-           <div className="min-h-screen flex items-center justify-center p-6 transition-all bg-gray-100 dark:bg-gray-900 text-black dark:text-white">
-      <div className="p-8 rounded-2xl shadow-2xl w-full max-w-2xl transform transition duration-500 hover:scale-105 bg-white dark:bg-gray-800">
-        <h2 className="text-2xl font-bold text-center mb-6">Request to be Membership</h2>
-        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="relative">
-            <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-            <input type="text" name="fullname" placeholder="Full Name" value={formData.fullname} onChange={handleChange} className="w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-black dark:text-white" required />
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
+      <div className="w-full max-w-md">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="p-8">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Membership Application</h2>
+              <p className="text-gray-500 dark:text-gray-400 mt-2">Please provide your details</p>
+            </div>
+
+            {error && (
+              <div className="mb-6 p-3 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 rounded-lg text-sm text-center">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
+                  <div className="relative">
+                    <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      name="fullname"
+                      value={formData.fullname}
+                      onChange={handleChange}
+                      className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</label>
+                  <div className="flex">
+                    {/* Country Code Dropdown */}
+                    <div className="relative mr-2 w-28">
+                      <button
+                        type="button"
+                        onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                        className="w-full flex items-center justify-between pl-3 pr-2 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none"
+                      >
+                        <span>{formData.countryCode}</span>
+                        <FaChevronDown className="text-gray-400 text-xs" />
+                      </button>
+                      {showCountryDropdown && (
+                        <div className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg">
+                          {countries.allCountries.map((country) => (
+                            <div
+                              key={country.iso2}
+                              className="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+                              onClick={() => selectCountry(country.dialCode)}
+                            >
+                              {country.name} ({country.dialCode})
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Phone Number Input */}
+                    <div className="relative flex-1">
+                      <FaPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                      <input
+                        type="text"
+                        name="contact"
+                        value={formData.contact}
+                        onChange={handleChange}
+                        className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
+                  <div className="relative">
+                    <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Birth Day</label>
+                    <div className="relative">
+                      <FaCalendarAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                      <input
+                        type="text"
+                        name="birthDay"
+                        placeholder="DD"
+                        value={formData.birthDay}
+                        onChange={handleChange}
+                        maxLength="2"
+                        className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Birth Month</label>
+                    <div className="relative">
+                      <FaCalendarAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                      <input
+                        type="text"
+                        name="birthMonth"
+                        placeholder="MM"
+                        value={formData.birthMonth}
+                        onChange={handleChange}
+                        maxLength="2"
+                        className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200"
+              >
+                {isSubmitting ? "Processing..." : "Submit Application"}
+              </button>
+            </form>
           </div>
-          <div className="relative">
-            <FaPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-            <input type="text" name="contact" placeholder="Contact" value={formData.contact} onChange={handleChange} className="w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-black dark:text-white" required />
-          </div>
-          <div className="relative">
-            <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-            <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-black dark:text-white" required />
-          </div>
-          <button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white p-3 rounded-lg font-bold shadow-lg hover:from-blue-600 hover:to-blue-800 transition-all duration-300">Submit</button>
-        </form>
+        </div>
       </div>
     </div>
-    </div>
-
   );
 }
