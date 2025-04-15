@@ -92,7 +92,7 @@ export const sendBirthdaySMS = async (req, res, next) => {
         });
 
         if (birthdayMembers.length === 0) {
-            return res.status(200).json({ message: "No birthdays today." });
+            return console.log("No birthdays today");
         }
 
         for (const member of birthdayMembers) {
@@ -104,7 +104,7 @@ export const sendBirthdaySMS = async (req, res, next) => {
                 },
                 body: JSON.stringify({
                     sender: "FOGA_PEDU",
-                    message: `Happy Birthday ${member.fullname}! 🎉 We love and celebrate you - From FOGA Church 💙`,
+                    message: `Happy Birthday ${member.fullname}! We love and celebrate you - From FOGA Church `,
                     recipients: [`233${member.contact.slice(-9)}`],
                 }),
             });
