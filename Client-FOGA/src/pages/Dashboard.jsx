@@ -20,6 +20,7 @@ import DashAnonymous from '../components/DashAnonymous';
 import DashBible from '../components/DashBible';
 import DashNotepad from '../components/DashNotepad';
 import DashContact from '../components/DashContact';
+import DashBirthday from '../components/DashBirthday';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -100,6 +101,7 @@ export default function Dashboard() {
         {tab === 'bible' && <DashBible />}
         {tab === 'notepad' && <DashNotepad />}
         {tab === 'contact' && <DashContact />}
+        {tab === 'birthday' && <DashBirthday />}
       </div>
     </div>
   );

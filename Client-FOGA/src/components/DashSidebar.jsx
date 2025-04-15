@@ -9,6 +9,7 @@ import { FaPray } from "react-icons/fa";
 import { MdOutlineContactSupport } from "react-icons/md";
 import { FaPollH } from "react-icons/fa";
 import { MdEventAvailable, MdOutlineAttachMoney } from "react-icons/md";
+import { FaBirthdayCake } from "react-icons/fa";
 import { Link, useLocation } from 'react-router-dom';
 import { signoutSuccess } from '../radux/user/userSlice';
 import { BiNotepad } from "react-icons/bi";
@@ -195,6 +196,15 @@ export default function DashSidebar() {
                     >
                       Users
                     </Sidebar.Item>
+                  </SidebarLink>
+                  <SidebarLink to='/dashboard?tab=birthday' tabValue='birthday'>
+                    <Sidebar.Item
+                      active={tab === 'birthday'}
+                      icon={FaBirthdayCake}
+                      as='div'
+                    >
+                      Birthday  
+                  </Sidebar.Item>
                   </SidebarLink>
                   <SidebarLink to='/dashboard?tab=comments' tabValue='comments'>
                     <Sidebar.Item

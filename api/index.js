@@ -23,6 +23,9 @@ import jwt from 'jsonwebtoken'; // JWT for authentication
 import { createServer } from 'http'; // HTTP server module
 import { Server } from 'socket.io'; // Socket.IO for real-time communication
 import { getVerse, BOOK } from 'bible-kjv';
+import cron from 'node-cron';
+import { sendBirthdaySMS } from './controllers/membership.controller.js'; // Adjust path if needed
+
 
 
 dotenv.config(); // Load environment variables from .env file
@@ -48,6 +51,13 @@ const io = new Server(server, {
     methods: ["GET", "POST"], // Allow specified HTTP methods
   },
 });
+
+// Run every minute
+cron.schedule('0 6 * * *', () => {
+  console.log("⏰ Running birthday SMS check...");
+  sendBirthdaySMS();
+});
+
 
 // Store online users
 const userSocketMap = {}; // { userId: socketId }
