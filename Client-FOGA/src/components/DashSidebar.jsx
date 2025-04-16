@@ -12,6 +12,7 @@ import { MdEventAvailable, MdOutlineAttachMoney } from "react-icons/md";
 import { FaBirthdayCake } from "react-icons/fa";
 import { Link, useLocation } from 'react-router-dom';
 import { signoutSuccess } from '../radux/user/userSlice';
+import { FaBullhorn } from "react-icons/fa";
 import { BiNotepad } from "react-icons/bi";
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -249,6 +250,15 @@ export default function DashSidebar() {
                       as='div'
                     >
                       Contact
+                    </Sidebar.Item>
+                  </SidebarLink>
+                  <SidebarLink to='/dashboard?tab=broadcast' tabValue='broadcast'>
+                    <Sidebar.Item
+                      active={tab === 'broadcast'}
+                      icon={FaBullhorn}
+                      as='div'
+                    >
+                      Broadcast
                     </Sidebar.Item>
                   </SidebarLink>
                 </>

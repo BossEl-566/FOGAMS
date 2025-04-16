@@ -17,6 +17,7 @@ import contactRoute from './routes/contact.route.js'; // Contact-related routes
 import bookRoute from './routes/book.route.js'; // Book-related routes
 import notepadRoute from './routes/notepad.route.js'; // Notepad-related routes
 import pollRoute from './routes/poll.route.js'; // Poll-related routes
+import broadcastMessageRoute from './routes/broadcastMessage.route.js'; // Broadcast message routes
 import anonymousRoute from './routes/anonymous.route.js'; // Anonymouse-related routes
 import cookieParser from 'cookie-parser'; // Middleware to parse cookies
 import jwt from 'jsonwebtoken'; // JWT for authentication
@@ -25,6 +26,7 @@ import { Server } from 'socket.io'; // Socket.IO for real-time communication
 import { getVerse, BOOK } from 'bible-kjv';
 import cron from 'node-cron';
 import { sendBirthdaySMS } from './controllers/membership.controller.js'; // Adjust path if needed
+import { sendScheduledMessages } from './controllers/broadcastMessage.controller.js'; // Adjust path if needed
 
 
 
@@ -52,12 +54,16 @@ const io = new Server(server, {
   },
 });
 
-// Run every minute
+// Run every day at 6 AM
 cron.schedule('0 6 * * *', () => {
   console.log("⏰ Running birthday SMS check...");
   sendBirthdaySMS();
 });
 
+cron.schedule('0 6 * * *', () => {
+  console.log("⏰ Running scheduled message check...");
+  sendScheduledMessages();
+});
 
 // Store online users
 const userSocketMap = {}; // { userId: socketId }
@@ -136,6 +142,7 @@ app.use('/api/messages', messageRoute); // Routes for messages
 app.use('/api/tithe', titheRoute); // Routes for tithes
 app.use('/api/church-account', churchAccountRoute); // Routes for church account
 app.use('/api/baptism', baptismRoute); // Routes for baptism
+app.use('/api/broadcast', broadcastMessageRoute); // Routes for messages
 // Error handling middleware
 app.use('/api/poll', pollRoute); // Routes for polls
 app.use('/api/book', bookRoute); // Routes for books
