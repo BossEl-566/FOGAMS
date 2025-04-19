@@ -78,7 +78,7 @@ const WelcomeScreen = () => {
             className="w-40 h-40 mb-6"
             resizeMode="contain"
           />
-          <Text style={{ fontFamily: 'Inter_900Black' }} className="text-4xl text-slate-800 mb-1">
+          <Text style={{ fontFamily: 'Inter_900Black' }} className="text-4xl text-blue-800 mb-1">
             Welcome to FOGA
           </Text>
           <Text style={{ fontFamily: 'Inter_400Regular' }} className="text-lg text-slate-500">
