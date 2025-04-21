@@ -4,8 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_900Black, Inter_600SemiBold, Inter_400Regular } from '@expo-google-fonts/inter';
 import React, { useEffect, useRef } from 'react';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+
 
 const WelcomeScreen = () => {
+const router = useRouter();
+
   // Load custom fonts
   const [fontsLoaded] = useFonts({
     Inter_900Black,
@@ -60,6 +65,9 @@ const WelcomeScreen = () => {
   }
 
   return (
+    <>
+      <StatusBar style="dark" backgroundColor="#f8fafc" />
+
     <LinearGradient
       colors={['#f8fafc', '#e2e8f0']}
       className="flex-1"
@@ -97,6 +105,7 @@ const WelcomeScreen = () => {
           <TouchableOpacity 
             className="py-4 rounded-xl overflow-hidden"
             activeOpacity={0.8}
+            onPress={() => router.push('/signin')}
           >
             <LinearGradient
               colors={['#3b82f6', '#2563eb']}
@@ -110,10 +119,11 @@ const WelcomeScreen = () => {
               </Text>
             </LinearGradient>
           </TouchableOpacity>
-
+          
           <TouchableOpacity 
             className="border-2 border-blue-500 py-4 rounded-xl bg-white"
             activeOpacity={0.8}
+            onPress={() => router.push('/signup')}
           >
             <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-blue-500 text-center text-lg">
               Register
@@ -180,6 +190,8 @@ const WelcomeScreen = () => {
         </Animated.View>
       </SafeAreaView>
     </LinearGradient>
+    </>
+    
   );
 };
 
