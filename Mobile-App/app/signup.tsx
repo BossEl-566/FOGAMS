@@ -2,11 +2,22 @@ import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, ScrollVie
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_900Black, Inter_600SemiBold, Inter_400Regular } from '@expo-google-fonts/inter';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import * as AuthSession from 'expo-auth-session';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+
+
+WebBrowser.maybeCompleteAuthSession();
+
 
 const SignUp = () => {
     const router = useRouter();
+    const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -20,6 +31,53 @@ const SignUp = () => {
         Inter_600SemiBold,
         Inter_400Regular,
     });
+    const [request, response, promptAsync] = Google.useAuthRequest({
+        androidClientId: '546264222419-2jsdiq9d4ihdn2irh0bj8tb9suv7f0q9.apps.googleusercontent.com',
+        iosClientId: '546264222419-uis4m7khbnhgsnreu5laat9e582vdfra.apps.googleusercontent.com',
+        webClientId: '546264222419-ldn8rh0niiu7bmfv3guvbriibi48o419.apps.googleusercontent.com',
+        redirectUri: AuthSession.makeRedirectUri({
+            scheme: 'FOGAMS', // optional if using bare workflow
+        }),
+      })
+
+    useEffect(() => {
+        handleGoogleSignIn(); 
+    }, [response]);
+
+    async function handleGoogleSignIn() {
+        const user = await AsyncStorage.getItem('@user');
+        if (!user) {
+         if(response?.type === 'success') {
+            const { authentication } = response.params;
+            if (response.authentication) {
+                await getUserInfo(response.authentication.accessToken);
+            }
+         }
+        } else {
+          setUserInfo(JSON.parse(user));  
+        }
+    }
+
+    interface UserInfo {
+        id: string;
+        email: string;
+        name: string;
+        picture: string;
+    }
+
+    const getUserInfo = async (token: string | null): Promise<void> => {
+        if (!token) return;
+        try {
+            const user = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const userData: UserInfo = await user.json();
+            await AsyncStorage.setItem('@user', JSON.stringify(userData));
+            setUserInfo(userData);
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+        }
+    };
 
     if (!fontsLoaded) {
         return null;
@@ -163,6 +221,7 @@ const SignUp = () => {
                         {/* Google Sign In */}
                         <TouchableOpacity 
                             className="flex-row items-center justify-center border-2 border-blue-100 py-4 rounded-2xl bg-white shadow-sm mb-6"
+                            onPress={() => promptAsync()}
                         >
                             <AntDesign name="google" size={22} color="#DB4437" style={{ marginRight: 10 }} />
                             <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-slate-700 text-lg">
