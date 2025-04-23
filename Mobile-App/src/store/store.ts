@@ -1,6 +1,7 @@
 // src/store/store.ts
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { userReducer } from '../features/users/userSlice'
+import { themeReducer } from '../features/theme/themeSlice' // 👈 import your theme reducer
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   persistStore,
@@ -21,6 +22,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   user: userReducer,
+  theme: themeReducer, // 👈 include the theme slice
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

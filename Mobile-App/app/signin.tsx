@@ -2,26 +2,36 @@ import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, ScrollVie
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_900Black, Inter_600SemiBold, Inter_400Regular } from '@expo-google-fonts/inter';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { ToastAndroid } from 'react-native';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart, signInSuccess, signInFailure } from '../src/features/users/userSlice';
 
 const SignIn = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
+    const { currentUser, loading, error } = useSelector((state: any) => state.user);
+    
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     const [fontsLoaded] = useFonts({
         Inter_900Black,
         Inter_600SemiBold,
         Inter_400Regular,
     });
+
+    // Check if user is already logged in
+    useEffect(() => {
+        if (currentUser) {
+            router.replace('/(tabs)/home');
+        }
+    }, [currentUser]);
 
     if (!fontsLoaded) {
         return null;
@@ -43,12 +53,13 @@ const SignIn = () => {
     const handleSubmit = async () => {
         if (!formData.email || !formData.password) {
             Alert.alert('Error', 'All fields are required');
-            
+            return;
         }
 
         try {
+            dispatch(signInStart());
             
-            const res = await fetch('http://192.168.234.105:3000/api/auth/signin', {
+            const res = await fetch('http://192.168.48.105:3000/api/auth/signin', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -58,20 +69,17 @@ const SignIn = () => {
             const data = await res.json();
 
             if (res.ok) {
-                
-              ToastAndroid.show('Login successful', ToastAndroid.SHORT);
-                router.push('/(tabs)/home');
+                dispatch(signInSuccess(data));
+                ToastAndroid.show('Login successful', ToastAndroid.SHORT);
+                router.replace('/(tabs)/home');
             } else {
-                
+                dispatch(signInFailure(data.message));
                 Alert.alert('Error', data.message);
             }
         } catch (error) {
-          
-            if (error instanceof Error) {
-                Alert.alert('Error', error.message || 'Something went wrong');
-            } else {
-                Alert.alert('Error', 'Something went wrong');
-            }
+            const errorMessage = error instanceof Error ? error.message : 'Something went wrong';
+            dispatch(signInFailure(errorMessage));
+            Alert.alert('Error', errorMessage);
         }
     };
 

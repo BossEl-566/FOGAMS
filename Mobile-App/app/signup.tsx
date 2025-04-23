@@ -8,6 +8,7 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AuthSession from 'expo-auth-session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
 
 
 
@@ -16,6 +17,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 
 const SignUp = () => {
+    const { currentUser } = useSelector((state: any) => state.user);
     const router = useRouter();
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
     const [formData, setFormData] = useState({
@@ -39,6 +41,12 @@ const SignUp = () => {
             scheme: 'FOGAMS', // optional if using bare workflow
         }),
       })
+
+    useEffect(() => {
+        if (currentUser) {
+            router.replace('/home');
+        }
+    }, [userInfo, currentUser]);
 
     useEffect(() => {
         handleGoogleSignIn(); 
@@ -116,7 +124,7 @@ const SignUp = () => {
             }
 
             Alert.alert('Success', 'Sign up successful! Redirecting to Sign In...');
-            router.push('/(tabs)/home');
+            router.push('/signin');
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Something went wrong';
             Alert.alert('Error', errorMessage);

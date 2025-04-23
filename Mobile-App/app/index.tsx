@@ -4,11 +4,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_900Black, Inter_600SemiBold, Inter_400Regular } from '@expo-google-fonts/inter';
 import React, { useEffect, useRef } from 'react';
-import { useRouter } from 'expo-router';
+import { useRouter, Redirect } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useSelector } from 'react-redux';
+
 
 
 const WelcomeScreen = () => {
+  // Redux state
+  const { currentUser } = useSelector((state: any) => state.user);
+
+  
+
+  // Router
 const router = useRouter();
 
   // Load custom fonts
@@ -62,6 +70,10 @@ const router = useRouter();
 
   if (!fontsLoaded) {
     return null;
+  }
+
+  if (currentUser) {
+    return <Redirect href="/(tabs)/home" />;
   }
 
   return (
