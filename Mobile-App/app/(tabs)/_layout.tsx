@@ -1,4 +1,4 @@
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 import React from 'react'
 import { Tabs } from 'expo-router'
 import { useSelector } from 'react-redux'
@@ -8,6 +8,7 @@ const _layout = () => {
   const { theme } = useSelector((state: any) => state.theme)
 
   return (
+    <View className={`flex-1 bg-white dark:bg-black`}>
     <Tabs
       screenOptions={{
         tabBarStyle: {
@@ -85,6 +86,7 @@ const _layout = () => {
         }}
       />
     </Tabs>
+    </View>
   )
 }
 
