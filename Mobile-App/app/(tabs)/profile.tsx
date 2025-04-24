@@ -28,7 +28,7 @@ const Profile = () => {
   if (!fontsLoaded || !currentUser) {
     return null;
   }
-
+ 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -235,7 +235,7 @@ const Profile = () => {
               <View className="flex-row justify-end space-x-4">
                 <TouchableOpacity
                   onPress={() => setShowSignOutModal(false)}
-                  className="px-5 py-2 rounded-lg border border-gray-300"
+                  className="px-5 py-2 rounded-lg border border-gray-300 mr-4"
                 >
                   <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-gray-700 dark:text-gray-300">
                     Cancel
