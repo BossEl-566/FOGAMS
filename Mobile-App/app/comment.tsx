@@ -36,22 +36,43 @@ export default function CommentScreen() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Theme-based styles
+  const themeStyles = {
+    container: theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50',
+    card: theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200',
+    textPrimary: theme === 'dark' ? 'text-white' : 'text-gray-900',
+    textSecondary: theme === 'dark' ? 'text-gray-400' : 'text-gray-500',
+    border: theme === 'dark' ? 'border-gray-700' : 'border-gray-200',
+    refreshControl: theme === 'dark' ? '#ffffff' : '#000000',
+    icon: theme === 'dark' ? '#9CA3AF' : '#6B7280',
+    dangerIcon: theme === 'dark' ? '#FCA5A5' : '#EF4444',
+    dangerText: theme === 'dark' ? 'text-red-400' : 'text-red-500',
+    dangerBg: theme === 'dark' ? 'bg-red-900/30' : 'bg-red-50',
+    modalBg: theme === 'dark' ? 'bg-gray-800' : 'bg-white',
+    buttonSecondary: theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100',
+    buttonSecondaryText: theme === 'dark' ? 'text-gray-200' : 'text-gray-800',
+    countBadge: theme === 'dark' ? 'bg-indigo-900' : 'bg-indigo-100',
+    countText: theme === 'dark' ? 'text-indigo-200' : 'text-indigo-800',
+    postIdText: theme === 'dark' ? 'text-purple-400' : 'text-purple-600',
+    loadMoreBg: theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100',
+    loadMoreText: theme === 'dark' ? 'text-gray-300' : 'text-gray-700',
+    loadMoreIcon: theme === 'dark' ? '#D1D5DB' : '#4B5563'
+  };
+
   const fetchComments = async () => {
     try {
-      const token = await AsyncStorage.getItem('token'); // Assuming you stored it like this
-  
+      const token = await AsyncStorage.getItem('token');
       const res = await fetch(`http://192.168.106.105:3000/api/comment/getcomments`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`, // 👈 This makes your middleware happy
+          Authorization: `Bearer ${token}`,
         },
       });
   
       const data = await res.json();
   
       if (res.ok) {
-        console.log('Fetched comments:', data);
         setComments(data.comments);
         setShowMore(data.comments.length >= 9);
       } else {
@@ -71,7 +92,6 @@ export default function CommentScreen() {
       setRefreshing(false);
     }
   };
-  
 
   useEffect(() => {
     if (currentUser?.isAdmin) {
@@ -132,7 +152,6 @@ export default function CommentScreen() {
       setIsDeleting(false);
     }
   };
- 
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -152,32 +171,32 @@ export default function CommentScreen() {
 
   if (isLoading && !refreshing) {
     return (
-      <View className="flex-1 items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <ActivityIndicator size="large" color={theme === 'dark' ? '#ffffff' : '#000000'} />
+      <View className={`flex-1 items-center justify-center ${themeStyles.container}`}>
+        <ActivityIndicator size="large" color={themeStyles.refreshControl} />
       </View>
     );
   }
 
   return (
-    <View className="flex-1 bg-gray-50 dark:bg-gray-900">
+    <View className={`flex-1 ${themeStyles.container}`}>
       <ScrollView 
         className="p-4"
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[theme === 'dark' ? '#ffffff' : '#000000']}
-            tintColor={theme === 'dark' ? '#ffffff' : '#000000'}
+            colors={[themeStyles.refreshControl]}
+            tintColor={themeStyles.refreshControl}
           />
         }
       >
-        <View className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
-          <View className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex-row justify-between items-center">
-            <Text className="text-2xl font-semibold text-gray-800 dark:text-white">
+        <View className={`rounded-xl shadow-sm border ${themeStyles.card} ${themeStyles.border} overflow-hidden mb-6`}>
+          <View className={`px-6 py-4 border-b ${themeStyles.border} flex-row justify-between items-center`}>
+            <Text className={`text-2xl font-semibold ${themeStyles.textPrimary}`}>
               Comments Management
             </Text>
-            <View className="bg-indigo-100 dark:bg-indigo-900 px-3 py-1 rounded-full">
-              <Text className="text-indigo-800 dark:text-indigo-200 text-sm">
+            <View className={`${themeStyles.countBadge} px-3 py-1 rounded-full`}>
+              <Text className={`${themeStyles.countText} text-sm`}>
                 {comments.length} total
               </Text>
             </View>
@@ -189,7 +208,7 @@ export default function CommentScreen() {
                 {comments.map((comment) => (
                   <View 
                     key={comment._id}
-                    className="p-4 border-b border-gray-200 dark:border-gray-700 flex-row items-start"
+                    className={`p-4 border-b ${themeStyles.border} flex-row items-start`}
                   >
                     <Avatar 
                       uri={comment.userProfilePicture || 'https://via.placeholder.com/40'}
@@ -198,14 +217,14 @@ export default function CommentScreen() {
                     />
                     <View className="flex-1">
                       <View className="flex-row justify-between items-start mb-1">
-                        <Text className="font-medium text-gray-900 dark:text-white">
+                        <Text className={`font-medium ${themeStyles.textPrimary}`}>
                           {comment.username}
                         </Text>
-                        <Text className="text-xs text-gray-500 dark:text-gray-400">
+                        <Text className={`text-xs ${themeStyles.textSecondary}`}>
                           {formatDate(comment.updatedAt)}
                         </Text>
                       </View>
-                      <Text className="text-gray-800 dark:text-gray-200 mb-2">
+                      <Text className={`${themeStyles.textPrimary} mb-2`}>
                         {truncateContent(comment.content)}
                       </Text>
                       <View className="flex-row justify-between items-center">
@@ -214,13 +233,13 @@ export default function CommentScreen() {
                             <FontAwesome 
                               name="thumbs-o-up" 
                               size={14} 
-                              color={theme === 'dark' ? '#9CA3AF' : '#6B7280'} 
+                              color={themeStyles.icon} 
                             />
-                            <Text className="text-xs text-gray-500 dark:text-gray-400 ml-1">
+                            <Text className={`text-xs ${themeStyles.textSecondary} ml-1`}>
                               {comment.numberOfLikes}
                             </Text>
                           </View>
-                          <Text className="text-xs text-purple-600 dark:text-purple-400">
+                          <Text className={`text-xs ${themeStyles.postIdText}`}>
                             Post: {comment.postId?.slice(-6)}
                           </Text>
                         </View>
@@ -229,14 +248,14 @@ export default function CommentScreen() {
                             setShowModal(true);
                             setCommentIdToDelete(comment._id);
                           }}
-                          className="flex-row items-center px-3 py-1 bg-red-50 dark:bg-red-900/30 rounded-full"
+                          className={`flex-row items-center px-3 py-1 ${themeStyles.dangerBg} rounded-full`}
                         >
                           <Feather 
                             name="trash-2" 
                             size={14} 
-                            color={theme === 'dark' ? '#FCA5A5' : '#EF4444'} 
+                            color={themeStyles.dangerIcon} 
                           />
-                          <Text className="text-xs text-red-500 dark:text-red-400 ml-1">
+                          <Text className={`text-xs ${themeStyles.dangerText} ml-1`}>
                             Delete
                           </Text>
                         </TouchableOpacity>
@@ -246,18 +265,18 @@ export default function CommentScreen() {
                 ))}
 
                 {showMore && (
-                  <View className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 items-center">
+                  <View className={`px-6 py-4 border-t ${themeStyles.border} items-center`}>
                     <TouchableOpacity
                       onPress={handleShowMore}
-                      className="flex-row items-center px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-full"
+                      className={`flex-row items-center px-4 py-2 ${themeStyles.loadMoreBg} rounded-full`}
                     >
-                      <Text className="text-gray-700 dark:text-gray-300 mr-1">
+                      <Text className={`${themeStyles.loadMoreText} mr-1`}>
                         Load more
                       </Text>
                       <AntDesign 
                         name="down" 
                         size={14} 
-                        color={theme === 'dark' ? '#D1D5DB' : '#4B5563'} 
+                        color={themeStyles.loadMoreIcon} 
                       />
                     </TouchableOpacity>
                   </View>
@@ -265,14 +284,14 @@ export default function CommentScreen() {
               </>
             ) : (
               <View className="p-8 items-center">
-                <Text className="text-gray-500 dark:text-gray-400">
+                <Text className={themeStyles.textSecondary}>
                   No comments found
                 </Text>
               </View>
             )
           ) : (
             <View className="p-8 items-center">
-              <Text className="text-gray-500 dark:text-gray-400">
+              <Text className={themeStyles.textSecondary}>
                 You need admin privileges to view comments
               </Text>
             </View>
@@ -287,29 +306,29 @@ export default function CommentScreen() {
         onRequestClose={() => setShowModal(false)}
       >
         <View className="flex-1 justify-center items-center bg-black/50 p-4">
-          <View className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md">
+          <View className={`rounded-xl p-6 w-full max-w-md ${themeStyles.modalBg}`}>
             <View className="items-center mb-4">
-              <View className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 items-center justify-center">
+              <View className={`w-12 h-12 rounded-full ${themeStyles.dangerBg} items-center justify-center`}>
                 <Feather 
                   name="alert-circle" 
                   size={24} 
-                  color={theme === 'dark' ? '#FCA5A5' : '#EF4444'} 
+                  color={themeStyles.dangerIcon} 
                 />
               </View>
             </View>
-            <Text className="text-lg font-medium text-gray-900 dark:text-white text-center mb-2">
+            <Text className={`text-lg font-medium text-center mb-2 ${themeStyles.textPrimary}`}>
               Delete comment
             </Text>
-            <Text className="text-sm text-gray-500 dark:text-gray-400 text-center mb-6">
+            <Text className={`text-sm text-center mb-6 ${themeStyles.textSecondary}`}>
               Are you sure you want to delete this comment? This action cannot be undone.
             </Text>
             <View className="flex-row justify-center space-x-3">
               <TouchableOpacity
                 onPress={() => setShowModal(false)}
-                className="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg"
+                className={`px-4 py-2 ${themeStyles.buttonSecondary} rounded-lg`}
                 disabled={isDeleting}
               >
-                <Text className="text-gray-800 dark:text-gray-200">
+                <Text className={themeStyles.buttonSecondaryText}>
                   Cancel
                 </Text>
               </TouchableOpacity>
