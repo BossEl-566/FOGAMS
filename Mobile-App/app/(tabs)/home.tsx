@@ -494,7 +494,7 @@ const AdminDashboard = ({ theme, refreshing }: { theme: 'light' | 'dark'; refres
         title="Broadcast"
         description="Send messages to congregation"
         icon={<Ionicons name="megaphone" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-        onPress={() => console.log('Navigate to Broadcast')}
+        onPress={() => router.push('/broadcast')}
         theme={theme}
       />
 
@@ -510,7 +510,7 @@ const AdminDashboard = ({ theme, refreshing }: { theme: 'light' | 'dark'; refres
         title="Upcoming Events"
         description="Schedule and promote church events"
         icon={<MaterialIcons name="event" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-        onPress={() => console.log('Navigate to Upcoming Events')}
+        onPress={() => router.push('/upcomingevent')}
         theme={theme}
       />
 

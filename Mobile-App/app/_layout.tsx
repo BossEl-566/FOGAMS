@@ -52,6 +52,34 @@ function ThemedLayout() {
       },
     })}
   />
+  <Stack.Screen
+    name="broadcast"
+    options={() => ({
+      headerShown: true,
+      title: 'Broadcast',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
+  <Stack.Screen
+    name="upcomingevent"
+    options={() => ({
+      headerShown: true,
+      title: 'Upcoming Event',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
 </Stack>
 
 
