@@ -5,7 +5,7 @@ import { AntDesign, MaterialIcons, FontAwesome, Feather, Ionicons } from '@expo/
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import {  Pressable, } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 
 
 const SkeletonLoader = ({ theme }: { theme: 'light' | 'dark' }) => {
@@ -478,7 +478,7 @@ const AdminDashboard = ({ theme, refreshing }: { theme: 'light' | 'dark'; refres
         title="Daily Bible Message"
         description="Post today's scripture and reflection"
         icon={<MaterialIcons name="menu-book" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-        onPress={() => console.log('Navigate to Daily Bible Message')}
+        onPress={() => router.push('/dailybiblemessage')}
         theme={theme}
       />
 
