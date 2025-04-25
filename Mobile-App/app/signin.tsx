@@ -1,4 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, ScrollView, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_900Black, Inter_600SemiBold, Inter_400Regular } from '@expo-google-fonts/inter';
@@ -59,7 +60,7 @@ const SignIn = () => {
         try {
             dispatch(signInStart());
             
-            const res = await fetch('http://192.168.48.105:3000/api/auth/signin', {
+            const res = await fetch('http://192.168.106.105:3000/api/auth/signin', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -69,10 +70,12 @@ const SignIn = () => {
             const data = await res.json();
 
             if (res.ok) {
-                dispatch(signInSuccess(data));
-                ToastAndroid.show('Login successful', ToastAndroid.SHORT);
-                router.replace('/(tabs)/home');
-            } else {
+              const { token, ...user } = data;
+              dispatch(signInSuccess(user));
+              await AsyncStorage.setItem('userToken', token); // 👈 Save the token
+              ToastAndroid.show('Login successful', ToastAndroid.SHORT);
+              router.replace('/(tabs)/home');
+            }else {
                 dispatch(signInFailure(data.message));
                 Alert.alert('Error', data.message);
             }

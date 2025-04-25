@@ -486,7 +486,7 @@ const AdminDashboard = ({ theme, refreshing }: { theme: 'light' | 'dark'; refres
         title="Comment Page"
         description="Moderate comments on daily messages"
         icon={<FontAwesome name="comments" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-        onPress={() => console.log('Navigate to Comment Page')}
+        onPress={() => router.push('/comment')}
         theme={theme}
       />
 

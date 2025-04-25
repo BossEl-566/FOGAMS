@@ -38,6 +38,20 @@ function ThemedLayout() {
       },
     })}
   />
+<Stack.Screen
+    name="comment"
+    options={() => ({
+      headerShown: true,
+      title: 'Comment',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
 </Stack>
 
 

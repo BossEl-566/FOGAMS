@@ -46,11 +46,14 @@ const Profile = () => {
       }, 1500);
     }
   };
-
+ 
   const handleSignOut = async () => {
     setShowSignOutModal(false);
     try {
-      const res = await fetch('http://192.168.48.105:3000/api/user/signout', {
+      dispatch(signoutSuccess());
+        ToastAndroid.show('Signed out successfully', ToastAndroid.SHORT);
+        router.replace('/signin');
+      const res = await fetch('http://192.168.106.105/api/user/signout', {
         method: 'POST',
       });
 
