@@ -438,6 +438,7 @@ const MemberContent = ({ theme, user, refreshing }: { theme: 'light' | 'dark'; u
           </Link>
         ))}
       </View>
+      
     </ScrollView>
   );
 };
@@ -511,6 +512,13 @@ const AdminDashboard = ({ theme, refreshing }: { theme: 'light' | 'dark'; refres
         description="Schedule and promote church events"
         icon={<MaterialIcons name="event" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
         onPress={() => router.push('/upcomingevent')}
+        theme={theme}
+      />
+      <DashboardCard
+        title="Users"
+        description="Schedule and promote church events"
+        icon={<MaterialIcons name="group" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
+        onPress={() => router.push('/users')}
         theme={theme}
       />
 

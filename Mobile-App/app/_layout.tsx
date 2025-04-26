@@ -80,7 +80,22 @@ function ThemedLayout() {
       },
     })}
   />
+  <Stack.Screen
+    name="users"
+    options={() => ({
+      headerShown: true,
+      title: 'Users',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
 </Stack>
+
 
 
     </View>
