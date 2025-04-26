@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { FaUserPlus } from "react-icons/fa";
 import { HiMenuAlt2 } from "react-icons/hi";
+import { TfiAnnouncement } from "react-icons/tfi";
 
 export default function DashSidebar() {
   const location = useLocation();
@@ -124,6 +125,11 @@ export default function DashSidebar() {
               </SidebarLink>
               {currentUser.isMember && (
                 <>
+                <SidebarLink to='/dashboard?tab=announcement' tabValue='announcement'>
+                  <Sidebar.Item active={tab === 'announcement'} href="#" icon={TfiAnnouncement} as='div'>
+                    Announcement
+                  </Sidebar.Item>
+                </SidebarLink>
                 <SidebarLink to='/dashboard?tab=message' tabValue='message'>
                   <Sidebar.Item active={tab === 'message'} href="#" icon={BiChat} as='div'>
                     Chat

@@ -11,6 +11,7 @@ import DashResource from '../components/DashResource';
 import DashEvents from '../components/DashEvents';
 import MembershipRequest from '../components/MembershipRequest';
 import DashAccountRecord from '../components/DashAccountRecord';
+import DashAnnouncement from '../components/DashAnnouncement';
 import Chat from '../components/Chat';
 import ChurchAccount from '../components/ChurchAccount';
 import DashBaptismApplication from '../components/DashBaptismApplication';
@@ -104,6 +105,7 @@ export default function Dashboard() {
         {tab === 'contact' && <DashContact />}
         {tab === 'birthday' && <DashBirthday />}
         {tab === 'broadcast' && <DashBroadcast />}
+        {tab === 'announcement' && <DashAnnouncement />}
       </div>
     </div>
   );

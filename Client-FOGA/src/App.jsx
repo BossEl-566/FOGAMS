@@ -52,6 +52,7 @@ import ViewNotepad from './pages/ViewNotepad';
 import Gallery from './pages/Gallery';
 import PrayerGuide from './pages/PrayerGuide';
 import SendTestSMS from './pages/SendTestSMS';
+import Announcement from './pages/Announcement';
 
 export default function App() {
   const {currentUser} = useSelector((state) => state.user);
@@ -98,6 +99,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/sms" element={<SendTestSMS />} />
+        <Route path="/announcement/create" element={<Announcement />} />
         
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/search" element={<Search />} />
