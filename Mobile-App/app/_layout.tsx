@@ -164,6 +164,34 @@ function ThemedLayout() {
       },
     })}
   />
+  <Stack.Screen
+    name="birthday"
+    options={() => ({
+      headerShown: true,
+      title: 'Birthday',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
+  <Stack.Screen
+    name="baptism"
+    options={() => ({
+      headerShown: true,
+      title: 'Baptism',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
 </Stack>
 
 

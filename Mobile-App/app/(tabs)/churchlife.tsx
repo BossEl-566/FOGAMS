@@ -3,9 +3,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { MaterialIcons, FontAwesome, Feather, Ionicons, AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+
 const ChurchLife = () => {
+  const router = useRouter();
   const { theme } = useSelector((state: any) => state.theme);
   const currentUser = useSelector((state: any) => state.user.currentUser);
   const navigation = useNavigation<any>();
@@ -68,14 +71,14 @@ const ChurchLife = () => {
           title="Baptism Application"
           description="Apply for water baptism"
           icon={<FontAwesome name="tint" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-          onPress={() => navigation.navigate('BaptismApplication')}
+          onPress={() => router.push('/baptism')}
         />
 
         <FeatureCard
           title="Birthdays"
           description="View upcoming birthdays"
           icon={<MaterialIcons name="cake" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-          onPress={() => navigation.navigate('ChurchBirthdays')}
+          onPress={() => router.push('/birthday')}
         />
 
         <FeatureCard
