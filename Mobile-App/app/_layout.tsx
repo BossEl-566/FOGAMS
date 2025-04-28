@@ -94,6 +94,20 @@ function ThemedLayout() {
       },
     })}
   />
+  <Stack.Screen
+    name="announcement"
+    options={() => ({
+      headerShown: true,
+      title: 'Announcement',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
 </Stack>
 
 

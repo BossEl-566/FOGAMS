@@ -503,7 +503,7 @@ const AdminDashboard = ({ theme, refreshing }: { theme: 'light' | 'dark'; refres
         title="Announcements"
         description="Create and manage church announcements"
         icon={<Feather name="bell" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-        onPress={() => console.log('Navigate to Announcements')}
+        onPress={() => router.push('/announcement')}
         theme={theme}
       />
 
