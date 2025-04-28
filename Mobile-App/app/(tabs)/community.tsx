@@ -141,7 +141,7 @@ const Community = () => {
             title="Book Time with Pastor"
             description="Schedule a meeting with church leadership"
             icon={<FontAwesome name="calendar" size={22} color="white" />}
-            onPress={() => navigation.navigate('BookPastor')}
+            onPress={() => router.push('/booktime')}
             color="#10b981"
           />
           
@@ -149,7 +149,7 @@ const Community = () => {
             title="Community Polls"
             description="Participate in important decisions"
             icon={<Feather name="check-circle" size={22} color="white" />}
-            onPress={() => navigation.navigate('CommunityPolls')}
+            onPress={() => router.push('/poll')}
             color="#f59e0b"
           />
         </View>

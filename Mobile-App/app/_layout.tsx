@@ -136,6 +136,34 @@ function ThemedLayout() {
       },
     })}
   />
+  <Stack.Screen
+    name="booktime"
+    options={() => ({
+      headerShown: true,
+      title: 'Book Time',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
+  <Stack.Screen
+    name="poll"
+    options={() => ({
+      headerShown: true,
+      title: 'Poll',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
 </Stack>
 
 
