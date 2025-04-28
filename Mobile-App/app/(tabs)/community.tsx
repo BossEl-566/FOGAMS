@@ -6,6 +6,7 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 
 type FeatureCardProps = {
   title: string;
@@ -19,6 +20,7 @@ const FeatureCard = ({ title, description, icon, onPress, color }: FeatureCardPr
   const isDark = useSelector((state: any) => state.theme.theme === 'dark');
 
   return (
+
     <TouchableOpacity
       onPress={onPress}
       className={`p-5 rounded-2xl mb-4 ${isDark ? 'bg-gray-800' : 'bg-white'}`}
@@ -92,14 +94,15 @@ const Community = () => {
   const currentUser = useSelector((state: any) => state.user.currentUser);
   const navigation = useNavigation<NavigationProp<any>>();
   const isDark = theme === 'dark';
+  const router = useRouter();
 
   const handleAnonymousMessage = () => {
-    if (currentUser?.isPastor && currentUser?.isMember) {
-      navigation.navigate('PastorMemberMessages');
-    } else if (currentUser?.isPastor) {
-      navigation.navigate('PastorMessages');
+    if (currentUser?.isMember && currentUser?.isPastor) {
+      router.push('/anonymouspastor');
+    } else if (currentUser?.isMember) {
+      router.push('/anonymousmember');
     } else {
-      navigation.navigate('SendAnonymousMessage');
+      router.push('/anonymousmember');
     }
   };
 

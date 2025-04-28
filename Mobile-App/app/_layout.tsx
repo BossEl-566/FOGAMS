@@ -108,6 +108,34 @@ function ThemedLayout() {
       },
     })}
   />
+  <Stack.Screen
+    name="anonymouspastor"
+    options={() => ({
+      headerShown: true,
+      title: 'Annonymous Messages',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
+  <Stack.Screen
+    name="anonymousmember"
+    options={() => ({
+      headerShown: true,
+      title: 'Annonymous Messages',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
 </Stack>
 
 
