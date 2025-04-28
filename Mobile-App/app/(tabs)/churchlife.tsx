@@ -85,7 +85,7 @@ const ChurchLife = () => {
           title="Tithe & Offerings"
           description="Give your tithes and offerings"
           icon={<FontAwesome name="money" size={22} color={isDark ? '#3b82f6' : '#2563eb'} />}
-          onPress={() => navigation.navigate('TitheOffering')}
+          onPress={() => router.push('/tithe')}
         />
 
         <FeatureCard
