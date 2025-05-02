@@ -2,8 +2,6 @@ import Event from "../models/event.model.js";
 import { errorHandler } from "../utils/error.js";
 
 
-import Event from '../models/Event.js'; // adjust the path as needed
-import { errorHandler } from '../utils/errorHandler.js'; // adjust the path as needed
 
 export const createEvent = async (req, res, next) => {
   try {

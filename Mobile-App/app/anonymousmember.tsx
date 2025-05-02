@@ -34,7 +34,7 @@ const AnonymousMessageScreen = () => {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch('http://192.168.148.105:3000/api/anonymous/create', {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/anonymous/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,16 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, FlatList, RefreshControl, Image, Modal, StyleSheet } from 'react-native';
+import { View, ScrollView, TouchableOpacity, ActivityIndicator, FlatList, RefreshControl, Image, Modal, Text, Animated, Easing } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
-import { MaterialIcons, AntDesign } from '@expo/vector-icons';
-import { Card, Badge, TextInput, useTheme } from 'react-native-paper';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Haptics from 'expo-haptics';
+import type { RootState } from '../src/store/store'; // Adjust import path as needed
+
+interface Member {
+  _id: string;
+  userId: string;
+  fullname: string;
+  email: string;
+  username: string;
+  profilePicture: string;
+  birthDay?: string;
+  birthMonth?: string;
+  isAdmin: boolean;
+  isPastor: boolean;
+  isDeptHead: boolean;
+  isMember: boolean;
+  member: boolean;
+}
 
 const UsersScreen = () => {
-  const { currentUser } = useSelector((state: any) => state.user);
-  const { theme: appTheme } = useSelector((state: any) => state.theme);
-  const [members, setMembers] = useState<any[]>([]);
+  const { currentUser } = useSelector((state: RootState) => state.user);
+  const { theme: appTheme } = useSelector((state: RootState) => state.theme);
+  const [members, setMembers] = useState<Member[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showMore, setShowMore] = useState(true);
@@ -19,146 +37,41 @@ const UsersScreen = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
-  const theme = useTheme();
+  
+  // Animation values
+  const fadeAnim = useState(new Animated.Value(0))[0];
+  const scaleAnim = useState(new Animated.Value(0.95))[0];
 
-  // Theme-aware styles
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: appTheme === 'dark' ? '#1a1a1a' : '#f5f5f5',
-      padding: 16,
-    },
-    header: {
-      marginBottom: 24,
-    },
-    headerTitle: {
-      fontSize: 28,
-      fontWeight: '800',
-      color: appTheme === 'dark' ? 'white' : '#333',
-      marginBottom: 8,
-    },
-    headerSubtitle: {
-      fontSize: 16,
-      color: appTheme === 'dark' ? '#aaa' : '#666',
-    },
-    searchContainer: {
-      marginBottom: 20,
-      borderRadius: 12,
-      overflow: 'hidden',
-      backgroundColor: appTheme === 'dark' ? '#2a2a2a' : 'white',
-      elevation: 2,
-    },
-    searchInput: {
-      backgroundColor: appTheme === 'dark' ? '#2a2a2a' : 'white',
-    },
-    memberCountBadge: {
-      alignSelf: 'flex-start',
-      marginTop: 8,
-      backgroundColor: theme.colors.primary,
-    },
-    memberCard: {
-      marginBottom: 16,
-      borderRadius: 12,
-      overflow: 'hidden',
-      backgroundColor: appTheme === 'dark' ? '#2a2a2a' : 'white',
-      elevation: 2,
-    },
-    profileImage: {
-      width: 100,
-      height: 100,
-      borderRadius: 50,
-      marginBottom: 12,
-      borderWidth: 3,
-      borderColor: theme.colors.primary,
-    },
-    memberName: {
-      fontSize: 18,
-      fontWeight: '600',
-      color: appTheme === 'dark' ? 'white' : '#333',
-      textAlign: 'center',
-      marginBottom: 4,
-    },
-    memberEmail: {
-      fontSize: 14,
-      color: appTheme === 'dark' ? '#aaa' : '#666',
-      textAlign: 'center',
-      marginBottom: 8,
-    },
-    birthdayText: {
-      fontSize: 13,
-      color: appTheme === 'dark' ? '#888' : '#999',
-      marginBottom: 12,
-      textAlign: 'center',
-    },
-    badgeContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      marginBottom: 16,
-      gap: 8,
-    },
-    badge: {
-      paddingHorizontal: 10,
-      paddingVertical: 5,
-      borderRadius: 20,
-    },
-    actionButtonContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      gap: 12,
-      marginTop: 8,
-    },
-    actionButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingVertical: 10,
-      borderRadius: 8,
-    },
-    loadMoreButton: {
-      backgroundColor: theme.colors.primary,
-      padding: 14,
-      borderRadius: 10,
-      alignItems: 'center',
-      marginTop: 20,
-      marginBottom: 10,
-    },
-    emptyStateCard: {
-      alignItems: 'center',
-      padding: 24,
-      borderRadius: 12,
-      backgroundColor: appTheme === 'dark' ? '#2a2a2a' : 'white',
-    },
-    modalContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0,0,0,0.5)',
-    },
-    modalContent: {
-      backgroundColor: appTheme === 'dark' ? '#2a2a2a' : 'white',
-      padding: 24,
-      borderRadius: 12,
-      width: '90%',
-      maxWidth: 400,
-    },
-    modalButtons: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      gap: 16,
-      marginTop: 20,
-    },
-  });
+  useEffect(() => {
+    // Entry animation
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 300,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    if (currentUser?.isAdmin) {
+      fetchData();
+    }
+  }, [currentUser?._id]);
 
   const fetchData = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
       
       const [membersRes, usersRes] = await Promise.all([
-        fetch('http://192.168.106.105:3000/api/membership/get', {
+        fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/membership/get`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch('http://192.168.106.105:3000/api/user/getusers', {
+        fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/user/getusers`, {
           headers: { Authorization: `Bearer ${token}` },
         })
       ]);
@@ -169,8 +82,8 @@ const UsersScreen = () => {
       ]);
       
       if (membersRes.ok && usersRes.ok) {
-        const activeMembers = membersData.filter((member: any) => member.member);
-        const combinedData = activeMembers.map((member: any) => {
+        const activeMembers = membersData.filter((member: Member) => member.member);
+        const combinedData = activeMembers.map((member: Member) => {
           const user = usersData.users.find((u: any) => u._id === member.userId);
           return {
             ...member,
@@ -191,6 +104,7 @@ const UsersScreen = () => {
       Toast.show({
         type: 'error',
         text1: 'Failed to fetch data',
+        position: 'bottom',
       });
       console.error(error);
     } finally {
@@ -199,27 +113,23 @@ const UsersScreen = () => {
     }
   };
 
-  useEffect(() => {
-    if (currentUser?.isAdmin) {
-      fetchData();
-    }
-  }, [currentUser?._id]);
-
   const onRefresh = () => {
     setRefreshing(true);
     fetchData();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   const handleShowMore = async () => {
+    Haptics.selectionAsync();
     const startIndex = members.length;
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch(`http://192.168.106.105:3000/api/membership?startIndex=${startIndex}`, {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/membership?startIndex=${startIndex}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (res.ok) {
-        const newMembers = data.filter((member: any) => member.member);
+        const newMembers = data.filter((member: Member) => member.member);
         setMembers(prev => [...prev, ...newMembers]);
         setShowMore(newMembers.length >= 9);
       }
@@ -227,15 +137,17 @@ const UsersScreen = () => {
       Toast.show({
         type: 'error',
         text1: 'Failed to load more members',
+        position: 'bottom',
       });
       console.error(error);
     }
   };
 
   const handleDeleteUser = async () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch(`http://192.168.106.105:3000/api/user/delete/${userIdToDelete}`, {
+      const res = await fetch(`${process.env.EXPO_PUBLIC_IP}/api/user/delete/${userIdToDelete}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -246,17 +158,20 @@ const UsersScreen = () => {
         Toast.show({
           type: 'success',
           text1: 'User deleted successfully',
+          position: 'bottom',
         });
       } else {
         Toast.show({
           type: 'error',
           text1: data.message || 'Failed to delete user',
+          position: 'bottom',
         });
       }
     } catch (error) {
       Toast.show({
         type: 'error',
         text1: 'Error deleting user',
+        position: 'bottom',
       });
       console.error(error);
     }
@@ -268,115 +183,177 @@ const UsersScreen = () => {
     member.username?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const renderMemberCard = ({ item }: { item: any }) => (
-    <Card style={styles.memberCard}>
-      <Card.Content style={{ alignItems: 'center' }}>
-        <Image
-          source={{ uri: item.profilePicture }}
-          style={styles.profileImage}
-          defaultSource={{ uri: 'https://i.imgur.com/0LKZQYM.png' }}
-        />
-        <Text style={styles.memberName}>{item.fullname}</Text>
-        <Text style={styles.memberEmail}>{item.email}</Text>
-        
-        {item.birthDay && item.birthMonth && (
-          <Text style={styles.birthdayText}>
-            Birthday: {item.birthMonth}/{item.birthDay}
-          </Text>
-        )}
+  const renderMemberCard = ({ item, index }: { item: Member, index: number }) => {
+    const cardAnim = new Animated.Value(0);
+    
+    Animated.spring(cardAnim, {
+      toValue: 1,
+      delay: index * 50,
+      useNativeDriver: true,
+    }).start();
 
-        <View style={styles.badgeContainer}>
-          {item.isAdmin && (
-            <Badge style={[styles.badge, { backgroundColor: '#8b5cf6' }]}>
-              Admin
-            </Badge>
-          )}
-          {item.isPastor && (
-            <Badge style={[styles.badge, { backgroundColor: '#6366f1' }]}>
-              Pastor
-            </Badge>
-          )}
-          {item.isDeptHead && (
-            <Badge style={[styles.badge, { backgroundColor: '#ec4899' }]}>
-              Dept Head
-            </Badge>
-          )}
-          <Badge style={[styles.badge, { backgroundColor: '#10b981' }]}>
-            Member
-          </Badge>
-        </View>
+    return (
+      <Animated.View
+        className="mb-4"
+        style={{
+          transform: [{ scale: cardAnim }],
+          opacity: cardAnim,
+        }}
+      >
+        <View className={`rounded-2xl overflow-hidden ${appTheme === 'dark' ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
+          <View className="items-center p-5">
+            <View className="relative mb-4">
+              <Image
+                source={{ uri: item.profilePicture }}
+                className="w-24 h-24 rounded-full border-2"
+                style={{ borderColor: appTheme === 'dark' ? '#6366f1' : '#4f46e5' }}
+                defaultSource={{ uri: 'https://i.imgur.com/0LKZQYM.png' }}
+              />
+              {item.isAdmin && (
+                <View className="absolute bottom-0 right-0 bg-indigo-500 rounded-xl p-1">
+                  <Feather name="shield" size={16} color="white" />
+                </View>
+              )}
+            </View>
+            
+            <Text className={`text-lg font-semibold text-center ${appTheme === 'dark' ? 'text-white' : 'text-gray-900'} mb-1`}>
+              {item.fullname}
+            </Text>
+            
+            <Text className={`text-sm text-center ${appTheme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
+              {item.email}
+            </Text>
+            
+            {item.birthDay && item.birthMonth && (
+              <View className="flex-row items-center mb-4">
+                <Feather name="gift" size={14} color={appTheme === 'dark' ? '#9ca3af' : '#6b7280'} />
+                <Text className={`text-xs ml-1 ${appTheme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                  {item.birthMonth}/{item.birthDay}
+                </Text>
+              </View>
+            )}
 
-        <View style={styles.actionButtonContainer}>
-          <TouchableOpacity
-            style={[styles.actionButton, { backgroundColor: '#3b82f6' }]}
-            onPress={() => console.log('Edit member', item)}
-          >
-            <MaterialIcons name="edit" size={16} color="white" />
-            <Text style={{ color: 'white', marginLeft: 6 }}>Edit</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.actionButton, { backgroundColor: '#ef4444' }]}
-            onPress={() => {
-              setShowModal(true);
-              setUserIdToDelete(item.userId);
-            }}
-          >
-            <MaterialIcons name="delete" size={16} color="white" />
-            <Text style={{ color: 'white', marginLeft: 6 }}>Delete</Text>
-          </TouchableOpacity>
+            <View className="flex-row flex-wrap justify-center mb-4 gap-2">
+              {item.isPastor && (
+                <View className="flex-row items-center px-3 py-1 rounded-full bg-purple-600">
+                  <Feather name="cross" size={12} color="white" />
+                  <Text className="text-white text-xs ml-1">Pastor</Text>
+                </View>
+              )}
+              {item.isDeptHead && (
+                <View className="flex-row items-center px-3 py-1 rounded-full bg-pink-600">
+                  <Feather name="award" size={12} color="white" />
+                  <Text className="text-white text-xs ml-1">Dept Head</Text>
+                </View>
+              )}
+              <View className="flex-row items-center px-3 py-1 rounded-full bg-emerald-600">
+                <Feather name="user" size={12} color="white" />
+                <Text className="text-white text-xs ml-1">Member</Text>
+              </View>
+            </View>
+
+            <View className="flex-row justify-center mt-2 gap-3">
+              <TouchableOpacity
+                className="flex-row items-center px-4 py-2.5 rounded-lg bg-indigo-600"
+                onPress={() => {
+                  Haptics.selectionAsync();
+                  console.log('Edit member', item);
+                }}
+                activeOpacity={0.8}
+              >
+                <Feather name="edit-2" size={16} color="white" />
+                <Text className="text-white ml-2">Edit</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                className="flex-row items-center px-4 py-2.5 rounded-lg bg-red-600"
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  setShowModal(true);
+                  setUserIdToDelete(item.userId);
+                }}
+                activeOpacity={0.8}
+              >
+                <Feather name="trash-2" size={16} color="white" />
+                <Text className="text-white ml-2">Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </Card.Content>
-    </Card>
-  );
+      </Animated.View>
+    );
+  };
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
+      <View className={`flex-1 justify-center items-center ${appTheme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <ActivityIndicator size="large" color={appTheme === 'dark' ? '#6366f1' : '#4f46e5'} />
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <Animated.View 
+      className={`flex-1 ${appTheme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}
+      style={{
+        opacity: fadeAnim,
+        transform: [{ scale: scaleAnim }],
+      }}
+    >
       <ScrollView
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[theme.colors.primary]}
-            tintColor={theme.colors.primary}
+            colors={[appTheme === 'dark' ? '#6366f1' : '#4f46e5']}
+            tintColor={appTheme === 'dark' ? '#6366f1' : '#4f46e5'}
+            progressBackgroundColor={appTheme === 'dark' ? '#1f2937' : '#f9fafb'}
           />
         }
+        contentContainerClassName="p-4"
       >
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Church Members</Text>
-          <Text style={styles.headerSubtitle}>Manage all active members of the church</Text>
+        <View className="mb-6">
+          <View className="flex-row items-center mb-2">
+            <Text className={`text-3xl font-extrabold ${appTheme === 'dark' ? 'text-white' : 'text-gray-900'} mr-3`}>
+              Church Members
+            </Text>
+            <View className="bg-indigo-600 rounded-xl px-3 py-1">
+              <Text className="text-white font-medium">
+                {members.length} members
+              </Text>
+            </View>
+          </View>
+          
+          <Text className={`text-base ${appTheme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+            Manage all active members of the church
+          </Text>
         </View>
 
-        <Card style={styles.searchContainer}>
-          <Card.Content>
-            <TextInput
-              mode="outlined"
-              placeholder="Search members..."
-              value={searchTerm}
-              onChangeText={setSearchTerm}
-              style={styles.searchInput}
-              left={<TextInput.Icon icon="magnify" color={appTheme === 'dark' ? '#aaa' : '#666'} />}
-              outlineColor="transparent"
-              activeOutlineColor={theme.colors.primary}
-              theme={{
-                colors: {
-                  text: appTheme === 'dark' ? 'white' : 'black',
-                  placeholder: appTheme === 'dark' ? '#aaa' : '#666',
-                }
-              }}
-            />
-            <Badge style={styles.memberCountBadge}>
-              {`Total Members: ${members.length}`}
-            </Badge>
-          </Card.Content>
-        </Card>
+        <View className={`rounded-2xl overflow-hidden ${appTheme === 'dark' ? 'bg-gray-800' : 'bg-white'} shadow-sm mb-5`}>
+          <View className="p-4">
+            <View className={`flex-row items-center rounded-xl px-3 ${appTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'}`}>
+              <Feather name="search" size={20} color={appTheme === 'dark' ? '#9ca3af' : '#6b7280'} />
+              <TextInput
+                placeholder="Search members..."
+                placeholderTextColor={appTheme === 'dark' ? '#9ca3af' : '#6b7280'}
+                value={searchTerm}
+                onChangeText={setSearchTerm}
+                className={`flex-1 ml-2 ${appTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}
+                underlineColorAndroid="transparent"
+                selectionColor={appTheme === 'dark' ? '#6366f1' : '#4f46e5'}
+                style={{
+                  backgroundColor: 'transparent',
+                  height: 48,
+                }}
+              />
+              {searchTerm.length > 0 && (
+                <TouchableOpacity onPress={() => setSearchTerm('')}>
+                  <Feather name="x" size={20} color={appTheme === 'dark' ? '#9ca3af' : '#6b7280'} />
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </View>
 
         {filteredMembers.length > 0 ? (
           <FlatList
@@ -385,29 +362,32 @@ const UsersScreen = () => {
             keyExtractor={(item) => item._id}
             scrollEnabled={false}
             nestedScrollEnabled
+            contentContainerClassName="pb-4"
           />
         ) : (
-          <Card style={styles.emptyStateCard}>
-            <MaterialIcons 
-              name="people-outline" 
+          <View className={`rounded-2xl items-center p-8 ${appTheme === 'dark' ? 'bg-gray-800' : 'bg-white'} mt-4`}>
+            <Feather 
+              name="users" 
               size={48} 
-              color={appTheme === 'dark' ? '#aaa' : '#666'} 
+              color={appTheme === 'dark' ? '#9ca3af' : '#6b7280'} 
+              className="mb-4"
             />
-            <Text style={[styles.memberName, { marginTop: 12 }]}>
+            <Text className={`text-lg font-semibold text-center ${appTheme === 'dark' ? 'text-white' : 'text-gray-900'} mb-2`}>
               {searchTerm ? 'No matching members found' : 'No members yet'}
             </Text>
-            <Text style={styles.memberEmail}>
+            <Text className={`text-sm text-center ${appTheme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
               {searchTerm ? 'Try a different search term' : 'Add your first member'}
             </Text>
-          </Card>
+          </View>
         )}
 
         {showMore && (
           <TouchableOpacity
-            style={styles.loadMoreButton}
+            className={`py-3 px-4 rounded-lg items-center mt-4 ${appTheme === 'dark' ? 'bg-indigo-700' : 'bg-indigo-600'}`}
             onPress={handleShowMore}
+            activeOpacity={0.8}
           >
-            <Text style={{ color: 'white', fontWeight: '600' }}>Load More Members</Text>
+            <Text className="text-white font-medium">Load More Members</Text>
           </TouchableOpacity>
         )}
       </ScrollView>
@@ -419,30 +399,32 @@ const UsersScreen = () => {
         visible={showModal}
         onRequestClose={() => setShowModal(false)}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <View style={{ alignItems: 'center', marginBottom: 16 }}>
-              <MaterialIcons 
-                name="warning" 
+        <View className="flex-1 justify-center items-center bg-black/70">
+          <View className={`rounded-2xl w-[90%] max-w-md ${appTheme === 'dark' ? 'bg-gray-800' : 'bg-white'} p-6`}>
+            <View className="items-center mb-4">
+              <MaterialCommunityIcons 
+                name="alert-circle-outline" 
                 size={48} 
                 color="#ef4444" 
               />
             </View>
-            <Text style={[styles.memberName, { textAlign: 'center', marginBottom: 24 }]}>
+            <Text className={`text-lg font-semibold text-center ${appTheme === 'dark' ? 'text-white' : 'text-gray-900'} mb-6`}>
               Are you sure you want to delete this member?
             </Text>
-            <View style={styles.modalButtons}>
+            <View className="flex-row justify-center mt-5 gap-4">
               <TouchableOpacity
-                style={[styles.actionButton, { backgroundColor: '#ef4444', flex: 1 }]}
+                className="flex-1 py-2.5 px-4 rounded-lg bg-red-600"
                 onPress={handleDeleteUser}
+                activeOpacity={0.8}
               >
-                <Text style={{ color: 'white', fontWeight: '600' }}>Delete</Text>
+                <Text className="text-white font-medium text-center">Delete</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.actionButton, { backgroundColor: '#6b7280', flex: 1 }]}
+                className={`flex-1 py-2.5 px-4 rounded-lg ${appTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-300'}`}
                 onPress={() => setShowModal(false)}
+                activeOpacity={0.8}
               >
-                <Text style={{ color: 'white', fontWeight: '600' }}>Cancel</Text>
+                <Text className={`font-medium text-center ${appTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Cancel</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -450,7 +432,7 @@ const UsersScreen = () => {
       </Modal>
 
       <Toast />
-    </View>
+    </Animated.View>
   );
 };
 

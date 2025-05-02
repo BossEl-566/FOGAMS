@@ -37,7 +37,7 @@ const AnonymousPastorScreen = () => {
   const fetchMessages = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch('http://192.168.148.105:3000/api/anonymous/get', {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/anonymous/get`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

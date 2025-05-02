@@ -55,7 +55,7 @@ const BookTimeScreen = () => {
   const fetchBookings = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch('http://192.168.148.105:3000/api/book/get', {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/book/get`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ const BookTimeScreen = () => {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch('http://192.168.148.105:3000/api/book/create', {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/book/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ const BookTimeScreen = () => {
     try {
       setIsLoading(true);
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://192.168.148.105:3000/api/book/book-appointment/${bookingId}/${slotId}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/book/book-appointment/${bookingId}/${slotId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -183,7 +183,7 @@ const BookTimeScreen = () => {
   const fetchBookedMembers = async (slotId: string) => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://192.168.148.105:3000/api/book/get-names/${slotId}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/book/get-names/${slotId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -201,7 +201,7 @@ const BookTimeScreen = () => {
     try {
       setIsLoading(true);
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://192.168.148.105:3000/api/book/delete/${bookingId}/${slotId}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/book/delete/${bookingId}/${slotId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

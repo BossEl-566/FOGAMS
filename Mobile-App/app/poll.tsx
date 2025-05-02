@@ -59,7 +59,7 @@ const PollScreen = () => {
   const fetchPolls = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch('http://192.168.148.105:3000/api/poll/get', {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/poll/get`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -80,7 +80,7 @@ const PollScreen = () => {
   const fetchVisualData = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch('http://192.168.148.105:3000/api/poll/getpolls', {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/poll/getpolls`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -98,10 +98,10 @@ const PollScreen = () => {
 
   useEffect(() => {
     fetchPolls();
-    if (currentUser.isAdmin) {
+    if (currentUser.isPastor) {
       fetchVisualData();
     }
-  }, [currentUser.isAdmin]);
+  }, [currentUser.isPastor]);
 
   const handleAddCandidate = () => {
     setCandidates([...candidates, '']);
@@ -121,7 +121,7 @@ const PollScreen = () => {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch('http://192.168.148.105:3000/api/poll/create', {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/poll/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ const PollScreen = () => {
         setCandidates(['']);
         setExpiresAt('');
         fetchPolls();
-        if (currentUser.isAdmin) {
+        if (currentUser.isPastor) {
           fetchVisualData();
         }
       } else {
@@ -169,11 +169,11 @@ const PollScreen = () => {
   };
 
   const handleDeletePoll = async () => {
-    if (!currentUser.isAdmin || !pollToDelete) return;
+    if (!currentUser.isPastor || !pollToDelete) return;
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://192.168.148.105:3000/api/poll/delete/${pollToDelete._id}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/poll/delete/${pollToDelete._id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -201,7 +201,7 @@ const PollScreen = () => {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://192.168.148.105:3000/api/poll/vote/${selectedPollId}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/poll/vote/${selectedPollId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -218,7 +218,7 @@ const PollScreen = () => {
         Alert.alert('Success', 'Vote cast successfully!');
         setIsModalOpen(false);
         fetchPolls();
-        if (currentUser.isAdmin) {
+        if (currentUser.isPastor) {
           fetchVisualData();
         }
       } else {
@@ -267,7 +267,7 @@ const PollScreen = () => {
     <View className={`flex-1 ${colors.background} p-4`}>
       <ScrollView>
         {/* Admin Panel */}
-        {currentUser.isAdmin && (
+        {currentUser.isPastor && (
           <View className={`${colors.card} rounded-xl p-6 mb-6`}>
             <Text className={`text-2xl font-bold ${colors.text} mb-4`}>Create New Poll</Text>
             
@@ -366,7 +366,7 @@ const PollScreen = () => {
               <View key={poll._id} className={`${colors.card} rounded-xl p-6 mb-6`}>
                 <View className="flex-row justify-between items-start">
                   <Text className={`text-xl font-bold ${colors.text} mb-4`}>{poll.title}</Text>
-                  {currentUser.isAdmin && (
+                  {currentUser.isPastor && (
                     <TouchableOpacity
                       onPress={() => openDeleteModal(poll)}
                     >
@@ -414,7 +414,7 @@ const PollScreen = () => {
         )}
 
         {/* Admin Visualizations */}
-        {currentUser.isAdmin && (
+        {currentUser.isPastor && (
           <View className="mt-6">
             <Text className={`text-2xl font-bold ${colors.text} mb-4`}>Poll Results</Text>
             {visualData.length === 0 ? (
