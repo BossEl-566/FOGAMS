@@ -521,6 +521,14 @@ const AdminDashboard = ({ theme, refreshing }: { theme: 'light' | 'dark'; refres
         onPress={() => router.push('/users')}
         theme={theme}
       />
+      <DashboardCard
+        title="Church Tithe Records"
+        description="Manage member financial records"
+        icon={<Feather name="book" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
+        onPress={() => router.push('/accountrecords')}
+        theme={theme}
+      />
+      
 
       {/* Stats Section */}
       <View className={`mt-8 p-5 rounded-xl mb-2 ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-sm`}>

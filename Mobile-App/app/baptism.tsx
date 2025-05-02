@@ -43,7 +43,7 @@ const BaptismScreen = () => {
   const fetchApplicants = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch('http://192.168.201.105:3000/api/baptism/applicants', {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/baptism/applicants`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ const BaptismScreen = () => {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch('http://192.168.201.105:3000/api/baptism/create', {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/baptism/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ const BaptismScreen = () => {
         },
         body: JSON.stringify({ 
           username, 
-          userId: currentUser._id, 
+          userID: currentUser._id, 
           age: parseInt(age) 
         }),
       });
@@ -100,9 +100,11 @@ const BaptismScreen = () => {
         setAge('');
         Alert.alert('Success', 'Application submitted successfully!');
       } else {
+        console.log(response.status, await response.text())
         throw new Error('Failed to submit application');
       }
     } catch (error) {
+      console.error('Error submitting application:', error);
       Alert.alert('Error', error instanceof Error ? error.message : 'Failed to submit application');
     }
   };
@@ -112,7 +114,7 @@ const BaptismScreen = () => {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http:/192.168.201.105:3000/api/baptism/baptize/${applicantId}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/baptism/baptize/${applicantId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

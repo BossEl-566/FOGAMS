@@ -33,7 +33,7 @@ const BirthdayScreen = () => {
   const fetchCelebrants = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch('http://192.168.201.105:3000/api/membership/birthdays-today', {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/membership/birthdays-today`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

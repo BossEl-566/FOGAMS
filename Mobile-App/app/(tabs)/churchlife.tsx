@@ -88,21 +88,6 @@ const ChurchLife = () => {
           onPress={() => router.push('/tithe')}
         />
 
-        <FeatureCard
-          title="Church Account"
-          description="View church financial records"
-          icon={<Ionicons name="calculator" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-          onPress={() => navigation.navigate('ChurchAccount')}
-          adminOnly
-        />
-
-        <FeatureCard
-          title="Account Records"
-          description="Manage member financial records"
-          icon={<Feather name="book" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-          onPress={() => navigation.navigate('AccountRecords')}
-          adminOnly
-        />
 
         {/* Upcoming Events */}
         <View className="mt-8">

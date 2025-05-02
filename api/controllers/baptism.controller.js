@@ -27,6 +27,7 @@ export const createBaptism = async (req, res, next) => {
         await newBaptism.save();
         res.status(201).json(newBaptism);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: error.message });
     }
 };

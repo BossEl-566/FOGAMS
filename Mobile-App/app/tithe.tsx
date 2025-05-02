@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 
 type Tithe = {
   _id: string;
@@ -61,7 +62,7 @@ const TitheScreen = () => {
   const fetchTransactions = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch('http://192.168.201.105:3000/api/tithe/getTithe', {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/tithe/getTithe`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -104,7 +105,7 @@ const TitheScreen = () => {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch('http://192.168.201.105:3000/api/tithe/create', {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/tithe/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +166,7 @@ const TitheScreen = () => {
           <Text className={`text-2xl font-bold ${colors.text} mb-4`}>Tithe Dashboard</Text>
           
           <TouchableOpacity 
-            onPress={() => navigation.navigate('AllTransactions')}
+            onPress={() => router.push('/transactions')}
             className={`${colors.button} p-3 rounded-lg mb-4 items-center`}
           >
             <Text className="text-white font-medium">View All Records</Text>
