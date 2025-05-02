@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Modal, FlatList, RefreshControl, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, FlatList, RefreshControl, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { FontAwesome, AntDesign } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 interface Member {
   _id: string;
@@ -23,8 +22,13 @@ const BroadcastScreen = () => {
   const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [message, setMessage] = useState('');
-  const [scheduleTime, setScheduleTime] = useState(new Date());
+  const [scheduleTime, setScheduleTime] = useState<Date>(() => {
+    const now = new Date();
+    now.setHours(now.getHours() + 1, 0, 0, 0); // Set to next hour
+    return now;
+  });
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [pickerMode, setPickerMode] = useState<'date' | 'time'>('date');
   const [loading, setLoading] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
   const [segments, setSegments] = useState(1);
@@ -48,7 +52,7 @@ const BroadcastScreen = () => {
   const fetchMembers = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch(`http://192.168.154.105:3000/api/membership/get`, {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/membership/get`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -98,8 +102,6 @@ const BroadcastScreen = () => {
         member.contact?.includes(term)
       );
       setFilteredMembers(filtered);
-      
-      // Remove selected IDs that are no longer visible
       setSelectedIds(prev => prev.filter(id => 
         filtered.some(member => member._id === id)
       ));
@@ -120,18 +122,50 @@ const BroadcastScreen = () => {
     }
   };
 
-  const showPicker = () => {
+  const showPicker = (mode: 'date' | 'time') => {
+    setPickerMode(mode);
     setShowDatePicker(true);
   };
 
-  const onDateChange = (event: any, selectedDate?: Date) => {
+  const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     setShowDatePicker(false);
+
+    if (event.type === 'dismissed') {
+      return;
+    }
+
     if (selectedDate) {
-      setScheduleTime(selectedDate);
+      if (pickerMode === 'date') {
+        if (Platform.OS === 'android') {
+          // For Android, update date portion only
+          const newDate = new Date(selectedDate);
+          newDate.setHours(scheduleTime.getHours());
+          newDate.setMinutes(scheduleTime.getMinutes());
+          setScheduleTime(newDate);
+          setTimeout(() => showPicker('time'), 100);
+        } else {
+          // iOS handles both date and time
+          setScheduleTime(selectedDate);
+        }
+      } else {
+        // Time picker - update time portion only
+        const newDate = new Date(scheduleTime);
+        newDate.setHours(selectedDate.getHours());
+        newDate.setMinutes(selectedDate.getMinutes());
+        setScheduleTime(newDate);
+      }
     }
   };
 
-  console.log(process.env.EXPO_PUBLIC_ARKESEL_API_KEY)
+  const formatDisplayDate = (date: Date) => {
+    return date.toLocaleString([], {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
   const sendInstantMessage = async () => {
     if (!message.trim()) {
@@ -217,43 +251,66 @@ const BroadcastScreen = () => {
       return;
     }
 
-    const selectedMembers = members.filter(user => selectedIds.includes(user._id));
-    
+    const now = new Date();
+    if (scheduleTime <= now) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid schedule time',
+        text2: 'Please select a future date and time',
+      });
+      return;
+    }
+
+
+    const messages = members
+      .filter(user => selectedIds.includes(user._id))
+      .map(user => ({
+        memberId: user._id,
+        contact: user.contact || '',
+        fullname: user.fullname || 'Unknown',
+        message: message.trim(),
+        scheduledTime: scheduleTime.toISOString()
+      }));
+
+    setLoading(true);
     try {
-      setLoading(true);
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/broadcast/schedule`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/broadcast/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          message,
-          recipients: selectedMembers.map(m => ({ id: m._id, contact: m.contact })),
-          scheduledTime: scheduleTime.toISOString()
-        }),
+        body: JSON.stringify({ messages }),
       });
 
-      const result = await res.json();
+      const data = await response.json();
+      console.log('Server response:', data);
 
-      if (res.ok) {
-        Toast.show({
-          type: 'success',
-          text1: `Scheduled ${selectedMembers.length} messages!`,
-        });
-        setMessage('');
-        setSelectedIds([]);
-      } else {
-        throw new Error(result.message || 'Failed to schedule messages');
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to schedule messages');
       }
-    } catch (err) {
+
+      Toast.show({
+        type: 'success',
+        text1: `Scheduled ${messages.length} messages!`,
+        text2: `Will be sent at ${formatDisplayDate(scheduleTime)}`,
+      });
+      
+      setMessage('');
+      setSelectedIds([]);
+      // Reset to next hour
+      const nextHour = new Date();
+      nextHour.setHours(nextHour.getHours() + 1, 0, 0, 0);
+      setScheduleTime(nextHour);
+
+    } catch (error) {
+      console.error('Scheduling error:', error);
       Toast.show({
         type: 'error',
-        text1: 'Failed to schedule messages',
-        text2: err instanceof Error ? err.message : 'Unknown error',
+        text1: 'Failed to schedule',
+        text2: error.message || 'Please try again',
       });
-      console.error('Error scheduling messages:', err);
     } finally {
       setLoading(false);
     }
@@ -275,9 +332,7 @@ const BroadcastScreen = () => {
         <View className={`w-6 h-6 rounded-md border-2 ${
           isSelected ? themeStyles.checkboxSelected : themeStyles.checkbox
         } mr-3 items-center justify-center`}>
-          {isSelected && (
-            <MaterialIcons name="check" size={16} color="white" />
-          )}
+          {isSelected && <MaterialIcons name="check" size={16} color="white" />}
         </View>
         <View className="flex-1">
           <Text className={`font-medium ${themeStyles.textPrimary}`}>
@@ -291,40 +346,6 @@ const BroadcastScreen = () => {
           <Text className={`text-sm ${themeStyles.textSecondary} mt-1`}>{item.contact}</Text>
         </View>
       </TouchableOpacity>
-    );
-  };
-
-  const renderIOSPickerModal = () => {
-    if (Platform.OS !== 'ios' || !showDatePicker) return null;
-    
-    return (
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={showDatePicker}
-        onRequestClose={() => setShowDatePicker(false)}
-      >
-        <View className="flex-1 justify-end bg-black bg-opacity-50">
-          <View className={`p-4 rounded-t-lg ${themeStyles.card}`}>
-            <View className="flex-row justify-between items-center mb-4">
-              <Text className={`text-lg font-semibold ${themeStyles.textPrimary}`}>
-                Select Date and Time
-              </Text>
-              <TouchableOpacity onPress={() => setShowDatePicker(false)}>
-                <Text className="text-blue-500">Done</Text>
-              </TouchableOpacity>
-            </View>
-            
-            <DateTimePicker
-              value={scheduleTime}
-              mode="datetime"
-              display="spinner"
-              onChange={onDateChange}
-              minimumDate={new Date()}
-            />
-          </View>
-        </View>
-      </Modal>
     );
   };
 
@@ -364,11 +385,11 @@ const BroadcastScreen = () => {
           <Text className={`text-sm font-medium mb-2 ${themeStyles.textPrimary}`}>Schedule Time</Text>
           <TouchableOpacity 
             className={`p-3 ${themeStyles.input} rounded-lg border ${themeStyles.border} flex-row justify-between items-center`}
-            onPress={showPicker}
+            onPress={() => showPicker('date')}
             activeOpacity={0.7}
           >
             <Text className={themeStyles.textPrimary}>
-              {scheduleTime.toLocaleString()}
+              {formatDisplayDate(scheduleTime)}
             </Text>
             <MaterialIcons 
               name="date-range" 
@@ -376,7 +397,17 @@ const BroadcastScreen = () => {
               color={theme === 'dark' ? '#9CA3AF' : '#6B7280'} 
             />
           </TouchableOpacity>
-          {renderIOSPickerModal()}
+          
+          {showDatePicker && (
+            <DateTimePicker
+              value={scheduleTime}
+              mode={pickerMode}
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={handleDateChange}
+              minimumDate={new Date()}
+              themeVariant={theme === 'dark' ? 'dark' : 'light'}
+            />
+          )}
         </View>
 
         {/* Action Buttons */}
