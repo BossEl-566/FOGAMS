@@ -262,6 +262,20 @@ function ThemedLayout() {
       },
     })}
   />
+  <Stack.Screen
+    name="CreateEvent"
+    options={() => ({
+      headerShown: true,
+      title: 'Create Event',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
 </Stack>
 
 

@@ -2,33 +2,45 @@ import Event from "../models/event.model.js";
 import { errorHandler } from "../utils/error.js";
 
 
+import Event from '../models/Event.js'; // adjust the path as needed
+import { errorHandler } from '../utils/errorHandler.js'; // adjust the path as needed
+
 export const createEvent = async (req, res, next) => {
+  try {
     if (!req.user.isAdmin) {
-        return next(errorHandler(403, 'You are not authorized to perform this action'));
+      return next(errorHandler(403, 'You are not authorized to perform this action'));
     }
-    if (!req.body.title || !req.body.description || !req.body.date || !req.body.location) {
-        return next(errorHandler(400, 'Title, description, startDate and endDate are required'));
+
+    const { title, description, date, location, imageUrl } = req.body;
+
+    if (!title || !description || !date || !location) {
+      return next(errorHandler(400, 'Title, description, date, and location are required'));
     }
-    // Generate slug
-    const slug = req.body.title
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, '-')        // Replace spaces with dashes
-        .replace(/[^a-z0-9-]/g, '')  // Remove special characters
-        .replace(/--+/g, '-');       // Avoid multiple dashes
+
+    // Generate slug from title
+    const slug = title
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '-')        // Replace spaces with dashes
+      .replace(/[^a-z0-9-]/g, '')  // Remove special characters
+      .replace(/--+/g, '-');       // Avoid multiple dashes
 
     const newEvent = new Event({
-        ...req.body, slug
+      title,
+      description,
+      date,
+      location,
+      imageUrl: imageUrl || null,
+      slug
     });
 
-    try {
-        const event = await newEvent.save();
-        res.status(201).json(event);
-    } catch (error) {
-        next(error);
-    }
-
+    const savedEvent = await newEvent.save();
+    res.status(201).json(savedEvent);
+  } catch (error) {
+    next(error);
+  }
 };
+
 
 export const getEvents = async (req, res, next) => {
     try {

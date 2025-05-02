@@ -7,7 +7,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 type Announcement = {
   _id: string;
   title: string;
@@ -54,7 +53,7 @@ export default function AnnouncementScreen() {
   const fetchAnnouncements = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch('http://192.168.148.105:3000/api/announcement/get', {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/announcement/get`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -134,7 +133,7 @@ export default function AnnouncementScreen() {
         username: currentUser.username
       };
 
-      const response = await fetch('http://192.168.148.105:3000/api/announcement/create', {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/announcement/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -151,8 +150,10 @@ export default function AnnouncementScreen() {
 
       Toast.show({
         type: 'success',
-        text1: 'Success!',
-        text2: 'Announcement created successfully!',
+        text1: 'Announcement Created',
+        text2: 'Your announcement has been published successfully!',
+        visibilityTime: 3000,
+        position: 'bottom'
       });
       
       setFormData({
@@ -167,8 +168,10 @@ export default function AnnouncementScreen() {
       console.error('Error creating announcement:', err);
       Toast.show({
         type: 'error',
-        text1: 'Error',
+        text1: 'Creation Failed',
         text2: err.message || 'Failed to create announcement',
+        visibilityTime: 3000,
+        position: 'bottom'
       });
     } finally {
       setIsSubmitting(false);
@@ -178,7 +181,7 @@ export default function AnnouncementScreen() {
   const handleDelete = async (id: string) => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://192.168.148.105:3000/api/announcement/delete/${id}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/announcement/delete/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -194,8 +197,10 @@ export default function AnnouncementScreen() {
 
       Toast.show({
         type: 'success',
-        text1: 'Success!',
-        text2: 'Announcement deleted successfully!',
+        text1: 'Announcement Deleted',
+        text2: 'The announcement has been removed successfully!',
+        visibilityTime: 3000,
+        position: 'bottom'
       });
 
       fetchAnnouncements();
@@ -203,8 +208,10 @@ export default function AnnouncementScreen() {
       console.error('Error deleting announcement:', err);
       Toast.show({
         type: 'error',
-        text1: 'Error',
+        text1: 'Deletion Failed',
         text2: err.message || 'Failed to delete announcement',
+        visibilityTime: 3000,
+        position: 'bottom'
       });
     }
   };
@@ -358,6 +365,9 @@ export default function AnnouncementScreen() {
           ))
         )}
       </ScrollView>
+      
+      {/* Toast component should be at the root level */}
+      <Toast />
     </View>
   );
 }

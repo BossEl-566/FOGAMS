@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { Card, Badge, useTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 
 const UpcomingEventsScreen = () => {
   const { currentUser } = useSelector((state: any) => state.user);
@@ -73,7 +74,7 @@ const UpcomingEventsScreen = () => {
   const fetchEvents = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch('http://192.168.106.105:3000/api/event/get', {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/event/get`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -118,7 +119,7 @@ const UpcomingEventsScreen = () => {
     
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://192.168.106.105:3000/api/event/delete/${eventToDelete}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/event/delete/${eventToDelete}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -243,12 +244,6 @@ const UpcomingEventsScreen = () => {
         {currentUser?.isAdmin && (
           <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
             <TouchableOpacity
-              style={[themeStyles.buttonSecondary, { padding: 8, borderRadius: 8 }]}
-              onPress={() => console.log('Edit Event', item._id)}
-            >
-              <Text style={{ color: 'white' }}>Edit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
               style={{ padding: 8, borderRadius: 8, backgroundColor: '#ef4444' }}
               onPress={() => handleDeleteModal(item._id)}
             >
@@ -279,7 +274,7 @@ const UpcomingEventsScreen = () => {
           {currentUser?.isAdmin && (
             <TouchableOpacity
               style={[themeStyles.buttonPrimary, { padding: 12, borderRadius: 8, flexDirection: 'row', alignItems: 'center' }]}
-              onPress={() => console.log('Add Event')}
+              onPress={() => router.push('/CreateEvent')}
             >
               <AntDesign name="plus" size={16} color="white" />
               <Text style={{ color: 'white', marginLeft: 8 }}>Add Event</Text>
