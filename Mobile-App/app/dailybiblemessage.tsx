@@ -1,18 +1,21 @@
-import { View, Text, ScrollView, Image, TextInput, Alert } from 'react-native';
+import { View, Text, ScrollView, Image, TextInput, Alert, Platform, ToastAndroid } from 'react-native';
 import React, { useState } from 'react';
-import { Client, Storage } from 'appwrite';
+import { Client, Storage, ID } from 'appwrite';
 import { Button } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
-import { APPWRITE_API_ENDPOINT, APPWRITE_PROJECT_ID, APPWRITE_BUCKET_ID } from '@env';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store'; // Adjust path to your store
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../src/store/store';
+import { AppwriteClientFactory } from '../appwrite-client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const storage = AppwriteClientFactory.getInstance().storage;
 
 const DailyBibleMessage = () => {
-  const [file, setFile] = useState<string | null>(null);
-  const [fileUrl, setFileUrl] = useState('');
+  const [file, setFile] = useState<ImagePicker.ImagePickerAsset | null>(null);
+  const [previewUri, setPreviewUri] = useState('');
   const [formData, setFormData] = useState({
     title: '',
     category: 'uncategorized',
@@ -20,13 +23,18 @@ const DailyBibleMessage = () => {
     image: ''
   });
   const [isUploading, setIsUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   
-  // Get current theme from Redux store
   const { theme } = useSelector((state: RootState) => state.theme);
   const isDarkMode = theme === 'dark';
+  const [imageFileUrl, setImageFileUrl] = useState<string | null>(null);
+  const [uploadImageError, setUploadImageError] = useState<string | null>(null);
+  const [imageFileUploading, setImageFileUploading] = useState(false);
+  const [debugInfo, setDebugInfo] = useState('');
 
-  // Theme colors
+  // Theme styles
   const themeStyles = {
     container: isDarkMode ? 'bg-gray-900' : 'bg-gray-50',
     text: isDarkMode ? 'text-white' : 'text-gray-900',
@@ -40,67 +48,142 @@ const DailyBibleMessage = () => {
   };
 
   // Initialize Appwrite client
-  const client = new Client();
-  client
-    .setEndpoint(APPWRITE_API_ENDPOINT)
-    .setProject(APPWRITE_PROJECT_ID);
+  const client = new Client()
+    .setEndpoint(process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+    .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID || 'default-project-id');
 
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission Denied', 'We need camera roll permissions to upload images');
-      return;
+  const prepareNativeFile = async (
+      asset: ImagePicker.ImagePickerAsset
+    ): Promise<{ name: string; type: string; size: number; uri: string }> => {
+      try {
+        // Get filename or generate one
+        let fileName = asset.uri.split('/').pop() || `file-${Date.now()}`;
+        
+        // Normalize extensions
+        if (fileName.endsWith('.jpeg')) {
+          fileName = fileName.replace('.jpeg', '.jpg');
+        }
+  
+        // Ensure the file has an extension
+        if (!fileName.includes('.')) {
+          fileName = `${fileName}.jpg`;
+        }
+  
+        const fileExt = fileName.split('.').pop()?.toLowerCase() || 'jpg';
+        const mimeType = asset.mimeType || `image/${fileExt === 'jpg' ? 'jpeg' : fileExt}`;
+  
+        return {
+          name: fileName,
+          size: asset.fileSize || 0,
+          type: mimeType,
+          uri: Platform.OS === "android" ? asset.uri : asset.uri.replace('file://', ''),
+        };
+      } catch (error) {
+        const errorMsg = `File preparation failed: ${error}`;
+        console.error(errorMsg);
+        return Promise.reject(error);
+      }
+    };
+
+  async function uploadImageAsync(asset: ImagePicker.ImagePickerAsset) {
+      try {
+        const fileToUpload = await prepareNativeFile(asset);
+        
+        // Double-check the extension
+        const fileExt = fileToUpload.name.split('.').pop()?.toLowerCase();
+        const allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        
+        if (!fileExt || !allowedExts.includes(fileExt)) {
+          throw new Error(`Invalid file extension: ${fileExt || 'none'}`);
+        }
+  
+        console.log('Uploading file:', {
+          name: fileToUpload.name,
+          type: fileToUpload.type,
+          size: fileToUpload.size,
+          uri: fileToUpload.uri.substring(0, 50) + '...'
+        });
+  
+        const response = await storage.createFile(
+          process.env.EXPO_PUBLIC_APPWRITE_BUCKET_ID!,
+          ID.unique(),
+          fileToUpload
+        );
+  
+        console.log('Upload response:', response);
+        
+        const fileUrl = storage.getFileView(
+          process.env.EXPO_PUBLIC_APPWRITE_BUCKET_ID!,
+          response.$id
+        );
+  
+        setDebugInfo(prev => prev + `\n\n✅ Upload successful! File ID: ${response.$id}`);
+        return fileUrl;
+      } catch (error: any) {
+        const errorMsg = `❌ Upload failed: ${error.message}\n\n${debugInfo}`;
+        console.error(errorMsg);
+        setDebugInfo(errorMsg);
+        setUploadImageError(error.message);
+        throw error;
+      }
     }
 
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  const pickImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
 
-    if (!result.canceled && result.assets) {
-      setFile(result.assets[0].uri);
+      if (!result.canceled && result.assets && result.assets[0].uri) {
+        setFile(result.assets[0]);
+        setPreviewUri(result.assets[0].uri);
+        setImageFileUploading(true);
+        setUploadImageError(null);
+        try {
+          const fileUrl = await uploadImageAsync(result.assets[0]);
+          setImageFileUrl(fileUrl.href);
+          setFormData(prev => ({ ...prev, image: fileUrl.href }));
+          ToastAndroid.show('Image uploaded successfully', ToastAndroid.SHORT);
+        } catch (error) {
+          ToastAndroid.show('Image upload failed', ToastAndroid.SHORT);
+        } finally {
+          setImageFileUploading(false);
+        }
+      }
+    } catch (error) {
+      console.error("Image picker error:", error);
+      Alert.alert('Error', 'Failed to select image');
     }
   };
 
   const handleUploadImage = async () => {
     try {
       if (!file) {
-        Alert.alert('Error', 'Please select an image');
+        ToastAndroid.show('No image selected', ToastAndroid.SHORT);
         return;
       }
-
+      
+      if (imageFileUploading) {
+        ToastAndroid.show('Please wait for image upload to complete', ToastAndroid.SHORT);
+        return;
+      }
+      
       setIsUploading(true);
-      const storage = new Storage(client);
-
-      const response = await fetch(file);
-      const blob = await response.blob();
-
-      const fileResponse = await storage.createFile(
-        APPWRITE_BUCKET_ID,
-        'unique()',
-        blob
-      );
-
-      const fileUrl = storage.getFileView(
-        APPWRITE_BUCKET_ID,
-        fileResponse.$id
-      );
-      
-      setFileUrl(fileUrl.href);
-      setFormData(prev => ({ ...prev, image: fileUrl.href }));
-      
-      Toast.show({
-        type: 'success',
-        text1: 'Success',
-        text2: 'Image uploaded successfully',
-      });
+      try {
+        const fileUrl = await uploadImageAsync(file);
+        setFormData(prev => ({ ...prev, image: fileUrl.href }));
+        ToastAndroid.show('Image uploaded successfully', ToastAndroid.SHORT);
+      } catch (error) {
+        ToastAndroid.show('Image upload failed', ToastAndroid.SHORT);
+      } finally {
+        setIsUploading(false);
+      }
     } catch (error) {
-      console.error('Error uploading file:', error);
-      Alert.alert('Error', 'Failed to upload image');
-    } finally {
-      setIsUploading(false);
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      ToastAndroid.show(errorMessage, ToastAndroid.SHORT);
     }
   };
 
@@ -111,7 +194,23 @@ const DailyBibleMessage = () => {
         return;
       }
 
-      const response = await fetch(`http://192.168.48.105:3000/api/daily-bible-message`, {
+      if (!formData.image) {
+        Alert.alert('Warning', 'No image uploaded. Continue without image?', [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Continue', onPress: actuallySubmit }
+        ]);
+        return;
+      }
+
+      await actuallySubmit();
+    } catch (error: any) {
+      Alert.alert('Error', error.message || 'An error occurred while submitting the form');
+    }
+  };
+
+  const actuallySubmit = async () => {
+    try {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/daily-bible-message`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,8 +231,8 @@ const DailyBibleMessage = () => {
       });
 
       navigation.goBack();
-    } catch (error) {
-      Alert.alert('Error', error.message || 'An error occurred while submitting the form');
+    } catch (error: any) {
+      throw error;
     }
   };
 
@@ -181,22 +280,20 @@ const DailyBibleMessage = () => {
           Select Image
         </Button>
         <Button 
-  mode="contained" 
-  onPress={handleUploadImage}
-  loading={isUploading}
-  disabled={isUploading || !file}
-  className="flex-1"
-  textColor={isDarkMode ? 'white' : undefined}
-  style={{ borderColor: isDarkMode ? '#6B7280' : '#D1D5DB' }}
->
-  {isUploading ? 'Uploading...' : 'Upload'}
-</Button>
-
+          mode="contained" 
+          onPress={handleUploadImage}
+          loading={isUploading}
+          disabled={isUploading || !file}
+          className="flex-1"
+          textColor={isDarkMode ? 'white' : undefined}
+        >
+          {isUploading ? 'Uploading...' : 'Upload'}
+        </Button>
       </View>
 
-      {formData.image ? (
+      {previewUri ? (
         <Image 
-          source={{ uri: formData.image }} 
+          source={{ uri: previewUri }} 
           className={`w-full h-64 rounded-lg my-2 border ${themeStyles.imageBorder}`}
           resizeMode="cover"
         />
@@ -221,7 +318,6 @@ const DailyBibleMessage = () => {
         className={`mt-2 ${themeStyles.button}`}
         icon="send"
         disabled={!formData.title || !formData.content}
-        buttonColor={isDarkMode ? '#2563EB' : '#1D4ED8'}
       >
         Publish Message
       </Button>

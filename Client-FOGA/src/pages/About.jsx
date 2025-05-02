@@ -28,19 +28,19 @@ export default function About() {
           name: "Deaconess Justina Baidoo",
           role: "Church Secretary & FESA Committee Chair",
           bio: "Professional teacher with 20 years experience teaching English Language. Committed member of FOGA for 10 years.",
-          image: "/images/justina-baidoo.jpg"
+          image: "src/assets/Justina-baidoo.jpg"
         },
         {
           name: "Deacon Dr. Justice G.K.A. Boateng",
           role: "Departmental Liaison Officer & Anniversary Committee Chair",
           bio: "Senior Assistant Registrar at University of Cape Coast. Active in mentoring, discipleship programs, and church welfare initiatives.",
-          image: "/images/justice-boateng.jpg"
+          image: "/src/assets/Deacon-Boateng.jpg"
         },
         {
           name: "Deacon Dr. Nana Abekah Twentoh",
           role: "Community Impact Fund Chair",
           bio: "Pharmacist with 32 years civil service experience. Founding member of FOGA with passion for Sunday School ministry.",
-          image: "/images/nana-twentoh.jpg"
+          image: "/src/assets/Deacon-Twentoh.jpg"
         },
         {
           name: "Deacon Joseph Arthur",
@@ -52,13 +52,13 @@ export default function About() {
           name: "Deacon Prof. Abraham Ansong",
           role: "Finance Committee Chair",
           bio: "Professor of Management and Leadership at University of Cape Coast. Expert in organizational management and corporate governance.",
-          image: "/images/abraham-ansong.jpg"
+          image: "/src/assets/Deacon-Ansong.jpg"
         },
         {
           name: "Deaconess Felicia Adomako",
           role: "Treasurer",
           bio: "District Representative of Cape Coast North District Women Ministry. Passionate about evangelism and prison ministry.",
-          image: "/images/felicia-adomako.jpg"
+          image: "/src/assets/Mrs-Adomako.jpg"
         }
       ]
     },
@@ -78,27 +78,27 @@ export default function About() {
         {
           name: "Lay Pastor Mary Opoku",
           role: "Missions Ministry",
-          image: "/images/mary-opoku.jpg"
+          image: "/src/assets/Mary-foga.jpg"
         },
         {
           name: "Lay Pastor Asiedu Ompong",
           role: "School Ministry",
-          image: "/images/Asiedu.jpg"
+          image: "/src/assets/kweku-Asiedu.jpg"
         },
         {
           name: "Lay Pastor Patrick Offei",
           role: "School Ministry",
-          image: "/images/Patrick.jpg"
+          image: "/src/assets/mr-offie.jpg"
         },
         {
           name: "Pastor Eric Botchwey",
           role: "Youth Ministry",
-          image: "/images/eric-botchwey.jpg"
+          image: "/src/assets/pastor-Eric.jpg"
         },
         {
           name: "Student Pastor George Ofori Aidoo",
           role: "Operations (Executive Pastor)",
-          image: "/images/george-aidoo.jpg"
+          image: "/src/assets/Pastor-Aidoo.jpg"
         }
 
       ]
@@ -109,12 +109,12 @@ export default function About() {
         {
           name: "Mr. Andy Kojo Addison",
           role: "Men's Ministry President",
-          image: "/images/andy-addison.jpg"
+          image: "/src/assets/Mr-Addison.jpg"
         },
         {
           name: "Mad. Josephine Yawson",
           role: "Women's Ministry President",
-          image: "/images/josephine-yawson.jpg"
+          image: "/src/assets/maa-Josephine.jpg"
         },
         {
           name: "Miss Hawawu Kassim",
@@ -123,17 +123,17 @@ export default function About() {
         },
         {name: "Mrs Joyce Baaba Twentoh",
         role: "Children Ministry President",
-        image: "/images/joyce-twentoh.jpg"
+        image: "/src/assets/Joyce-twentoh.jpg"
         },
         {
           name: "Mr. Francis Ansah",
           role: "Creative Arts President",
-          image: "/images/francis-ansah.jpg"
+          image: "/src/assets/Francis-Ansah.jpg"
         },
         {
           name: "Dr. Shiabu Adams",
           role: "Sunday School Superintendent",
-          image: "/images/shiabu-adams.jpg"
+          image: "/src/assets/Dr-Shibu.jpg"
         }
       ]
     }
@@ -141,9 +141,10 @@ export default function About() {
   
   const images = [
     '../src/assets/church-exterior.jpg',
+    '../src/assets/Board.jpg',
+    '../src/assets/AsaafoMaame-Pastor.jpg', 
+    '../src/assets/community-event.jpg',
     '../src/assets/congregation-worship.jpg',
-    '../src/assets/pastor-preaching.jpg',
-    '../src/assets/community-event.jpg'
   ];
 
   const [currentSlide, setCurrentSlide] = React.useState(0);
@@ -217,7 +218,7 @@ export default function About() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Carousel Section */}
-      <div className="relative h-72 md:h-96 max-h-[600px] overflow-hidden">
+      <div className="relative h-80 md:h-96 max-h-[600px] overflow-hidden">
         {/* Carousel Images */}
         <div className="relative h-full w-full">
           {images.map((image, index) => (
@@ -675,11 +676,12 @@ export default function About() {
                     whileHover={{ y: -5 }}
                   >
                     <div className="relative h-64 overflow-hidden">
-                      <img 
-                        src={member.image} 
-                        alt={member.name}
-                        className="w-full h-full object-contain"
-                      />
+                    <img  
+  src={member.image} 
+  alt={member.name}
+  className="w-full h-full object-cover"
+/>
+
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                       <div className="absolute bottom-0 left-0 p-6">
                         <h4 className="text-xl font-bold text-white">{member.name}</h4>

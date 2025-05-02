@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, ScrollView, Switch, Modal, Pressable, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, Switch, Modal, Pressable, SafeAreaView, RefreshControl } from 'react-native';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { signoutSuccess } from '../../src/features/users/userSlice';
@@ -19,6 +19,7 @@ const Profile = () => {
   const [image, setImage] = useState(currentUser?.profilePicture || null);
   const [uploading, setUploading] = useState(false);
   const [showSignOutModal, setShowSignOutModal] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [fontsLoaded] = useFonts({
     Inter_900Black,
     Inter_600SemiBold,
@@ -29,6 +30,22 @@ const Profile = () => {
     return null;
   }
  
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      // Simulate a network request or any async operation
+      // In a real app, you might fetch the latest user data here
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // For demonstration, we'll just show a toast
+      ToastAndroid.show('Profile refreshed!', ToastAndroid.SHORT);
+    } catch (error) {
+      ToastAndroid.show('Refresh failed', ToastAndroid.SHORT);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -97,7 +114,18 @@ const Profile = () => {
         colors={theme === 'dark' ? ['#1f2937', '#111827'] : ['#f8fafc', '#e2e8f0']}
         className="flex-1"
       >
-        <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 40 }}>
+        <ScrollView 
+          className="flex-1" 
+          contentContainerStyle={{ paddingBottom: 40 }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={theme === 'dark' ? ['#3b82f6'] : ['#2563eb']}
+              tintColor={theme === 'dark' ? '#3b82f6' : '#2563eb'}
+            />
+          }
+        >
           {/* Header */}
           <View className="items-center pt-12 pb-6 px-6">
             <TouchableOpacity 
@@ -134,7 +162,7 @@ const Profile = () => {
                 Account Settings
               </Text>
               
-              <TouchableOpacity className={`flex-row items-center px-4 py-3 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+              <TouchableOpacity className={`flex-row items-center px-4 py-3 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`} onPress={() => router.push('/edit-profile')}>
                 <Ionicons name="person-outline" size={20} color={theme === 'dark' ? 'white' : 'gray'} />
                 <Text style={{ fontFamily: 'Inter_400Regular' }} className={`ml-3 flex-1 ${textStyles}`}>
                   Edit Profile
@@ -142,7 +170,7 @@ const Profile = () => {
                 <AntDesign name="right" size={16} color={theme === 'dark' ? 'gray' : 'gray'} />
               </TouchableOpacity>
               
-              <TouchableOpacity className={`flex-row items-center px-4 py-3 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+              <TouchableOpacity className={`flex-row items-center px-4 py-3 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`} onPress={() => router.push('/edit-profile')}>
                 <Ionicons name="lock-closed-outline" size={20} color={theme === 'dark' ? 'white' : 'gray'} />
                 <Text style={{ fontFamily: 'Inter_400Regular' }} className={`ml-3 flex-1 ${textStyles}`}>
                   Change Password
@@ -166,7 +194,7 @@ const Profile = () => {
                 </View>
                 <Switch
                   value={theme === 'dark'}
-                  onValueChange={() => dispatch(toggleTheme())}
+                  onValueChange={(value) => dispatch(toggleTheme())}
                   trackColor={{ false: '#e2e8f0', true: '#3b82f6' }}
                   thumbColor={theme === 'dark' ? '#f8fafc' : '#f8fafc'}
                 />

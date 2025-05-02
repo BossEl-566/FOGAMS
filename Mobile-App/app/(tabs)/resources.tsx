@@ -5,8 +5,10 @@ import { MaterialIcons, FontAwesome, Feather, AntDesign } from '@expo/vector-ico
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { useRouter, router } from 'expo-router';
 
 const Resources = () => {
+  const router = useRouter();
   const { theme } = useSelector((state: any) => state.theme);
   const navigation = useNavigation();
   const isDark = theme === 'dark';
@@ -61,21 +63,21 @@ const Resources = () => {
           title="Bible"
           description="Read and study Scripture"
           icon={<FontAwesome name="book" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-          onPress={() => navigation.navigate('BibleReader')}
+          onPress={() => router.push('/bible')}
         />
 
         <ResourceCard
           title="Study Resources"
           description="Sermons, devotionals and more"
           icon={<MaterialIcons name="menu-book" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-          onPress={() => navigation.navigate('StudyResources')}
+          onPress={() => router.push('/study-resources')}
         />
 
         <ResourceCard
           title="Spiritual Notepad"
           description="Journal your reflections"
           icon={<Feather name="edit" size={24} color={isDark ? '#3b82f6' : '#2563eb'} />}
-          onPress={() => navigation.navigate('SpiritualNotepad')}
+          onPress={() => router.push('/notepad')}
         />
 
         <View className="mt-8">

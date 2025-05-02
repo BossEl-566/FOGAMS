@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
-import churchBg from '../assets/community-event.jpg'; // Replace with your image path
+import churchBg from '../assets/Board.jpg'; // Replace with your image path
 
 export default function ContactUs() {
   const [formData, setFormData] = useState({
@@ -58,7 +58,7 @@ export default function ContactUs() {
   }}
 >
   {/* Gradient Overlay */}
-  <div className="absolute inset-0 bg-black opacity-80"></div>
+  <div className="absolute inset-0 bg-black opacity-70"></div>
 
   <div className="relative container mx-auto px-6 text-center">
     <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Fellowship Of Grace A/G Church</h1>

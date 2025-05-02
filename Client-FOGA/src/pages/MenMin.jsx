@@ -7,10 +7,10 @@ export default function MenMin() {
 
   // Image paths - replace with your actual images
   const heroImages = [
-    "/images/men-praying.jpg",
-    "/images/men-bible-study.jpg",
-    "/images/men-fellowship.jpg",
-    "/images/men-outreach.jpg"
+    "/src/assets/Men_ministry.jpg",
+    "/src/assets/Men-friends.jpg",
+    "/src/assets/action.jpg",
+    "/src/assets/singing-men.jpg"
   ];
 
   const galleryImages = [
@@ -22,22 +22,22 @@ export default function MenMin() {
     {
       name: "Mr. Andy Kojo Addison",
       position: "President",
-      image: "/images/andy-addison.jpg"
+      image: "/src/assets/Mr-Addison.jpg"
     },
     {
       name: "L.P. Patrick Offei",
       position: "Vice President",
-      image: "/images/patrick-offei.jpg"
-    },
+      image: "../scr/assets/Mr-Addison.jpg"
+    }, 
     {
       name: "Mr. Bright Abeka Mensah",
       position: "Secretary",
-      image: "/images/bright-mensah.jpg"
+      image: "/scr/assets/bright-mensah.jpg"
     },
     {
       name: "Mr. Emmanuel Arthur",
       position: "Treasurer",
-      image: "/images/emmanuel-arthur.jpg"
+      image: "/scr/assets/emmanuel-arthur.jpg"
     }
   ];
 
@@ -71,15 +71,7 @@ export default function MenMin() {
             }}
           >
             <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center p-4">
-              {/* Church Logo */}
-              <div className="mb-6 w-40">
-                <img 
-                  src="/images/church-logo.png" 
-                  alt="Church Logo"
-                  className="w-full h-full object-contain"
-                  style={{ mixBlendMode: 'multiply' }}
-                />
-              </div>
+              
               
               <div className="text-center px-4">
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">

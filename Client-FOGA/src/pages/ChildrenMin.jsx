@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Carousel } from 'flowbite-react'; // Using Flowbite's Carousel instead
-import { Modal, Timeline, Card } from 'flowbite-react'
+import { Carousel } from 'flowbite-react';
+import { Modal, Timeline, Card } from 'flowbite-react';
+import { Link } from 'react-router-dom';
 
 export default function ChildrenMin() {
   const [activeTab, setActiveTab] = useState('about');
-  const [showVideo, setShowVideo] = useState(false);
+  const [showVideo, setShowVideo] = useState(true); // Set to true for autoplay on load
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   const galleryImages = [
-    '/images/children1.jpg',
-    '/images/children2.jpg',
+    '/src/assets/children-evengelism.jpg',
+    '/src/assets/pastor-with-children.jpg',
     '/images/children3.jpg',
     '/images/children4.jpg',
     '/images/children5.jpg',
@@ -18,7 +21,7 @@ export default function ChildrenMin() {
   const events = [
     { id: 1, title: "Sunday School", day: "Every Sunday", time: "9:00 AM - 10:30 AM", description: "Fun Bible lessons, songs, and activities" },
     { id: 2, title: "Children's Choir Rehearsal", day: "Wednesdays", time: "4:30 PM - 5:30 PM", description: "Learn joyful songs to praise the Lord" },
-    { id: 3, title: "Vacation Bible School", day: "July 10-14", time: "9:00 AM - 12:00 PM", description: "Summer fun with Bible stories, crafts, and games" },
+    { id: 3, title: "Evangelism", day: "Every year", time: "9:00 AM - 12:00 PM", description: "An annual outreach program where we share the love of Christ through Bible storytelling, interactive crafts, fun games, and meaningful connections with the community. Join us as we spread the Gospel and bring hope to others!" },
     { id: 4, title: "Children's Camp", day: "August 5-7", time: "Overnight", description: "Nature, worship, and friendship at our annual camp" },
   ];
 
@@ -26,28 +29,81 @@ export default function ChildrenMin() {
     { name: "Pastor Sarah Johnson", role: "Children's Ministry Director", image: "/images/pastor-sarah.jpg" },
     { name: "Brother Michael Lee", role: "Sunday School Teacher", image: "/images/teacher-michael.jpg" },
     { name: "Sister Emily Chen", role: "Music Coordinator", image: "/images/teacher-emily.jpg" },
+    { name: "Sister Emily Chen", role: "Music Coordinator", image: "/images/teacher-emily.jpg" },
+    { name: "Sister Emily Chen", role: "Music Coordinator", image: "/images/teacher-emily.jpg" },
+    { name: "Sister Emily Chen", role: "Music Coordinator", image: "/images/teacher-emily.jpg" },
   ];
+
+  // Optional: Close video after certain time
+  useEffect(() => {
+    if (showVideo) {
+      const timer = setTimeout(() => {
+        setShowVideo(false);
+      }, 30000); // Close after 30 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [showVideo]);
+
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+    setIsImageModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Hero Section with Animation */}
+      {/* Video Modal - Now shows automatically */}
+      {showVideo && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
+          <div className="relative max-w-4xl w-full h-[70vh]">
+            <button 
+              className="absolute -top-12 right-0 text-white text-4xl z-10 hover:text-red-400 transition-colors"
+              onClick={() => setShowVideo(false)}
+            >
+              ×
+            </button>
+            <video 
+              className="w-full h-full object-contain"
+              autoPlay
+              muted
+              controls
+              playsInline
+            >
+              <source src="/src/assets/0429.mp4" type="video/mp4" />
+              Your browser does not support HTML5 video.
+            </video>
+          </div>
+        </div>
+      )}
+
+      {/* Image Modal */}
+      {isImageModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
+          <div className="relative max-w-4xl w-full">
+            <button 
+              className="absolute -top-12 right-0 text-white text-4xl z-10 hover:text-red-400 transition-colors"
+              onClick={() => setIsImageModalOpen(false)}
+            >
+              ×
+            </button>
+            <img 
+              src={selectedImage} 
+              alt="Enlarged gallery view" 
+              className="w-full max-h-[80vh] object-contain"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Hero Section */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative bg-gradient-to-br from-blue-500 to-pur-600 text-white py-16 px-4 text-center overflow-hidden border-b-8 border-yellow-300"
+        className="relative bg-gradient-to-br from-blue-500 to-purple-600 text-white py-16 px-4 text-center overflow-hidden border-b-8 border-yellow-300"
       >
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-md">FOGA Kids For Christ</h1>
           <p className="text-xl md:text-2xl mb-8">Where faith and fun come together!</p>
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-yellow-300 text-gray-800 px-8 py-3 rounded-full font-bold shadow-lg hover:bg-yellow-400 transition-colors"
-            onClick={() => setActiveTab('events')}
-          >
-            Join Our Next Event
-          </motion.button>
         </div>
         
         {/* Floating Balloons */}
@@ -96,7 +152,7 @@ export default function ChildrenMin() {
           >
             <h2 className="text-3xl font-bold text-blue-800 mb-6">Welcome to Our Children's Ministry!</h2>
             <p className="text-lg max-w-3xl mx-auto mb-8">
-              At [Church Name], we believe children are a precious gift from God. Our ministry provides 
+              At Fellowship of Grace Assemblies of God, we believe children are a precious gift from God. Our ministry provides 
               a safe, fun environment where kids can learn about Jesus and grow in faith through 
               age-appropriate Bible lessons, worship, and activities designed just for them!
             </p>
@@ -105,7 +161,7 @@ export default function ChildrenMin() {
               className="max-w-2xl mx-auto relative cursor-pointer rounded-xl overflow-hidden shadow-xl mb-12"
               onClick={() => setShowVideo(true)}
             >
-              <img src="/images/video-thumbnail.jpg" alt="Children's ministry video" className="w-full" />
+              <img src="/src/assets/pastor-with-children.jpg" alt="Children's ministry video" className="w-full" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-16 h-16 bg-white bg-opacity-80 rounded-full flex items-center justify-center">
                   <div className="w-0 h-0 border-t-8 border-b-8 border-l-12 border-t-transparent border-b-transparent border-l-red-500 ml-1"></div>
@@ -113,29 +169,6 @@ export default function ChildrenMin() {
               </div>
               <p className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-3 px-4">Watch our ministry in action!</p>
             </div>
-
-            {showVideo && (
-              <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
-                <div className="relative max-w-4xl w-full">
-                  <button 
-                    className="absolute -top-10 right-0 text-white text-3xl"
-                    onClick={() => setShowVideo(false)}
-                  >
-                    ×
-                  </button>
-                  <div className="aspect-w-16 aspect-h-9">
-                    <iframe 
-                      className="w-full h-full"
-                      src="https://www.youtube.com/embed/your-video-id" 
-                      title="Children's Ministry Video" 
-                      frameBorder="0" 
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                </div>
-              </div>
-            )}
 
             <div className="mt-12">
               <h3 className="text-2xl font-bold text-blue-800 mb-8">Our Core Values</h3>
@@ -196,7 +229,12 @@ export default function ChildrenMin() {
               >
                 {galleryImages.map((image, index) => (
                   <div key={index}>
-                    <img src={image} alt={`Children's ministry activity ${index + 1}`} className="w-full h-96 object-cover" />
+                    <img 
+                      src={image} 
+                      alt={`Children's ministry activity ${index + 1}`} 
+                      className="w-full h-96 object-cover cursor-pointer"
+                      onClick={() => handleImageClick(image)}
+                    />
                   </div>
                 ))}
               </Carousel>
@@ -208,8 +246,13 @@ export default function ChildrenMin() {
                   key={index}
                   whileHover={{ scale: 1.03 }}
                   className="rounded-lg overflow-hidden shadow-md cursor-pointer"
+                  onClick={() => handleImageClick(image)}
                 >
-                  <img src={image} alt={`Gallery thumbnail ${index + 1}`} className="w-full h-40 object-cover" />
+                  <img 
+                    src={image} 
+                    alt={`Gallery thumbnail ${index + 1}`} 
+                    className="w-full h-40 object-cover" 
+                  />
                 </motion.div>
               ))}
             </div>
@@ -242,9 +285,6 @@ export default function ChildrenMin() {
                     <h3 className="text-xl font-bold mb-2">{event.title}</h3>
                     <p className="text-gray-600 text-sm mb-2">{event.time}</p>
                     <p className="text-gray-700 mb-4">{event.description}</p>
-                    <button className="bg-blue-700 text-white px-4 py-2 rounded text-sm hover:bg-blue-800 transition-colors">
-                      Register Now
-                    </button>
                   </div>
                 </motion.div>
               ))}
@@ -252,8 +292,9 @@ export default function ChildrenMin() {
             
             <div className="bg-blue-50 border-2 border-dashed border-blue-700 rounded-xl p-8 mt-12 max-w-3xl mx-auto text-center">
               <h3 className="text-2xl font-bold text-blue-800 mb-2">Annual Children's Camp</h3>
-              <p className="text-lg mb-2">August 5-7 at Pine Ridge Retreat Center</p>
+              
               <p className="text-gray-700 mb-6">Three days of outdoor adventures, Bible stories, worship, and making new friends!</p>
+              <Link to="/contact-us">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -261,6 +302,7 @@ export default function ChildrenMin() {
               >
                 Learn More About Camp
               </motion.button>
+              </Link>
             </div>
           </motion.div>
         )}

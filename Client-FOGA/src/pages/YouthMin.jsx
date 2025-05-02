@@ -9,8 +9,8 @@ import 'swiper/css/pagination';
 const YouthMin = () => {
   // Gallery images
   const galleryImages = [
-    'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1524179091875-bf99a9a6af57?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    '/src/assets/youth-with-patron.jpg',
+    '/src/assets/Youth-Ministry.jpg',
     'https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     'https://images.unsplash.com/photo-1542626991-cbc4e32524cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     'https://images.unsplash.com/photo-1529333166437-7750a6dd5a30?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
@@ -19,17 +19,17 @@ const YouthMin = () => {
 
   // Events data
   const upcomingEvents = [
-    { title: "Weekly Youth Meeting", day: "Every Friday", time: "6:00 PM", location: "Church Hall" },
-    { title: "Summer Youth Camp", day: "July 15-18", time: "All Day", location: "Green Valley Retreat" },
-    { title: "Worship Night", day: "August 5", time: "7:00 PM", location: "Main Sanctuary" },
-    { title: "Community Outreach", day: "September 10", time: "9:00 AM", location: "Downtown Square" },
+    { title: "Weekly Youth Meeting", day: "Every Monday", time: "6:00 PM", location: "Church Hall" },
+    { title: "Youth Camp", day: "Yearly", time: "All Day", location: "Campground" },
+    { title: "Worship Night", day: "Yearly", time: "6:00 PM", location: "Church Hall" },
+    { title: "Community Outreach & Evengelism", day: "Holidays", time: "9:00 AM", location: "Abura-Pedu Community" },
   ];
 
   // Leadership team
   const leadership = [
-    { name: "Miss Hawawu Kassim", position: "President", image: "/leader-1.jpg" },
-    { name: "Mr. Amos Botchway", position: "Vice President", image: "/leader-2.jpg" },
-    { name: "Miss Cynthia Bawa", position: "Secretary", image: "/leader-3.jpg" },
+    { name: "Miss Hawawu Kassim", position: "President", image: "/src/assets/Hawa.jpg" },
+    { name: "Mr. Amos Botchway", position: "Vice President", image: "/src/assets/Bra-Cann.jpg" },
+    { name: "Miss Cynthia Bawa", position: "Secretary", image: "/src/assets/Cynthia.jpg" },
     { name: "Miss Bridget Mawuli", position: "Treasurer", image: "/leader-4.jpg" },
   ];
 
@@ -204,13 +204,13 @@ const YouthMin = () => {
               <div className="absolute -inset-2 bg-gradient-to-r from-pink-400 to-purple-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-200"></div>
               <div className="relative bg-white rounded-lg overflow-hidden shadow-xl">
                 <img 
-                  src="/youth-pastor.jpg" 
+                  src="/src/assets/patron.jpg" 
                   alt="Youth Ministry Leader" 
                   className="w-full h-auto object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-2xl font-bold text-purple-600">Pastor Alex Johnson</h3>
-                  <p className="text-gray-600">Youth Ministry Leader</p>
+                  <h3 className="text-2xl font-bold text-purple-600">Deacon Dr. Justice G.K.A. Boateng</h3>
+                  <p className="text-gray-600">Youth Ministry Patron</p>
                 </div>
               </div>
             </div>
@@ -514,7 +514,7 @@ const YouthMin = () => {
                 </div>
               </div>
               <p className="text-gray-600">
-                "Summer camp was life-changing! I rededicated my life to Christ and now I'm serving on the worship team. This community is amazing!"
+                "Youth camp was life-changing! I rededicated my life to Christ and now I'm serving on the worship team. This community is amazing!"
               </p>
             </motion.div>
 

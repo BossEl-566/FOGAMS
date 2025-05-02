@@ -3,11 +3,10 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator,
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import {  FontAwesome, AntDesign } from '@expo/vector-icons';
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
- 
 interface Member {
   _id: string;
   fullname?: string;
@@ -40,16 +39,16 @@ const BroadcastScreen = () => {
     textSecondary: theme === 'dark' ? 'text-gray-400' : 'text-gray-500',
     border: theme === 'dark' ? 'border-gray-700' : 'border-gray-200',
     input: theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-900',
-    buttonPrimary: theme === 'dark' ? 'bg-blue-700' : 'bg-blue-600',
-    buttonSecondary: theme === 'dark' ? 'bg-purple-700' : 'bg-purple-600',
+    buttonPrimary: theme === 'dark' ? 'bg-blue-600' : 'bg-blue-500',
+    buttonSecondary: theme === 'dark' ? 'bg-purple-600' : 'bg-purple-500',
     checkbox: theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300',
-    checkboxSelected: theme === 'dark' ? 'bg-blue-500' : 'bg-blue-500',
+    checkboxSelected: 'bg-blue-500 border-blue-500',
   };
 
   const fetchMembers = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch('http://192.168.106.105:3000/api/membership/get', {
+      const res = await fetch(`http://192.168.154.105:3000/api/membership/get`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -99,6 +98,11 @@ const BroadcastScreen = () => {
         member.contact?.includes(term)
       );
       setFilteredMembers(filtered);
+      
+      // Remove selected IDs that are no longer visible
+      setSelectedIds(prev => prev.filter(id => 
+        filtered.some(member => member._id === id)
+      ));
     }
   }, [searchTerm, members]);
 
@@ -116,36 +120,8 @@ const BroadcastScreen = () => {
     }
   };
 
-  const showPicker = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const { action, year, month, day } = await DatePickerAndroid.open({
-          date: scheduleTime,
-          minDate: new Date(),
-        });
-        
-        if (action !== DatePickerAndroid.dismissedAction) {
-          const { action: timeAction, hour, minute } = await TimePickerAndroid.open({
-            hour: scheduleTime.getHours(),
-            minute: scheduleTime.getMinutes(),
-            is24Hour: true,
-          });
-          
-          if (timeAction !== TimePickerAndroid.dismissedAction) {
-            const newDate = new Date(year, month, day, hour, minute);
-            setScheduleTime(newDate);
-          }
-        }
-      } catch ({ code, message }) {
-        console.warn('Cannot open date/time picker', message);
-        Toast.show({
-          type: 'error',
-          text1: 'Failed to open date picker',
-        });
-      }
-    } else {
-      setShowDatePicker(true);
-    }
+  const showPicker = () => {
+    setShowDatePicker(true);
   };
 
   const onDateChange = (event: any, selectedDate?: Date) => {
@@ -154,6 +130,8 @@ const BroadcastScreen = () => {
       setScheduleTime(selectedDate);
     }
   };
+
+  console.log(process.env.EXPO_PUBLIC_ARKESEL_API_KEY)
 
   const sendInstantMessage = async () => {
     if (!message.trim()) {
@@ -186,22 +164,22 @@ const BroadcastScreen = () => {
 
     setLoading(true);
     try {
-      const token = await AsyncStorage.getItem('token');
-      const res = await fetch('http://192.168.106.105:3000/api/broadcast/send', {
+      const response = await fetch('https://sms.arkesel.com/api/v2/sms/send', {
         method: 'POST',
         headers: {
+          'api-key': "S1JQWnlSQkR2YlN4WW5iaEdQUU0",
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          sender: 'FOGA_PEDU',
           message,
           recipients: validRecipients
         }),
       });
 
-      const result = await res.json();
-
-      if (res.ok) {
+      const result = await response.json();
+      console.log('Broadcast result:', result);
+      if (result.status === 'success') {
         Toast.show({
           type: 'success',
           text1: `Message sent to ${validRecipients.length} recipients!`,
@@ -244,7 +222,7 @@ const BroadcastScreen = () => {
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch('http://192.168.106.105:3000/api/broadcast/schedule', {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/broadcast/schedule`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -286,31 +264,35 @@ const BroadcastScreen = () => {
     fetchMembers();
   };
 
-  const renderItem = ({ item }: { item: Member }) => (
-    <TouchableOpacity 
-      className={`p-4 border-b ${themeStyles.border} flex-row items-center`}
-      onPress={() => toggleSelect(item._id)}
-    >
-      <View className={`w-6 h-6 rounded-md border ${themeStyles.checkbox} mr-3 items-center justify-center ${
-        selectedIds.includes(item._id) ? themeStyles.checkboxSelected : ''
-      }`}>
-        {selectedIds.includes(item._id) && (
-          <MaterialIcons name="check" size={16} color="white" />
-        )}
-      </View>
-      <View className="flex-1">
-        <Text className={`font-medium ${themeStyles.textPrimary}`}>
-          {item.fullname}
-          {item.birthDay && item.birthMonth && (
-            <Text className={`ml-2 text-xs px-2 py-1 ${themeStyles.textSecondary} rounded-full`}>
-              🎂 {item.birthDay}/{item.birthMonth}
-            </Text>
+  const renderItem = ({ item }: { item: Member }) => {
+    const isSelected = selectedIds.includes(item._id);
+    return (
+      <TouchableOpacity 
+        className={`p-4 border-b ${themeStyles.border} flex-row items-center`}
+        onPress={() => toggleSelect(item._id)}
+        activeOpacity={0.7}
+      >
+        <View className={`w-6 h-6 rounded-md border-2 ${
+          isSelected ? themeStyles.checkboxSelected : themeStyles.checkbox
+        } mr-3 items-center justify-center`}>
+          {isSelected && (
+            <MaterialIcons name="check" size={16} color="white" />
           )}
-        </Text>
-        <Text className={`text-sm ${themeStyles.textSecondary} mt-1`}>{item.contact}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+        </View>
+        <View className="flex-1">
+          <Text className={`font-medium ${themeStyles.textPrimary}`}>
+            {item.fullname}
+            {item.birthDay && item.birthMonth && (
+              <Text className={`ml-2 text-xs px-2 py-1 ${themeStyles.textSecondary} rounded-full`}>
+                🎂 {item.birthDay}/{item.birthMonth}
+              </Text>
+            )}
+          </Text>
+          <Text className={`text-sm ${themeStyles.textSecondary} mt-1`}>{item.contact}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   const renderIOSPickerModal = () => {
     if (Platform.OS !== 'ios' || !showDatePicker) return null;
@@ -383,6 +365,7 @@ const BroadcastScreen = () => {
           <TouchableOpacity 
             className={`p-3 ${themeStyles.input} rounded-lg border ${themeStyles.border} flex-row justify-between items-center`}
             onPress={showPicker}
+            activeOpacity={0.7}
           >
             <Text className={themeStyles.textPrimary}>
               {scheduleTime.toLocaleString()}
@@ -402,6 +385,7 @@ const BroadcastScreen = () => {
             className={`flex-1 mr-2 p-3 ${themeStyles.buttonSecondary} rounded-lg items-center justify-center`}
             onPress={scheduleMessage}
             disabled={loading || selectedIds.length === 0}
+            activeOpacity={0.7}
           >
             {loading ? (
               <ActivityIndicator color="white" />
@@ -413,6 +397,7 @@ const BroadcastScreen = () => {
             className={`flex-1 ml-2 p-3 ${themeStyles.buttonPrimary} rounded-lg items-center justify-center`}
             onPress={sendInstantMessage}
             disabled={loading || selectedIds.length === 0}
+            activeOpacity={0.7}
           >
             {loading ? (
               <ActivityIndicator color="white" />
@@ -426,7 +411,7 @@ const BroadcastScreen = () => {
         <View className={`rounded-lg p-4 ${themeStyles.card}`}>
           <View className="flex-row justify-between items-center mb-4">
             <Text className={`text-lg font-semibold ${themeStyles.textPrimary}`}>Select Recipients</Text>
-            <TouchableOpacity onPress={selectAll}>
+            <TouchableOpacity onPress={selectAll} activeOpacity={0.7}>
               <Text className={`text-sm ${themeStyles.textSecondary}`}>
                 {selectedIds.length === filteredMembers.length ? 'Deselect All' : 'Select All'}
               </Text>
@@ -461,6 +446,7 @@ const BroadcastScreen = () => {
               keyExtractor={(item) => item._id}
               scrollEnabled={false}
               nestedScrollEnabled
+              extraData={selectedIds}
             />
           )}
 

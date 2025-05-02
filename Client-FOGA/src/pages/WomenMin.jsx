@@ -7,10 +7,10 @@ export default function WomenMin() {
 
   // Image paths - replace with your actual image paths
   const heroImages = [
+    "../src/assets/Friends-Women-Ministry.jpg",
+    "../src/assets/Women-Ministry-Foga.jpg",
     "../src/assets/women-hero.jpg",
-    "../src/assets/church-exterior.jpg",
-    "/images/women-fellowship.jpg",
-    "/images/women-outreach.jpg"
+    "../src/assets/Women-and.jpg",
   ];
 
   const galleryImages = [
@@ -22,22 +22,22 @@ export default function WomenMin() {
     {
       name: "Mad. Josephine Yawson",
       position: "President",
-      image: "/images/josephine.jpg"
+      image: "../src/assets/maa-Josephine.jpg"
     },
     {
       name: "Mrs. Joyce Baaba Twentoh",
       position: "Vice President",
-      image: "/images/joyce.jpg"
+      image: "../src/assets/Joyce-twentoh.jpg"
     },
     {
-      name: "Mrs. Janet Nuwame",
+      name: "Sec Mrs. Janet Nuwame ",
       position: "Secretary",
-      image: "/images/janet.jpg"
+      image: "../src/assets/Janet-Nuwame.jpg"
     },
     {
       name: "Mad. Mary Blankson",
       position: "Treasurer",
-      image: "/images/mary.jpg"
+      image: "../src/assets/Old-Lady-Mary.jpg"
     }
   ];
 
@@ -71,15 +71,7 @@ export default function WomenMin() {
             }}
           >
             <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center p-4">
-              {/* Church Logo */}
-              <div className="mb-4 w-32">
-                <img 
-                  src="/src/assets/download.png" 
-                  alt="Church Logo"
-                  className="w-full h-full object-contain"
-                  style={{ mixBlendMode: 'multiply' }}
-                />
-              </div>
+              
               
               <div className="text-center px-4">
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
@@ -88,9 +80,6 @@ export default function WomenMin() {
                 <p className="text-lg md:text-xl text-white max-w-2xl mx-auto mb-4">
                   Empowering women through faith, fellowship and service
                 </p>
-                <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
-                  Join Us Today
-                </button>
               </div>
             </div>
           </div>

@@ -62,7 +62,7 @@ export default function CommentScreen() {
   const fetchComments = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch(`http://192.168.106.105:3000/api/comment/getcomments`, {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/comment/getcomments`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
