@@ -251,7 +251,7 @@ const AccountRecordsScreen = () => {
                   </View>
                   
                   <View className="flex-row space-x-3">
-                    <TouchableOpacity onPress={() => navigation.navigate('ViewRecord', { recordId: record._id })}>
+                    <TouchableOpacity onPress={() => router.push(`./church-record/${record._id}`)}>
                       <Text className={accentColor}>View</Text>
                     </TouchableOpacity>
                   </View>
@@ -295,7 +295,7 @@ const AccountRecordsScreen = () => {
               <TouchableOpacity 
                 key={record._id}
                 className={`p-4 border-b ${borderColor}`}
-                onPress={() => navigation.navigate('ViewRecord', { recordId: record._id })}
+                onPress={() => router.push(`./church-record/${record._id}`)}
               >
                 <View className="flex-row justify-between items-center">
                   <Text className={textColor}>
