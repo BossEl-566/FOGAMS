@@ -130,11 +130,6 @@ export default function DashSidebar() {
                     Announcement
                   </Sidebar.Item>
                 </SidebarLink>
-                <SidebarLink to='/dashboard?tab=message' tabValue='message'>
-                  <Sidebar.Item active={tab === 'message'} href="#" icon={BiChat} as='div'>
-                    Chat
-                  </Sidebar.Item>
-                </SidebarLink>
                 <SidebarLink to='/dashboard?tab=tithe' tabValue='tithe'>
                   <Sidebar.Item active={tab === 'tithe'} href="#" icon={ MdOutlineAttachMoney } as='div'>
                     Account
@@ -152,7 +147,7 @@ export default function DashSidebar() {
                 </SidebarLink>
                 <SidebarLink to='/dashboard?tab=book' tabValue='book'>
                   <Sidebar.Item active={tab === 'book'} href="#" icon={BsCalendarCheck} as='div'>
-                    Book Appointment
+                  Appointments
                   </Sidebar.Item>
                 </SidebarLink>
                 <SidebarLink to='/dashboard?tab=anonymous' tabValue='anonymous'>
@@ -237,7 +232,7 @@ export default function DashSidebar() {
                       icon={MdEventAvailable}
                       as='div'
                     >
-                      Upcoming Events
+                      Events
                     </Sidebar.Item>
                   </SidebarLink>
                   <SidebarLink to='/dashboard?tab=membership' tabValue='membership'>
@@ -246,7 +241,7 @@ export default function DashSidebar() {
                       icon={FaUserPlus}
                       as='div'
                     >
-                      Member Requests
+                      Requests
                     </Sidebar.Item>
                   </SidebarLink>
                   <SidebarLink to='/dashboard?tab=contact' tabValue='contact'>

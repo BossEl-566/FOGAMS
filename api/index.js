@@ -56,10 +56,10 @@ const io = new Server(server, {
 });
 
 // Run every day at 6 AM
-cron.schedule('0 6 * * *', () => {
-  console.log("⏰ Running birthday SMS check...");
-  sendBirthdaySMS();
-});
+// cron.schedule('* * * * *', () => {
+//   console.log("⏰ Running birthday SMS check...");
+//   sendBirthdaySMS();
+// });
 
 cron.schedule('0 6 * * *', () => {
   console.log("⏰ Running scheduled message check...");

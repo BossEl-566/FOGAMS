@@ -32,7 +32,7 @@ const ResourcesScreen = () => {
       setLoading(true);
       const token = await AsyncStorage.getItem('token');
       
-      const response = await fetch(`http://192.168.201.105:3000/api/resource/get?page=${page}&size=${pageSize}`, {
+      const response = await fetch(`http://192.168.205.105:3000/api/resource/get?page=${page}&size=${pageSize}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
