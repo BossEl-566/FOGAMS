@@ -27,17 +27,17 @@ export default function MenMin() {
     {
       name: "L.P. Patrick Offei",
       position: "Vice President",
-      image: "../scr/assets/Mr-Addison.jpg"
+      image: "/src/assets/mr-offie.jpg"
     }, 
     {
       name: "Mr. Bright Abeka Mensah",
       position: "Secretary",
-      image: "/scr/assets/bright-mensah.jpg"
+      image: "/src/assets/bright-mensah.jpg"
     },
     {
       name: "Mr. Emmanuel Arthur",
       position: "Treasurer",
-      image: "/scr/assets/emmanuel-arthur.jpg"
+      image: "/src/assets/emmanuel-arthur.jpg"
     }
   ];
 
@@ -280,7 +280,7 @@ export default function MenMin() {
             </div>
             <div className="md:w-1/2">
               <img 
-                src="/images/men-group.jpg" 
+                src="/src/assets/Men_ministry.jpg" 
                 alt="Men's Ministry Group"
                 className="w-full h-full object-cover"
               />

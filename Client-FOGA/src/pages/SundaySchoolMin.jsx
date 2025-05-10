@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function SundaySchoolMin() {
   const fadeIn = {
@@ -16,7 +17,7 @@ export default function SundaySchoolMin() {
     {
       name: "DR. SHIABU ADAMS",
       role: "SUNDAY SCHOOL SUPERINTENDENT",
-      image: "/images/leadership/superintendent.jpg"
+      image: "/src/assets/Dr-Shibu.jpg"
     },
     {
       name: "MAD. CLARISSA BOADI MENDS",
@@ -99,25 +100,25 @@ export default function SundaySchoolMin() {
       name: "English Class",
       description: "Biblical teachings in English for all age groups - children, youth, and adults",
       image: "/images/classes/english.jpg",
-      time: "Sundays 8:30AM - 10:00AM"
+      time: "Saturday 5:00 PM"
     },
     {
       name: "Akan Class",
       description: "Traditional language instruction connecting faith with cultural heritage for all generations",
       image: "/images/classes/akan.jpg",
-      time: "Sundays 8:30AM - 10:00AM"
+      time: "Saturday 5:00 PM"
     },
     {
       name: "Youth Class",
       description: "Engaging Bible study and discussions tailored for teenagers and young adults",
       image: "/images/classes/youth.jpg",
-      time: "Sundays 8:30AM - 10:00AM"
+      time: "Saturday 5:00 PM"
     },
     {
       name: "Adult Class",
       description: "In-depth Bible study and discussion for mature believers",
       image: "/images/classes/adult.jpg",
-      time: "Sundays 8:30AM - 10:00AM"
+      time: "Saturday 5:00 PM"
     }
   ];
 
@@ -207,7 +208,7 @@ export default function SundaySchoolMin() {
             </div>
             <div className="rounded-xl overflow-hidden shadow-md">
               <img 
-                src="/images/about-sunday-school.jpg"
+                src="/src/assets/Sunday_school-Teachers.jpg"
                 alt="Sunday School for all ages"
                 className="w-full h-full object-cover"
               />
@@ -484,9 +485,11 @@ export default function SundaySchoolMin() {
             <p className="text-xl mb-8">
               During this time, they study the curriculum, plan engaging activities for all age groups, and pray for their students.
             </p>
+            <Link to="/contact-us" className="inline-block mb-4">
             <button className="bg-white text-purple-600 font-bold px-8 py-3 rounded-full hover:bg-purple-100 transition-all duration-300 transform hover:scale-105">
               Interested in Teaching? Join Us
             </button>
+            </Link>
           </div>
         </motion.div>
       </section>

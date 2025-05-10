@@ -13,30 +13,30 @@ export default function DepCreativeArt() {
     {
       name: 'MR. FRANCIS ANSAH',
       role: 'PRESIDENT',
-      image: '/images/francis-ansah.jpg',
+      image: '/src/assets/Francis-Ansah.jpg',
       bio: 'Visionary leader with 10+ years experience in creative arts ministry.',
-      symbol: '🎨'
+      
     },
     {
       name: 'MRS. JOSEPHINE ANNAN',
       role: 'MUSIC DIRECTOR',
-      image: '/images/josephine-annan.jpg',
+      image: '/src/assets/MD-josephine.jpg',
       bio: 'Classically trained musician who directs our Voices of Grace choir.',
-      symbol: '🎼'
+    
     },
     {
       name: 'MR. BENJAMIN KUMI OSEI',
       role: 'SECRETARY',
-      image: '/images/benjamin-osei.jpg',
+      image: '/src/assets/benjamin.jpg',
       bio: 'Keeps our creative operations running smoothly behind the scenes.',
-      symbol: '📝'
+      
     },
     {
       name: 'MRS MABEL MORTTEY',
       role: 'TREASURER',
-      image: '/images/mabel-morttey.jpg',
+      image: '/src/assets/mottey.jpg',
       bio: 'Ensures our creative visions are financially sustainable.',
-      symbol: '💰'
+      
     }
   ];
 
@@ -47,7 +47,7 @@ export default function DepCreativeArt() {
       title: 'Voices of Grace',
       icon: '🎵',
       description: 'Our award-winning choir blends contemporary gospel with traditional hymns to create powerful worship experiences. With vocal ranges from soprano to bass, we minister through song at services and special events.',
-      image: '/images/music-team.jpg',
+      image: '/src/assets/Music-ministry.jpg',
       schedule: 'Tuesdays, 6:00 PM - 8:00 PM'
     },
     {
@@ -56,48 +56,48 @@ export default function DepCreativeArt() {
       icon: '💃',
       description: 'Expressing worship through movement, our dance team incorporates liturgical, contemporary, and African dance styles. We believe the body is an instrument of praise and use choreography to tell God\'s stories.',
       image: '/images/dance-team.jpg',
-      schedule: 'Thursdays, 5:30 PM - 7:30 PM'
+      schedule: 'Saturday, 6:00 PM - 8:00 PM'
     },
     {
       id: 'drama',
       title: 'Actors of Faith',
       icon: '🎭',
       description: 'Through sketches, plays, and dramatic readings, we bring biblical truths to life. Our team specializes in improvisation, scripted performances, and interactive theater that engages congregations.',
-      image: '/images/drama-team.jpg',
-      schedule: 'Fridays, 6:00 PM - 8:30 PM'
+      image: '/src/assets/Actors-of-Faith.jpg',
+      schedule: 'Saturday, 6:00 PM - 8:30 PM'
     },
     {
       id: 'media',
       title: 'Creative Visuals',
       icon: '🎥',
       description: 'From stage design to video production, we enhance worship through visual arts. Our team handles lighting, projections, photography, and graphic design to create immersive worship environments.',
-      image: '/images/media-team.jpg',
-      schedule: 'Saturdays, 9:00 AM - 12:00 PM'
+      image: '/src/assets/creative-visuals.jpg',
+      schedule: 'Saturdays, 6:00 PM - 8:00 PM'
     }
   ];
 
   // Gallery Images
   const galleryImages = [
-    '/images/gallery1.jpg',
-    '/images/gallery2.jpg',
-    '/images/gallery3.jpg',
-    '/images/gallery4.jpg',
-    '/images/gallery5.jpg',
+    '/src/assets/trumpet.jpg',
+    '/src/assets/Ministries31.jpg',
+    '/src/assets/voices.jpg',
+    '/src/assets/Actors-of-Faith.jpg',
+    '/src/assets/gallery5.jpg',
   ];
 
   // Rehearsal Schedule
   const rehearsalSchedule = [
     { team: 'Voices of Grace', day: 'Tuesday', time: '6:00 PM - 8:00 PM' },
-    { team: 'Choreography Team', day: 'Thursday', time: '5:30 PM - 7:30 PM' },
-    { team: 'Drama Team', day: 'Friday', time: '6:00 PM - 8:30 PM' },
-    { team: 'Combined Rehearsal', day: 'Saturday', time: '10:00 AM - 1:00 PM' },
+    { team: 'Choreography Team', day: 'Saturday', time: '6:00 PM - 8:00 PM' },
+    { team: 'Drama Team', day: 'Saturday', time: '6:00 PM - 8:00 PM' },
+    { team: 'Combined Rehearsal', day: 'Saturday', time: '6:00 PM - 8:00 PM' },
   ];
 
   // Upcoming Events
   const upcomingEvents = [
-    { title: 'Gospel Night Live', date: 'June 15, 7:00 PM', location: 'Main Sanctuary', icon: '🎤' },
-    { title: 'Sacred Dance Workshop', date: 'June 22, 10:00 AM', location: 'Fellowship Hall', icon: '💃' },
-    { title: 'Drama Ministry Auditions', date: 'July 5-6, 4:00 PM', location: 'Creative Arts Center', icon: '🎭' },
+    { title: 'Ose Ayeyi', date: 'January, 6:00 PM', location: 'Main Sanctuary',  },
+    { title: 'Sacred Dance Workshop', date: 'January, 6:00 PM', location: 'Fellowship Hall',  },
+    { title: 'Drama Ministry Auditions', date: 'January, 6:00 PM', location: 'Creative Arts Center', },
   ];
 
   // Toggle video mute
