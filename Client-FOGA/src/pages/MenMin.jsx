@@ -14,8 +14,8 @@ export default function MenMin() {
   ];
 
   const galleryImages = [
-    "/images/men-event1.jpg", "/images/men-event2.jpg", "/images/men-event3.jpg",
-    "/images/men-event4.jpg", "/images/men-event5.jpg", "/images/men-event6.jpg"
+    "/src/assets/men-at-beach.jpg", "/src/assets/men-at-beach1.jpg", "/src/assets/men-with-mrs.jpg",
+    "/src/assets/men-at-beach.jpg", "/src/assets/men-at-beach.jpg", "/src/assets/men-at-beach.jpg"
   ];
 
   const leadership = [
@@ -32,7 +32,7 @@ export default function MenMin() {
     {
       name: "Mr. Bright Abeka Mensah",
       position: "Secretary",
-      image: "/src/assets/bright-mensah.jpg"
+      image: "/src/assets/bright.jpg"
     },
     {
       name: "Mr. Emmanuel Arthur",

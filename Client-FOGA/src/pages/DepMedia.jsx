@@ -24,7 +24,7 @@ const DepMedia = () => {
       name: "KARIM YUSSIF SAAMID",
       role: "Multimedia Producer",
       expertise: "Video Production & Live Streaming",
-      image: "/media-producer.jpg",
+      image: "/src/assets/Karim.jpg",
       quote: "Every frame we capture tells a story of faith."
     },
     {
@@ -202,32 +202,32 @@ const DepMedia = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {teamMembers.map((member, index) => (
             <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -10 }}
-              className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
-            >
-              <div className="h-64 bg-gradient-to-br from-blue-900 to-purple-800 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('/media-pattern.png')] opacity-20"></div>
-                <div className="text-6xl z-10">
-                  {index === 0 && "🎬"}
-                  {index === 1 && "🎥"}
-                  {index === 2 && "📱"}
-                  {index === 3 && "🎛️"}
-                </div>
+            key={index}
+            className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+          >
+            <div className="h-64 bg-gradient-to-br from-blue-900 to-purple-800 flex items-center justify-center relative overflow-hidden">
+              {/* Team member image */}
+              <img 
+                src={member.image} 
+                alt={member.name}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+
+              {/* Optional emoji badge */}
+              <div className="text-4xl z-10 opacity-80">
+              
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-blue-400">{member.name}</h3>
-                <p className="text-purple-300 font-medium mb-2">{member.role}</p>
-                <p className="text-gray-300 text-sm mb-4">{member.expertise}</p>
-                <blockquote className="text-gray-400 italic text-sm border-l-2 border-blue-500 pl-4">
-                  "{member.quote}"
-                </blockquote>
-              </div>
-            </motion.div>
+            </div>
+            {/* Rest of the card content */}
+            <div className="p-6">
+              <h3 className="text-xl font-bold text-blue-400">{member.name}</h3>
+              <p className="text-purple-300 font-medium mb-2">{member.role}</p>
+              <p className="text-gray-300 text-sm mb-4">{member.expertise}</p>
+              <blockquote className="text-gray-400 italic text-sm border-l-2 border-blue-500 pl-4">
+                "{member.quote}"
+              </blockquote>
+            </div>
+          </motion.div>
           ))}
         </div>
       </section>

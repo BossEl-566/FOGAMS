@@ -9,7 +9,7 @@ export default function DepYoungSingles() {
     {
       name: 'MISS MARIAN-STELLA ARMAH',
       role: 'PRESIDENT',
-      image: '/src/assets/marian-stella.jpg',
+      image: '/src/assets/stella.jpg',
       bio: 'Dedicated to empowering young women through biblical principles and practical life skills.',
       symbol: '👑'
     },

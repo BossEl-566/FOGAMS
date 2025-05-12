@@ -11,10 +11,10 @@ const YouthMin = () => {
   const galleryImages = [
     '/src/assets/youth-with-patron.jpg',
     '/src/assets/Youth-Ministry.jpg',
-    'https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1542626991-cbc4e32524cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1529333166437-7750a6dd5a30?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    '/src/assets/Linus-and-Co.jpg',
+    '/src/assets/youth-doing-act.jpg',
+    '/src/assets/Cynthia-Bridget.jpg',
+    '/src/assets/Friends-Prince-and-co.jpg',
   ];
 
   // Events data
