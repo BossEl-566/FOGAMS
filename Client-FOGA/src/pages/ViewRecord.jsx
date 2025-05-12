@@ -14,7 +14,7 @@ export default function ViewRecord() {
   useEffect(() => {
     const fetchRecord = async () => {
       try {
-        const res = await fetch(`/api/church-account/get-church-record/${recordId}`);
+        const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/church-account/get-church-record/${recordId}`);
         if (!res.ok) {
           throw new Error('Failed to fetch record');
         }

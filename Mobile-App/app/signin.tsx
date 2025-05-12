@@ -60,7 +60,7 @@ const SignIn = () => {
         try {
             dispatch(signInStart());
             
-            const res = await fetch('http://192.168.205.105:3000/api/auth/signin', {
+            const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/auth/signin`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',

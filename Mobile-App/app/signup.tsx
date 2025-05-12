@@ -109,7 +109,7 @@ const SignUp = () => {
 
         try {
             setLoading(true);
-            const response = await fetch('http://192.168.234.105:3000/api/auth/signup', {
+            const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/auth/signup`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
