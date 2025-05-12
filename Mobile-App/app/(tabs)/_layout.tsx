@@ -74,10 +74,9 @@ const _layout = () => {
             fontWeight: '500',
             marginBottom: 5,
           },
-          header: () => null, // This hides the default header for all screens
+          header: () => null,
         }}
       >
-        {/* Home Tab - the only one with custom header */}
         <Tabs.Screen
           name="home"
           options={{

@@ -2,6 +2,7 @@ import { View, ScrollView, TextInput, TouchableOpacity, ActivityIndicator, Text,
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
 
 const AnonymousMessageScreen = () => {
   const { theme } = useSelector((state: any) => state.theme);

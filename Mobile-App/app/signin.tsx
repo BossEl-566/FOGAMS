@@ -72,9 +72,9 @@ const SignIn = () => {
             if (res.ok) {
               const { token, ...user } = data;
               dispatch(signInSuccess(user));
-              await AsyncStorage.setItem('userToken', token); // 👈 Save the token
+              await AsyncStorage.setItem('userToken', token);
               ToastAndroid.show('Login successful', ToastAndroid.SHORT);
-              router.replace('/(tabs)/home');
+              router.replace('/welcome');
             }else {
                 dispatch(signInFailure(data.message));
                 Alert.alert('Error', data.message);
@@ -92,130 +92,120 @@ const SignIn = () => {
             className="flex-1"
         >
             <SafeAreaView className="flex-1">
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    {/* Header Section */}
-                    <View className="items-center pt-12 pb-8 px-8">
-                        <Image 
-                            source={require('../assets/images/assembliesOfGodLogo.png')}
-                            className="w-32 h-32 mb-4"
-                            resizeMode="contain"
-                        />
-                        <Text style={{ fontFamily: 'Inter_900Black' }} className="text-3xl text-blue-800">
-                            Welcome Back
-                        </Text>
-                        <Text style={{ fontFamily: 'Inter_400Regular' }} className="text-lg text-slate-500 mt-2">
-                            Sign in to access your account
-                        </Text>
-                    </View>
-
-                    {/* Form Section */}
-                    <View className="px-8 pb-8">
-                        {/* Email Input */}
-                        <TextInput
-                            className="bg-white border-2 border-blue-100 rounded-xl px-5 py-4 text-slate-700 mb-5 text-lg"
-                            placeholder="your@email.com"
-                            placeholderTextColor="#94a3b8"
-                            value={formData.email}
-                            onChangeText={(text) => handleChange('email', text)}
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                        />
-                        
-                        {/* Password Input */}
-                        <View className="relative mb-6">
-                            <TextInput
-                                className="bg-white border-2 border-blue-100 rounded-xl px-5 py-4 text-slate-700 pr-12 text-lg"
-                                placeholder="Enter your password"
-                                placeholderTextColor="#94a3b8"
-                                value={formData.password}
-                                onChangeText={(text) => handleChange('password', text)}
-                                secureTextEntry={!showPassword}
+                <ScrollView 
+                    contentContainerStyle={{ 
+                        flexGrow: 1,
+                        justifyContent: 'center' // This centers content vertically
+                    }}
+                    keyboardShouldPersistTaps="handled"
+                >
+                    {/* Main Content Container */}
+                    <View className="px-8">
+                        {/* Header Section */}
+                        <View className="items-center pb-8">
+                            <Image 
+                                source={require('../assets/images/assembliesOfGodLogo.png')}
+                                className="w-32 h-32 mb-4"
+                                resizeMode="contain"
                             />
-                            <TouchableOpacity 
-                                className="absolute right-4 top-4"
-                                onPress={() => setShowPassword(!showPassword)}
-                            >
-                                <AntDesign 
-                                    name={showPassword ? "eye" : "eyeo"} 
-                                    size={22} 
-                                    color="#64748b" 
-                                />
-                            </TouchableOpacity>
+                            <Text style={{ fontFamily: 'Inter_900Black' }} className="text-3xl text-blue-800">
+                                Welcome Back FOGA
+                            </Text>
+                            <Text style={{ fontFamily: 'Inter_400Regular' }} className="text-lg text-slate-500 mt-2">
+                                Sign in to access your account
+                            </Text>
                         </View>
 
-                        {/* Remember Me */}
-                        <View className="flex-row items-center mb-6">
+                        {/* Form Section */}
+                        <View className="pb-8">
+                            {/* Email Input */}
+                            <TextInput
+                                className="bg-white border-2 border-blue-100 rounded-xl px-5 py-4 text-slate-700 mb-5 text-lg"
+                                placeholder="your@email.com"
+                                placeholderTextColor="#94a3b8"
+                                value={formData.email}
+                                onChangeText={(text) => handleChange('email', text)}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+                            
+                            {/* Password Input */}
+                            <View className="relative mb-6">
+                                <TextInput
+                                    className="bg-white border-2 border-blue-100 rounded-xl px-5 py-4 text-slate-700 pr-12 text-lg"
+                                    placeholder="Enter your password"
+                                    placeholderTextColor="#94a3b8"
+                                    value={formData.password}
+                                    onChangeText={(text) => handleChange('password', text)}
+                                    secureTextEntry={!showPassword}
+                                />
+                                <TouchableOpacity 
+                                    className="absolute right-4 top-4"
+                                    onPress={() => setShowPassword(!showPassword)}
+                                >
+                                    <AntDesign 
+                                        name={showPassword ? "eye" : "eyeo"} 
+                                        size={22} 
+                                        color="#64748b" 
+                                    />
+                                </TouchableOpacity>
+                            </View>
+
+                            {/* Remember Me */}
+                            <View className="flex-row items-center mb-6">
+                                <TouchableOpacity 
+                                    className="w-5 h-5 border border-slate-300 rounded mr-2 items-center justify-center"
+                                    onPress={() => setRememberMe(!rememberMe)}
+                                >
+                                    {rememberMe && (
+                                        <View className="w-3 h-3 bg-blue-500 rounded-sm" />
+                                    )}
+                                </TouchableOpacity>
+                                <Text style={{ fontFamily: 'Inter_400Regular' }} className="text-slate-600">
+                                    Remember me
+                                </Text>
+                                <TouchableOpacity
+                                    onPress={() => router.push('/forget-password')}
+                                    className="ml-auto"
+                                >
+                                    <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-blue-500">
+                                        Forgot password?
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            {/* Sign In Button */}
                             <TouchableOpacity 
-                                className="w-5 h-5 border border-slate-300 rounded mr-2 items-center justify-center"
-                                onPress={() => setRememberMe(!rememberMe)}
+                                className="bg-blue-600 py-4 rounded-2xl items-center justify-center mb-6 shadow-sm shadow-blue-200"
+                                onPress={handleSubmit}
+                                disabled={loading}
                             >
-                                {rememberMe && (
-                                    <View className="w-3 h-3 bg-blue-500 rounded-sm" />
+                                {loading ? (
+                                    <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-white text-lg">
+                                        Signing in...
+                                    </Text>
+                                ) : (
+                                    <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-white text-lg">
+                                        Sign In
+                                    </Text>
                                 )}
                             </TouchableOpacity>
-                            <Text style={{ fontFamily: 'Inter_400Regular' }} className="text-slate-600">
-                                Remember me
-                            </Text>
-                            <TouchableOpacity
-                                onPress={() => console.log('Forgot password')}
-                                className="ml-auto"
-                            >
-                                <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-blue-500">
-                                    Forgot password?
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
 
-                        {/* Sign In Button */}
-                        <TouchableOpacity 
-                            className="bg-blue-600 py-4 rounded-2xl items-center justify-center mb-6 shadow-sm shadow-blue-200"
-                            onPress={handleSubmit}
-                            disabled={loading}
-                        >
-                            {loading ? (
-                                <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-white text-lg">
-                                    Signing in...
+                            {/* Sign Up Link */}
+                            <View className="flex-row justify-center">
+                                <Text style={{ fontFamily: 'Inter_400Regular' }} className="text-slate-500">
+                                    Don't have an account?{' '}
                                 </Text>
-                            ) : (
-                                <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-white text-lg">
-                                    Sign In
-                                </Text>
-                            )}
-                        </TouchableOpacity>
-
-                        {/* Divider */}
-                        <View className="flex-row items-center my-6">
-                            <View className="flex-1 h-px bg-slate-200" />
-                            <Text style={{ fontFamily: 'Inter_400Regular' }} className="px-4 text-slate-500">
-                                or
-                            </Text>
-                            <View className="flex-1 h-px bg-slate-200" />
-                        </View>
-
-                        {/* Google Sign In */}
-                        <TouchableOpacity 
-                            className="flex-row items-center justify-center border border-slate-200 py-3 rounded-2xl bg-white shadow-sm mb-6"
-                        >
-                            <AntDesign name="google" size={20} color="#DB4437" style={{ marginRight: 8 }} />
-                            <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-slate-700">
-                                Continue with Google
-                            </Text>
-                        </TouchableOpacity>
-
-                        {/* Sign Up Link */}
-                        <View className="flex-row justify-center">
-                            <Text style={{ fontFamily: 'Inter_400Regular' }} className="text-slate-500">
-                                Don't have an account?{' '}
-                            </Text>
-                            <TouchableOpacity
-                                onPress={() => router.push('/signup')}
-                                activeOpacity={0.7}
-                                className="ml-1"
-                            >
-                                <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-blue-500">
-                                    Sign up
-                                </Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => router.push('/signup')}
+                                    activeOpacity={0.7}
+                                    className="ml-1"
+                                >
+                                    <Text style={{ fontFamily: 'Inter_600SemiBold' }} className="text-blue-500">
+                                        Sign up
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </ScrollView>

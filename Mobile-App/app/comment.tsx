@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { AntDesign, Feather, FontAwesome } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
+import React from 'react';
 
 const Avatar = ({ uri, size, className }: { uri: string; size: number; className?: string }) => (
   <View className={className}>

@@ -5,7 +5,7 @@ import { AntDesign, MaterialIcons, FontAwesome, Feather, Ionicons } from '@expo/
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import {  Pressable, } from 'react-native';
-import { Link, router } from 'expo-router';
+import { Link, router, Redirect } from 'expo-router';
 
 
 const SkeletonLoader = ({ theme }: { theme: 'light' | 'dark' }) => {
@@ -564,6 +564,11 @@ const home = () => {
   const isDark = theme === 'dark';
   const [refreshing, setRefreshing] = useState(false);
 
+  if (!currentUser) {
+    return <Redirect href="/welcome" />;
+  }
+    
+
   // Determine which dashboard to show
   const showAdminDashboard = currentUser?.isAdmin || currentUser?.isPastor || currentUser?.isDeptHead;
   const showMemberContent = currentUser?.isMember && !showAdminDashboard;
@@ -577,6 +582,7 @@ const home = () => {
       // Here you would typically refetch your data
     }, 1500);
   };
+  console.log('Current User:', currentUser);
 
   return (
     <SafeAreaProvider>

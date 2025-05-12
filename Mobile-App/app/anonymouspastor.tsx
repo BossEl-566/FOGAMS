@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, Feather } from '@expo/vector-icons';
+import React from 'react';
 
 type AnonymousMessage = {
   _id: string;

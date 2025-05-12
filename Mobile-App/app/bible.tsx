@@ -3,6 +3,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
+import React from 'react';
 
 const BibleScreen = () => {
   const { theme } = useSelector((state: any) => state.theme);

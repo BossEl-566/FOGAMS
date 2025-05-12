@@ -6,6 +6,7 @@ import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { PieChart, BarChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import React from 'react';
 
 const screenWidth = Dimensions.get('window').width;
 

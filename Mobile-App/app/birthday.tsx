@@ -2,6 +2,7 @@ import { View, ScrollView, Text, ActivityIndicator, RefreshControl } from 'react
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
 
 type Member = {
   _id: string;

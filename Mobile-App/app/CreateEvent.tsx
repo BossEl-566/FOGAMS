@@ -18,6 +18,7 @@ import {
   import * as ImagePicker from 'expo-image-picker';
   import { ID } from 'react-native-appwrite';
   import { AppwriteClientFactory } from '../appwrite-client';
+import React from 'react';
   
   const storage = AppwriteClientFactory.getInstance().storage;
   

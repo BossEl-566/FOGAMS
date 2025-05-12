@@ -1,4 +1,5 @@
 // app/_layout.tsx
+import React from 'react'
 import { Stack } from 'expo-router'
 import './global.css'
 import { Provider, useSelector } from 'react-redux'
@@ -267,6 +268,34 @@ function ThemedLayout() {
     options={() => ({
       headerShown: true,
       title: 'Create Event',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
+  <Stack.Screen
+    name="welcome"
+    options={() => ({
+      headerShown: false,
+      title: 'Create Broadcast',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
+  <Stack.Screen
+    name="forget-password"
+    options={() => ({
+      headerShown: false,
+      title: 'Create Broadcast',
       headerStyle: {
         backgroundColor: isDark ? '#000' : '#fff',
       },

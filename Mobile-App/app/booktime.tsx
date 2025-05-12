@@ -1,3 +1,4 @@
+import React from 'react';
 import { View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator, Alert, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
