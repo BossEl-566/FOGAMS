@@ -74,7 +74,7 @@ const SignIn = () => {
               dispatch(signInSuccess(user));
               await AsyncStorage.setItem('userToken', token);
               ToastAndroid.show('Login successful', ToastAndroid.SHORT);
-              router.replace('/welcome');
+              router.replace('/(tabs)/home');
             }else {
                 dispatch(signInFailure(data.message));
                 Alert.alert('Error', data.message);

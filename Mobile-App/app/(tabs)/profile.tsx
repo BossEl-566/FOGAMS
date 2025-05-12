@@ -69,7 +69,7 @@ const Profile = () => {
     try {
       dispatch(signoutSuccess());
         ToastAndroid.show('Signed out successfully', ToastAndroid.SHORT);
-        router.replace('./index');
+        router.replace('./welcome');
       const res = await fetch('http://192.168.106.105/api/user/signout', {
         method: 'POST',
       });
@@ -77,7 +77,7 @@ const Profile = () => {
       if (res.ok) {
         dispatch(signoutSuccess());
         ToastAndroid.show('Signed out successfully', ToastAndroid.SHORT);
-        router.replace('/signin');
+        router.replace('/welcome');
       } else {
         const error = await res.json();
         ToastAndroid.show(`Error: ${error.message}`, ToastAndroid.SHORT);
