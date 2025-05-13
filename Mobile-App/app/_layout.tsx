@@ -8,6 +8,8 @@ import { store, persistor } from '../src/store/store'
 import { View } from 'react-native'
 import { RootState } from '../src/store/store'
 import { useEffect, useState } from 'react'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+
 
 
 function ThemedLayout() {
@@ -20,6 +22,8 @@ function ThemedLayout() {
 
   return (
     <View className={`${isDark ? 'dark' : ''} flex-1 bg-white dark:bg-black`}>
+      <SafeAreaView className={`${isDark ? 'dark' : ''} flex-1 bg-white dark:bg-black`}>
+      
       <Stack>
   <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
   <Stack.Screen name="index" options={{ headerShown: false }} />
@@ -348,6 +352,7 @@ function ThemedLayout() {
     })}
   />
 </Stack>
+      </SafeAreaView>
 
 
 
@@ -359,8 +364,11 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <ThemedLayout />
+        <SafeAreaProvider>
+          <ThemedLayout />
+        </SafeAreaProvider>
       </PersistGate>
     </Provider>
   )
 }
+

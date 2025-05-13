@@ -134,7 +134,7 @@ const Community = () => {
             description={currentUser?.isPastor ? "View messages from congregation" : "Send message to leadership"}
             icon={<MaterialIcons name="message" size={24} color="white" />}
             onPress={handleAnonymousMessage}
-            color="#3b82f6"
+            color={isDark ? '#3b82f6' : '#2563eb'} 
           />
           
           <FeatureCard
@@ -142,7 +142,7 @@ const Community = () => {
             description="Schedule a meeting with church leadership"
             icon={<FontAwesome name="calendar" size={22} color="white" />}
             onPress={() => router.push('/booktime')}
-            color="#10b981"
+            color={isDark ? '#3b82f6' : '#2563eb'} 
           />
           
           <FeatureCard
@@ -150,7 +150,7 @@ const Community = () => {
             description="Participate in important decisions"
             icon={<Feather name="check-circle" size={22} color="white" />}
             onPress={() => router.push('/poll')}
-            color="#f59e0b"
+            color={isDark ? '#3b82f6' : '#2563eb'} 
           />
         </View>
 
