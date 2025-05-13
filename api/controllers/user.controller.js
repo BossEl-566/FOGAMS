@@ -8,7 +8,8 @@ export const test = (req, res) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  if (req.user.id !== req.params.userId) {
+  
+  if (req.user.id !== req.params.userId && !req.user.isAdmin) {
     return next(errorHandler(403, 'You are not authorized to perform this action'));
   }
   if (req.body.password) {
@@ -44,6 +45,7 @@ export const updateUser = async (req, res, next) => {
       const { password, ...rest } = updatedUser._doc;
       res.status(200).json(rest); 
     } catch (error) {
+      console.error(error);
       return next(errorHandler(400, 'Username already exists'));
       
     }

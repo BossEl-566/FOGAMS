@@ -7,7 +7,7 @@ import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
-import type { RootState } from '../src/store/store'; // Adjust import path as needed
+import type { RootState } from '../src/store/store';
 
 interface Member {
   _id: string;
@@ -25,25 +25,36 @@ interface Member {
   member: boolean;
 }
 
+interface User {
+  _id: string;
+  username: string;
+  email: string;
+  profilePicture: string;
+  isAdmin: boolean;
+  isPastor: boolean;
+  isDeptHead: boolean;
+  isMember: boolean;
+}
+
 const UsersScreen = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
   const { theme: appTheme } = useSelector((state: RootState) => state.theme);
   const [members, setMembers] = useState<Member[]>([]);
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showMore, setShowMore] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState('');
+  const [userToReset, setUserToReset] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
   
-  // Animation values
   const fadeAnim = useState(new Animated.Value(0))[0];
   const scaleAnim = useState(new Animated.Value(0.95))[0];
 
   useEffect(() => {
-    // Entry animation
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -84,7 +95,7 @@ const UsersScreen = () => {
       if (membersRes.ok && usersRes.ok) {
         const activeMembers = membersData.filter((member: Member) => member.member);
         const combinedData = activeMembers.map((member: Member) => {
-          const user = usersData.users.find((u: any) => u._id === member.userId);
+          const user = usersData.users.find((u: User) => u._id === member.userId);
           return {
             ...member,
             profilePicture: user?.profilePicture || 'https://i.imgur.com/0LKZQYM.png',
@@ -147,14 +158,14 @@ const UsersScreen = () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch(`${process.env.EXPO_PUBLIC_IP}/api/user/delete/${userIdToDelete}`, {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/user/delete/${userIdToDelete}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (res.ok) {
         setMembers(prev => prev.filter(member => member.userId !== userIdToDelete));
-        setShowModal(false);
+        setShowDeleteModal(false);
         Toast.show({
           type: 'success',
           text1: 'User deleted successfully',
@@ -174,6 +185,51 @@ const UsersScreen = () => {
         position: 'bottom',
       });
       console.error(error);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!currentUser?.isAdmin || !userToReset) return;
+
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/user/update/${userToReset._id}`, {
+        method: 'PUT',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          password: userToReset.email
+        })
+      });
+      
+      const data = await res.json();
+      if (res.ok) {
+        Toast.show({
+          type: 'success',
+          text1: 'Password reset successfully',
+          text2: `New password is ${userToReset.email}`,
+          position: 'bottom',
+        });
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: data.message || 'Failed to reset password',
+          position: 'bottom',
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error resetting password',
+        position: 'bottom',
+      });
+      console.error(error);
+    } finally {
+      setShowResetModal(false);
+      setUserToReset(null);
     }
   };
 
@@ -255,9 +311,42 @@ const UsersScreen = () => {
             <View className="flex-row justify-center mt-2 gap-3">
               <TouchableOpacity
                 className="flex-row items-center px-4 py-2.5 rounded-lg bg-indigo-600"
-                onPress={() => {
+                onPress={async () => {
                   Haptics.selectionAsync();
-                  console.log('Edit member', item);
+                  try {
+                    const token = await AsyncStorage.getItem('token');
+                    const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/user/getusers`, {
+                      headers: { Authorization: `Bearer ${token}` },
+                    });
+                    const data = await res.json();
+                    
+                    if (res.ok) {
+                      const user = data.users.find((u: User) => u._id === item.userId);
+                      if (user) {
+                        setUserToReset(user);
+                        setShowResetModal(true);
+                      } else {
+                        Toast.show({
+                          type: 'error',
+                          text1: 'User not found',
+                          position: 'bottom',
+                        });
+                      }
+                    } else {
+                      Toast.show({
+                        type: 'error',
+                        text1: 'Failed to fetch user data',
+                        position: 'bottom',
+                      });
+                    }
+                  } catch (error) {
+                    Toast.show({
+                      type: 'error',
+                      text1: 'Error fetching user data',
+                      position: 'bottom',
+                    });
+                    console.error(error);
+                  }
                 }}
                 activeOpacity={0.8}
               >
@@ -269,7 +358,7 @@ const UsersScreen = () => {
                 className="flex-row items-center px-4 py-2.5 rounded-lg bg-red-600"
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                  setShowModal(true);
+                  setShowDeleteModal(true);
                   setUserIdToDelete(item.userId);
                 }}
                 activeOpacity={0.8}
@@ -396,8 +485,8 @@ const UsersScreen = () => {
       <Modal
         animationType="fade"
         transparent={true}
-        visible={showModal}
-        onRequestClose={() => setShowModal(false)}
+        visible={showDeleteModal}
+        onRequestClose={() => setShowDeleteModal(false)}
       >
         <View className="flex-1 justify-center items-center bg-black/70">
           <View className={`rounded-2xl w-[90%] max-w-md ${appTheme === 'dark' ? 'bg-gray-800' : 'bg-white'} p-6`}>
@@ -421,7 +510,52 @@ const UsersScreen = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 className={`flex-1 py-2.5 px-4 rounded-lg ${appTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-300'}`}
-                onPress={() => setShowModal(false)}
+                onPress={() => setShowDeleteModal(false)}
+                activeOpacity={0.8}
+              >
+                <Text className={`font-medium text-center ${appTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Password Reset Confirmation Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showResetModal}
+        onRequestClose={() => setShowResetModal(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-black/70">
+          <View className={`rounded-2xl w-[90%] max-w-md ${appTheme === 'dark' ? 'bg-gray-800' : 'bg-white'} p-6`}>
+            <View className="items-center mb-4">
+              <MaterialCommunityIcons 
+                name="lock-reset" 
+                size={48} 
+                color="#6366f1" 
+              />
+            </View>
+            <Text className={`text-lg font-semibold text-center ${appTheme === 'dark' ? 'text-white' : 'text-gray-900'} mb-2`}>
+              Reset Password
+            </Text>
+            <Text className={`text-sm text-center ${appTheme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
+              Are you sure you want to reset password for {userToReset?.username}?
+            </Text>
+            <Text className={`text-xs text-center ${appTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'} mb-6`}>
+              Password will be reset to the user's email: {userToReset?.email}
+            </Text>
+            <View className="flex-row justify-center mt-5 gap-4">
+              <TouchableOpacity
+                className="flex-1 py-2.5 px-4 rounded-lg bg-indigo-600"
+                onPress={handleResetPassword}
+                activeOpacity={0.8}
+              >
+                <Text className="text-white font-medium text-center">Yes, Reset</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className={`flex-1 py-2.5 px-4 rounded-lg ${appTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-300'}`}
+                onPress={() => setShowResetModal(false)}
                 activeOpacity={0.8}
               >
                 <Text className={`font-medium text-center ${appTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Cancel</Text>

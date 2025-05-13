@@ -180,7 +180,7 @@ const EditProfile = () => {
       dispatch(updateStart());
       
       const token = await AsyncStorage.getItem('token');
-      const res = await fetch(`http://192.168.201.105:3000/api/user/update/${currentUser._id}`, {
+      const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/user/update/${currentUser._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
