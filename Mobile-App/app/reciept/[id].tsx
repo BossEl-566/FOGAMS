@@ -132,14 +132,6 @@ const ReceiptScreen = () => {
 
   return (
     <View className={`flex-1 ${bgColor} p-4`}>
-      {/* Share Button */}
-      <TouchableOpacity
-        onPress={handleShare}
-        className={`absolute top-4 right-4 z-10 flex-row items-center px-4 py-2 rounded-full ${appTheme === 'dark' ? 'bg-indigo-700' : 'bg-indigo-600'}`}
-      >
-        <Feather name="share-2" size={18} color="white" />
-        <Text className="text-white ml-2">Share</Text>
-      </TouchableOpacity>
 
       {/* Receipt Card */}
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>

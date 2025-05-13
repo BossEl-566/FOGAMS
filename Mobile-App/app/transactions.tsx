@@ -121,7 +121,7 @@ const TransactionsScreen = () => {
                 <View className="flex-1">
                   <View className="flex-row items-center mb-2">
                     <Text className={`text-lg font-semibold ${textColor}`}>
-                      ${transaction.amount.toFixed(2)}
+                      GHS {transaction.amount.toFixed(2)}
                     </Text>
                     <View className={`ml-3 px-2 py-1 rounded-full ${appTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'}`}>
                       <Text className={`text-xs ${secondaryTextColor}`}>

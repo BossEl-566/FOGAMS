@@ -337,7 +337,7 @@ const TitheScreen = () => {
               {isApproved.slice(0, 3).map((tx) => (
                 <TouchableOpacity 
                   key={tx._id}
-                  onPress={() => navigation.navigate('Receipt', { titheId: tx._id })}
+                  onPress={() => router.push(`./reciept/${tx._id}`)}
                   className={`${colors.input} p-3 rounded-lg`}
                 >
                   <Text className={`text-sm ${colors.secondaryText}`}>
@@ -358,7 +358,7 @@ const TitheScreen = () => {
               
               {isApproved.length > 3 && (
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('AllTransactions')}
+                  onPress={() => router.push('/transactions')}
                   className={`${colors.accent} text-center py-2`}
                 >
                   <Text className={`${colors.accent} font-medium`}>View All Records</Text>
@@ -379,7 +379,7 @@ const TitheScreen = () => {
               {isPending.slice(0, 3).map((tx) => (
                 <TouchableOpacity 
                   key={tx._id}
-                  onPress={() => navigation.navigate('Receipt', { titheId: tx._id })}
+                  onPress={() => router.push(`/reciept/${tx._id}`)}
                   className={`${colors.input} p-3 rounded-lg`}
                 >
                   <Text className={`text-sm ${colors.secondaryText}`}>

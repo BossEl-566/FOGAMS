@@ -4,7 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { RootState } from '../src/store/store'; // Adjust import path as needed
+import type { RootState } from '../src/store/store'; 
 
 interface TitheRecord {
   _id: string;

@@ -305,6 +305,48 @@ function ThemedLayout() {
       },
     })}
   />
+  <Stack.Screen
+    name="transactions"
+    options={() => ({
+      headerShown: true,
+      title: 'Transactions',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
+  <Stack.Screen
+    name="accountrecords"
+    options={() => ({
+      headerShown: true,
+      title: 'Record',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
+  <Stack.Screen
+    name="alltitherecords"
+    options={() => ({
+      headerShown: true,
+      title: 'All Tithe Records',
+      headerStyle: {
+        backgroundColor: isDark ? '#000' : '#fff',
+      },
+      headerTintColor: isDark ? '#fff' : '#000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    })}
+  />
 </Stack>
 
 

@@ -5,7 +5,7 @@ import { Provider, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "../../src/store/store";
 import { View } from "react-native";
-import { RootState } from "../../src/store/store";  
+import { RootState } from "../../src/store/store";
 import { useEffect, useState } from "react";
 
 
@@ -19,12 +19,12 @@ function ThemedLayout() {
         <View className={`${isDark ? "dark" : ""} flex-1 bg-white dark:bg-black`}>
             <Stack>
                 <Stack.Screen name="[id]" options={{ headerShown: false }} />
-</Stack>
+            </Stack>    
             <Stack.Screen
                 name="index"
                 options={{
                     headerShown: true,
-                    title: 'Church Record',
+                    title: 'Receipt',
                     headerStyle: {
                         backgroundColor: isDark ? '#000' : '#fff',
                     },
@@ -34,10 +34,10 @@ function ThemedLayout() {
                     },
                 }}
             />
-</View>
+
+        </View>
     );
 }
-
 export default function Layout() {
     return (
         <Provider store={store}>
