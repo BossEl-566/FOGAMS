@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import * as WebBrowser from 'expo-web-browser';
 import { LinearGradient } from 'expo-linear-gradient';
+import { StatusBar } from 'expo-status-bar';
 
 const ResourcesScreen = () => {
   const { currentUser } = useSelector((state: any) => state.user);
@@ -16,6 +17,8 @@ const ResourcesScreen = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const pageSize = 12;
+  const isDark = theme === 'dark';
+  const isLight = theme === 'light';
 
   // Theme colors with more vibrant options
   const getThemeColors = () => {
@@ -270,7 +273,7 @@ const ResourcesScreen = () => {
         {currentUser?.isAdmin && (
           <TouchableOpacity
             onPress={() => confirmDelete(item._id)}
-            className="px-4 py-2 rounded-lg flex-row items-center bg-red-500"
+            className="px-4 py-2 ml-2 rounded-lg flex-row items-center bg-red-500"
           >
             <Feather name="trash-2" size={16} color="white" />
             <Text className="text-white ml-2">Delete</Text>
@@ -301,7 +304,8 @@ const ResourcesScreen = () => {
   };
 
   return (
-    <SafeAreaView className={`flex-1 ${colors.background}`} edges={['top']}>
+    <SafeAreaView className={`flex-1 ${colors.background} mt-10`}>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
       {/* Header */}
       <LinearGradient
         colors={theme === 'dark' ? ['#1F2937', '#111827'] : ['#4F46E5', '#7C3AED']}
@@ -316,8 +320,8 @@ const ResourcesScreen = () => {
               className="flex-row items-center px-4 py-2 rounded-lg bg-white bg-opacity-20"
               onPress={() => console.log('Add new resource')}
             >
-              <Feather name="upload" size={18} color="white" />
-              <Text className="text-white ml-2">Upload</Text>
+              <Feather name="upload" size={18} color="#38A169" />
+              <Text className="text-black ml-2">Upload</Text>
             </TouchableOpacity>
           )}
         </View>

@@ -60,7 +60,7 @@ const ChurchLife = () => {
   return (
     <SafeAreaView className={`flex-1 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <ScrollView 
-        className="flex-1 p-5"
+        className="flex-1 px-5"
         showsVerticalScrollIndicator={false}
       >
         <Text className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>

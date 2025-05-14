@@ -110,7 +110,7 @@ const Community = () => {
     <SafeAreaView className={`flex-1 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <ScrollView 
-        className="flex-1 px-5 pt-5"
+        className="flex-1 px-5"
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}

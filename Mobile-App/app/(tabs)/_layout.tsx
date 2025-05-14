@@ -64,20 +64,13 @@ const TabLayout = () => {
         <Tabs
           screenOptions={{
             tabBarStyle: {
-              backgroundColor: isDark ? '#111827' : '#ffffff',
-              borderTopColor: isDark ? '#374151' : '#e5e7eb',
-              borderTopWidth: 1,
-              height: 60,
-              paddingBottom: 5,
+              backgroundColor: isDark ? '#0f172a' : '#fff',
+              borderTopWidth: 0,
+              elevation: 0,
             },
             tabBarActiveTintColor: isDark ? '#3b82f6' : '#2563eb',
             tabBarInactiveTintColor: isDark ? '#9ca3af' : '#6b7280',
-            tabBarLabelStyle: {
-              fontSize: 12,
-              fontWeight: '500',
-              marginBottom: 5,
-            },
-            header: () => null,
+            headerShown: false,
           }}
         >
           <Tabs.Screen
