@@ -32,7 +32,7 @@ const NotepadScreen = () => {
       setLoading(true);
       const token = await AsyncStorage.getItem('token');
       
-      const response = await fetch('http://192.168.205.105:3000/api/notepad/get', {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/notepad/get`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -69,7 +69,7 @@ const NotepadScreen = () => {
   const toggleFavorite = async (noteId: string, currentStatus: boolean) => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://192.168.205.105:3000/api/notepad/patch/${noteId}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/notepad/patch/${noteId}`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,

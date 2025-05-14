@@ -68,25 +68,14 @@ const Profile = () => {
     setShowSignOutModal(false);
     try {
       dispatch(signoutSuccess());
-        ToastAndroid.show('Signed out successfully', ToastAndroid.SHORT);
-        router.replace('./welcome');
-      const res = await fetch('http://192.168.106.105/api/user/signout', {
-        method: 'POST',
-      });
-
-      if (res.ok) {
-        dispatch(signoutSuccess());
-        ToastAndroid.show('Signed out successfully', ToastAndroid.SHORT);
-        router.replace('/welcome');
-      } else {
-        const error = await res.json();
-        ToastAndroid.show(`Error: ${error.message}`, ToastAndroid.SHORT);
-      }
+      ToastAndroid.show('Signed out successfully', ToastAndroid.SHORT);
+      router.replace('/welcome');
     } catch (err) {
       ToastAndroid.show('Sign out failed. Please try again.', ToastAndroid.SHORT);
       console.error('Sign out error:', err);
     }
   };
+  
 
   const containerStyles = theme === 'dark' 
     ? 'bg-gray-900' 

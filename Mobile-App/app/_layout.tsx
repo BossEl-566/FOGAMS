@@ -1,4 +1,3 @@
-// app/_layout.tsx
 import React from 'react'
 import { Stack } from 'expo-router'
 import './global.css'
@@ -7,43 +6,43 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from '../src/store/store'
 import { View } from 'react-native'
 import { RootState } from '../src/store/store'
-import { useEffect, useState } from 'react'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-
-
+import { StatusBar } from 'expo-status-bar'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 function ThemedLayout() {
   const theme = useSelector((state: RootState) => state.theme.theme)
-  const [isDark, setIsDark] = useState(false)
-
-  useEffect(() => {
-    setIsDark(theme === 'dark')
-  }, [theme])
+  const isDark = theme === 'dark'
 
   return (
-    <View className={`${isDark ? 'dark' : ''} flex-1 bg-white dark:bg-black`}>
-      <SafeAreaView className={`${isDark ? 'dark' : ''} flex-1 bg-white dark:bg-black`}>
-      
+    <View className={`flex-1 ${isDark ? 'bg-black' : 'bg-white'}`}>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
       <Stack>
-  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-  <Stack.Screen name="index" options={{ headerShown: false }} />
-  <Stack.Screen name="signup" options={{ headerShown: false }} />
-  <Stack.Screen name="signin" options={{ headerShown: false }} />
-  <Stack.Screen
-    name="dailybiblemessage"
-    options={() => ({
-      headerShown: true,
-      title: 'Daily Message',
-      headerStyle: {
-        backgroundColor: isDark ? '#000' : '#fff',
-      },
-      headerTintColor: isDark ? '#fff' : '#000',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
-    })}
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="signup" options={{ headerShown: false }} />
+        <Stack.Screen name="signin" options={{ headerShown: false }} />
+        <Stack.Screen
+    name="study-resources"
+    options={{ headerShown: false }}
   />
-<Stack.Screen
+        
+        {/* All your other screens with themed headers */}
+        <Stack.Screen
+          name="dailybiblemessage"
+          options={{
+            headerShown: true,
+            title: 'Daily Message',
+            headerStyle: {
+              backgroundColor: isDark ? '#000' : '#fff',
+            },
+            headerTintColor: isDark ? '#fff' : '#000',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        
+        <Stack.Screen
     name="comment"
     options={() => ({
       headerShown: true,
@@ -225,20 +224,7 @@ function ThemedLayout() {
       },
     })}
   />
-  <Stack.Screen
-    name="study-resources"
-    options={() => ({
-      headerShown: true,
-      title: 'Study Resources',
-      headerStyle: {
-        backgroundColor: isDark ? '#000' : '#fff',
-      },
-      headerTintColor: isDark ? '#fff' : '#000',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
-    })}
-  />
+
   <Stack.Screen
     name="notepad"
     options={() => ({
@@ -351,11 +337,7 @@ function ThemedLayout() {
       },
     })}
   />
-</Stack>
-      </SafeAreaView>
-
-
-
+      </Stack>
     </View>
   )
 }
@@ -371,4 +353,3 @@ export default function RootLayout() {
     </Provider>
   )
 }
-

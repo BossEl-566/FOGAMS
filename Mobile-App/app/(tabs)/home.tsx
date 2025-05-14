@@ -582,7 +582,7 @@ const home = () => {
       // Here you would typically refetch your data
     }, 1500);
   };
-  console.log('Current User:', currentUser);
+ 
 
   return (
     <SafeAreaProvider>
