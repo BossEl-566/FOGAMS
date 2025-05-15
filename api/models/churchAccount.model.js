@@ -35,6 +35,18 @@ const churchAccountSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  sundayOfferingFirstServiceProject: {
+    type: Number,
+    default: 0,
+  },
+  sundayOfferingSecondServiceProject: {
+    type: Number,
+    default: 0,
+  },
+  sundayOfferingThirdServiceProject: {
+    type: Number,
+    default: 0,
+  },
   childrenServiceOffering: {
     type: Number,
     default: 0,

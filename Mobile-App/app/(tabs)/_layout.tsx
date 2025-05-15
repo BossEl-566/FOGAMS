@@ -8,48 +8,67 @@ import { StatusBar } from 'expo-status-bar'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const CustomHeader = () => {
-  const { theme } = useSelector((state: any) => state.theme)
-  const currentUser = useSelector((state: any) => state.user.currentUser)
-  const isDark = theme === 'dark'
-  const insets = useSafeAreaInsets()
+  const { theme } = useSelector((state: any) => state.theme);
+  const currentUser = useSelector((state: any) => state.user.currentUser);
+  const isDark = theme === 'dark';
+  const insets = useSafeAreaInsets();
 
   return (
     <View 
-      className={`rounded-br-[10px] rounded-bl-[100px] ${
-        isDark ? 'bg-gray-900 border-b border-gray-700' : 'bg-white border-b border-gray-200'
+      className={`rounded-b-3xl overflow-hidden shadow-lg ${
+        isDark ? 'bg-gray-900' : 'bg-white'
       }`}
+      style={{
+        shadowColor: isDark ? '#3b82f6' : '#2563eb',
+        shadowOpacity: 0.2,
+        shadowRadius: 16,
+        shadowOffset: { width: 0, height: 4 },
+      }}
     >
       <LinearGradient
-        colors={isDark ? ['#0f172a', '#1e3a8a'] : ['#2563eb', '#3b82f6']}
+        colors={isDark ? ['#1e293b', '#0f172a'] : ['#3b82f6', '#2563eb']}
         start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        className="pb-6 px-6 rounded-br-[10px] rounded-bl-[100px]"
-        style={{ paddingTop: insets.top }}  // Moved paddingTop here
+        end={{ x: 1, y: 1 }}
+        className="pb-6 px-6"
+        style={{ paddingTop: insets.top }}
       >
         <View className="flex-row justify-between items-center">
-          <View className="flex-row items-center">
-            <Image 
-              source={require('../../assets/images/assembliesOfGodLogo.png')} 
-              className="w-12 h-12 mr-3"
-              resizeMode="contain"
-            />
+          {/* Left side with logo and church info */}
+          <View className="flex-row items-center space-x-3">
+            <View className={`p-2 rounded-2xl ${isDark ? 'bg-gray-800/50' : 'bg-white/20'}`}>
+              <Image 
+                source={require('../../assets/images/assembliesOfGodLogo.png')} 
+                className="w-10 h-10"
+                resizeMode="contain"
+              />
+            </View>
             <View>
-              <Text className="text-white text-2xl font-bold">FOGA</Text>
-              <Text className="text-blue-100 text-xs">Fellowship of Grace Assembly</Text>
+              <Text className="text-white text-2xl font-extrabold tracking-tight">FOGA</Text>
+              <Text className={`text-sm ${isDark ? 'text-blue-200' : 'text-blue-100'}`}>
+                Fellowship of Grace Assembly
+              </Text>
             </View>
           </View>
 
-          <View className="items-end">
-            <Text className="text-blue-100 text-xs">Welcome back</Text>
-            <Text className="text-white text-lg font-bold">
+          {/* Right side with user greeting */}
+          <View className={`items-end p-3 rounded-xl ${isDark ? 'bg-gray-800/30' : 'bg-white/10'}`}>
+            <Text className={`text-xs font-medium ${isDark ? 'text-blue-300' : 'text-blue-100'}`}>
+              Welcome back
+            </Text>
+            <Text className="text-white text-lg font-bold mt-1">
               {currentUser?.username ? `Hi, ${currentUser.username.split(' ')[0]}` : 'Hi, Friend'}
+              <View className="absolute -right-2 -top-1 w-2 h-2 bg-green-400 rounded-full border border-white" />
             </Text>
           </View>
         </View>
+
+        {/* Decorative elements */}
+        <View className="absolute top-0 right-0 w-32 h-32 rounded-full bg-white/5" />
+        <View className="absolute -bottom-10 -left-10 w-24 h-24 rounded-full bg-white/5" />
       </LinearGradient>
     </View>
-  )
-}
+  );
+};
 const TabLayout = () => {
   const { theme } = useSelector((state: any) => state.theme)
   const isDark = theme === 'dark'
@@ -70,13 +89,14 @@ const TabLayout = () => {
             },
             tabBarActiveTintColor: isDark ? '#3b82f6' : '#2563eb',
             tabBarInactiveTintColor: isDark ? '#9ca3af' : '#6b7280',
-            headerShown: false,
+            headerShown: false, // Default to false for all screens
           }}
         >
           <Tabs.Screen
             name="home"
             options={{
               title: 'Home',
+              headerShown: true, // Explicitly set to true only for home
               header: () => <CustomHeader />,
               tabBarIcon: ({ color }) => (
                 <AntDesign name="home" size={24} color={color} />
@@ -84,6 +104,7 @@ const TabLayout = () => {
             }}
           />
 
+          {/* Other screens remain with headerShown: false (inherited from screenOptions) */}
           <Tabs.Screen
             name="community"
             options={{

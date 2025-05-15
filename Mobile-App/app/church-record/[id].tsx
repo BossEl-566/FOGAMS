@@ -19,6 +19,9 @@ interface ChurchRecord {
   sundayOfferingFirstService: number;
   sundayOfferingSecondService: number;
   sundayOfferingThirdService: number;
+  sundayOfferingFirstServiceProject: number;
+  sundayOfferingSecondServiceProject: number;
+  sundayOfferingThirdServiceProject: number;
   childrenServiceOffering: number;
   sundaySchool: number;
   midWeekOffering: number;
@@ -43,22 +46,31 @@ const ViewChurchRecordScreen = () => {
   const accentColor = appTheme === 'dark' ? 'text-blue-400' : 'text-blue-600';
 
   // Calculate totals
-  const totalOffering = (record?.sundayOfferingFirstService || 0) +
-    (record?.sundayOfferingSecondService || 0) +
-    (record?.sundayOfferingThirdService || 0);
+  const calculateTotalOffering = () => {
+    return (record?.sundayOfferingFirstService || 0) +
+      (record?.sundayOfferingSecondService || 0) +
+      (record?.sundayOfferingThirdService || 0) +
+      (record?.sundayOfferingFirstServiceProject || 0) +
+      (record?.sundayOfferingSecondServiceProject || 0) +
+      (record?.sundayOfferingThirdServiceProject || 0);
+  };
 
-  const totalTithe = record?.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0;
+  const calculateTotalTithe = () => {
+    return record?.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0;
+  };
 
-  const overallTotal = (record?.thanksgiving || 0) +
-    (record?.welfare || 0) +
-    (record?.communityImpact || 0) +
-    totalOffering +
-    (record?.childrenServiceOffering || 0) +
-    (record?.sundaySchool || 0) +
-    (record?.midWeekOffering || 0) +
-    (record?.fridayPrayerOffering || 0) +
-    totalTithe +
-    (record?.ifAnySpecialOfferingSpecify?.reduce((sum, event) => sum + (event.amount || 0), 0) || 0);
+  const calculateOverallTotal = () => {
+    return (record?.thanksgiving || 0) +
+      (record?.welfare || 0) +
+      (record?.communityImpact || 0) +
+      calculateTotalOffering() +
+      (record?.childrenServiceOffering || 0) +
+      (record?.sundaySchool || 0) +
+      (record?.midWeekOffering || 0) +
+      (record?.fridayPrayerOffering || 0) +
+      calculateTotalTithe() +
+      (record?.ifAnySpecialOfferingSpecify?.reduce((sum, event) => sum + (event.amount || 0), 0) || 0);
+  };
 
   // Fetch record details
   useEffect(() => {
@@ -116,11 +128,30 @@ const ViewChurchRecordScreen = () => {
               </div>
             </div>
             
-            <!-- Add other sections similarly -->
+            <div class="section">
+              <h2>Tithe and Offerings</h2>
+              ${record ? [
+                { label: 'Sunday Offering (1st Service)', value: record.sundayOfferingFirstService },
+                { label: 'Sunday Offering (2nd Service)', value: record.sundayOfferingSecondService },
+                { label: 'Sunday Offering (3rd Service)', value: record.sundayOfferingThirdService },
+                { label: 'Sunday Offering Project (1st Service)', value: record.sundayOfferingFirstServiceProject },
+                { label: 'Sunday Offering Project (2nd Service)', value: record.sundayOfferingSecondServiceProject },
+                { label: 'Sunday Offering Project (3rd Service)', value: record.sundayOfferingThirdServiceProject },
+                { label: 'Children Service Offering', value: record.childrenServiceOffering },
+                { label: 'Sunday School', value: record.sundaySchool },
+                { label: 'Mid-Week Offering', value: record.midWeekOffering },
+                { label: 'Friday Prayer Offering', value: record.fridayPrayerOffering },
+              ].map(item => `
+                <div class="item">
+                  <span>${item.label}:</span>
+                  <span>GHS ${item.value || 0}</span>
+                </div>
+              `).join('') : ''}
+            </div>
             
             <div class="total">
               <span>Overall Total:</span>
-              <span>GHS ${overallTotal.toFixed(2)}</span>
+              <span>GHS ${calculateOverallTotal().toFixed(2)}</span>
             </div>
           </body>
         </html>
@@ -212,6 +243,9 @@ const ViewChurchRecordScreen = () => {
               { label: 'Sunday Offering (1st Service)', value: record.sundayOfferingFirstService },
               { label: 'Sunday Offering (2nd Service)', value: record.sundayOfferingSecondService },
               { label: 'Sunday Offering (3rd Service)', value: record.sundayOfferingThirdService },
+              { label: 'Sunday Offering Project (1st Service)', value: record.sundayOfferingFirstServiceProject },
+              { label: 'Sunday Offering Project (2nd Service)', value: record.sundayOfferingSecondServiceProject },
+              { label: 'Sunday Offering Project (3rd Service)', value: record.sundayOfferingThirdServiceProject },
               { label: 'Children Service Offering', value: record.childrenServiceOffering },
               { label: 'Sunday School', value: record.sundaySchool },
               { label: 'Mid-Week Offering', value: record.midWeekOffering },
@@ -219,7 +253,7 @@ const ViewChurchRecordScreen = () => {
             ].map((item, index) => (
               <View key={index} className="flex-row justify-between">
                 <Text className={textColor}>{item.label}</Text>
-                <Text className={secondaryTextColor}>GHS {item.value}</Text>
+                <Text className={secondaryTextColor}>GHS {item.value || 0}</Text>
               </View>
             ))}
           </View>
@@ -236,24 +270,26 @@ const ViewChurchRecordScreen = () => {
             ].map((item, index) => (
               <View key={index} className="flex-row justify-between">
                 <Text className={textColor}>{item.label}</Text>
-                <Text className={secondaryTextColor}>GHS {item.value}</Text>
+                <Text className={secondaryTextColor}>GHS {item.value || 0}</Text>
               </View>
             ))}
           </View>
         </View>
 
         {/* Name of Those Who Paid */}
-        <View className={`rounded-xl p-4 ${cardBgColor}`}>
-          <Text className={`text-xl font-semibold ${textColor} mb-4`}>Name of Those Who Paid</Text>
-          <View className="space-y-3">
-            {record.nameOfThoseWhoPaid.map((person, index) => (
-              <View key={index} className="flex-row justify-between">
-                <Text className={textColor}>{person.name}</Text>
-                <Text className={secondaryTextColor}>GHS {person.amount}</Text>
-              </View>
-            ))}
+        {record.nameOfThoseWhoPaid.length > 0 && (
+          <View className={`rounded-xl p-4 ${cardBgColor}`}>
+            <Text className={`text-xl font-semibold ${textColor} mb-4`}>Name of Those Who Paid</Text>
+            <View className="space-y-3">
+              {record.nameOfThoseWhoPaid.map((person, index) => (
+                <View key={index} className="flex-row justify-between">
+                  <Text className={textColor}>{person.name}</Text>
+                  <Text className={secondaryTextColor}>GHS {person.amount || 0}</Text>
+                </View>
+              ))}
+            </View>
           </View>
-        </View>
+        )}
 
         {/* Special Offerings */}
         {record.ifAnySpecialOfferingSpecify.length > 0 && (
@@ -263,7 +299,7 @@ const ViewChurchRecordScreen = () => {
               {record.ifAnySpecialOfferingSpecify.map((event, index) => (
                 <View key={index} className="flex-row justify-between">
                   <Text className={textColor}>{event.event}</Text>
-                  <Text className={secondaryTextColor}>GHS {event.amount}</Text>
+                  <Text className={secondaryTextColor}>GHS {event.amount || 0}</Text>
                 </View>
               ))}
             </View>
@@ -275,16 +311,16 @@ const ViewChurchRecordScreen = () => {
           <Text className={`text-xl font-semibold ${textColor} mb-4`}>Totals</Text>
           <View className="space-y-3">
             <View className="flex-row justify-between">
-              <Text className={textColor}>Total Offering (1st, 2nd, 3rd Services)</Text>
-              <Text className={secondaryTextColor}>GHS {totalOffering}</Text>
+              <Text className={textColor}>Total Offering (All Services)</Text>
+              <Text className={secondaryTextColor}>GHS {calculateTotalOffering()}</Text>
             </View>
             <View className="flex-row justify-between">
               <Text className={textColor}>Total Tithe</Text>
-              <Text className={secondaryTextColor}>GHS {totalTithe}</Text>
+              <Text className={secondaryTextColor}>GHS {calculateTotalTithe()}</Text>
             </View>
             <View className="flex-row justify-between border-t pt-3 border-gray-300">
               <Text className={`text-lg font-bold ${textColor}`}>Overall Total</Text>
-              <Text className={`text-lg font-bold ${accentColor}`}>GHS {overallTotal}</Text>
+              <Text className={`text-lg font-bold ${accentColor}`}>GHS {calculateOverallTotal()}</Text>
             </View>
           </View>
         </View>

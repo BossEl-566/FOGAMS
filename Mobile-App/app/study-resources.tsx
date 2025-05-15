@@ -304,7 +304,7 @@ const ResourcesScreen = () => {
   };
 
   return (
-    <SafeAreaView className={`flex-1 ${colors.background} mt-10`}>
+    <SafeAreaView className={`flex-1 ${colors.background} pt-10`}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       {/* Header */}
       <LinearGradient

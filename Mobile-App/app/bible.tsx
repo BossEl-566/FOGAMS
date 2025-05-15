@@ -196,7 +196,7 @@ const BibleScreen = () => {
       try {
        
         const res = await fetch(
-          `http://192.168.201.105:3000/api/bible?book=${selectedBookApiName}&chapter=${selectedChapter}&verse=${selectedVerse}`
+          `http://${process.env.EXPO_PUBLIC_IP}/api/bible?book=${selectedBookApiName}&chapter=${selectedChapter}&verse=${selectedVerse}`
         );
         const data = await res.json();
         

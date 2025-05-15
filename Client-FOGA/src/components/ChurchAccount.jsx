@@ -27,6 +27,27 @@ export default function ChurchAccount() {
     fetchRecords();
   }, []);
 
+  // Calculate total amount for a record
+  const calculateTotal = (record) => {
+    return (
+      (record?.thanksgiving || 0) +
+      (record?.welfare || 0) +
+      (record?.communityImpact || 0) +
+      (record?.sundayOfferingFirstService || 0) +
+      (record?.sundayOfferingSecondService || 0) +
+      (record?.sundayOfferingThirdService || 0) +
+      (record?.sundayOfferingFirstServiceProject || 0) +
+      (record?.sundayOfferingSecondServiceProject || 0) +
+      (record?.sundayOfferingThirdServiceProject || 0) +
+      (record?.childrenServiceOffering || 0) +
+      (record?.sundaySchool || 0) +
+      (record?.midWeekOffering || 0) +
+      (record?.fridayPrayerOffering || 0) +
+      (record?.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0) +
+      (record?.ifAnySpecialOfferingSpecify?.reduce((sum, event) => sum + (event.amount || 0), 0) || 0)
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6 w-full">
       {/* Header */}
@@ -45,18 +66,18 @@ export default function ChurchAccount() {
                 year: "numeric",
               })}
             </p>
-            
           )}
         </div>
         <Link to="/all-tithes">
-        <Button
+          <Button
             gradientDuoTone="purpleToBlue"
             size="sm"
             outline
             className="mt-2 mr-2"
-          > view all tithes
+          >
+            View all tithes
           </Button>
-          </Link>
+        </Link>
         {/* Add New Record Button */}
         <Link to="/new-church-record">
           <Button gradientDuoTone="purpleToBlue" outline>
@@ -85,21 +106,7 @@ export default function ChurchAccount() {
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Total Amount</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    GHS{" "}
-                    {(
-                      (firstRecord.thanksgiving || 0) +
-                      (firstRecord.welfare || 0) +
-                      (firstRecord.communityImpact || 0) +
-                      (firstRecord.sundayOfferingFirstService || 0) +
-                      (firstRecord.sundayOfferingSecondService || 0) +
-                      (firstRecord.sundayOfferingThirdService || 0) +
-                      (firstRecord.childrenServiceOffering || 0) +
-                      (firstRecord.sundaySchool || 0) +
-                      (firstRecord.midWeekOffering || 0) +
-                      (firstRecord.fridayPrayerOffering || 0) +
-                      (firstRecord.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0) +
-                      (firstRecord.ifAnySpecialOfferingSpecify?.reduce((sum, event) => sum + (event.amount || 0), 0) || 0)
-                    ).toLocaleString()}
+                    GHS {calculateTotal(firstRecord).toLocaleString()}
                   </p>
                 </div>
               </div>
@@ -149,6 +156,18 @@ export default function ChurchAccount() {
                   <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.sundayOfferingThirdService || 0}</p>
                 </div>
                 <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Sunday Offering Project (1st Service)</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.sundayOfferingFirstServiceProject || 0}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Sunday Offering Project (2nd Service)</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.sundayOfferingSecondServiceProject || 0}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-900 dark:text-white">Sunday Offering Project (3rd Service)</p>
+                  <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.sundayOfferingThirdServiceProject || 0}</p>
+                </div>
+                <div className="flex justify-between items-center">
                   <p className="text-gray-900 dark:text-white">Children Service Offering</p>
                   <p className="text-gray-600 dark:text-gray-400">GHS {firstRecord.childrenServiceOffering || 0}</p>
                 </div>
@@ -187,21 +206,7 @@ export default function ChurchAccount() {
                       })}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Total Amount: GHS{" "}
-                      {(
-                        (record.thanksgiving || 0) +
-                        (record.welfare || 0) +
-                        (record.communityImpact || 0) +
-                        (record.sundayOfferingFirstService || 0) +
-                        (record.sundayOfferingSecondService || 0) +
-                        (record.sundayOfferingThirdService || 0) +
-                        (record.childrenServiceOffering || 0) +
-                        (record.sundaySchool || 0) +
-                        (record.midWeekOffering || 0) +
-                        (record.fridayPrayerOffering || 0) +
-                        (record.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0) +
-                        (record.ifAnySpecialOfferingSpecify?.reduce((sum, event) => sum + (event.amount || 0), 0) || 0)
-                      ).toLocaleString()}
+                      Total Amount: GHS {calculateTotal(record).toLocaleString()}
                     </p>
                   </div>
                   <div className="flex space-x-2">
@@ -235,10 +240,9 @@ export default function ChurchAccount() {
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Current Record</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    GHS{" "}
-                    {(
-                      (firstRecord.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0
-                    ).toLocaleString())}
+                    GHS {(
+                      firstRecord.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0
+                    ).toLocaleString()}
                   </p>
                 </div>
               </div>
@@ -248,10 +252,9 @@ export default function ChurchAccount() {
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Previous Record</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    GHS{" "}
-                    {(
-                      (secondRecord.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0
-                    ).toLocaleString())}
+                    GHS {(
+                      secondRecord.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0
+                    ).toLocaleString()}
                   </p>
                 </div>
               </div>
@@ -294,21 +297,7 @@ export default function ChurchAccount() {
                     })}
                   </td>
                   <td className="px-6 py-4">
-                    GHS{" "}
-                    {(
-                      (record.thanksgiving || 0) +
-                      (record.welfare || 0) +
-                      (record.communityImpact || 0) +
-                      (record.sundayOfferingFirstService || 0) +
-                      (record.sundayOfferingSecondService || 0) +
-                      (record.sundayOfferingThirdService || 0) +
-                      (record.childrenServiceOffering || 0) +
-                      (record.sundaySchool || 0) +
-                      (record.midWeekOffering || 0) +
-                      (record.fridayPrayerOffering || 0) +
-                      (record.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0) +
-                      (record.ifAnySpecialOfferingSpecify?.reduce((sum, event) => sum + (event.amount || 0), 0) || 0)
-                    ).toLocaleString()}
+                    GHS {calculateTotal(record).toLocaleString()}
                   </td>
                   <td className="px-6 py-4">
                     <Link

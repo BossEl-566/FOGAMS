@@ -14,7 +14,7 @@ export default function ViewRecord() {
   useEffect(() => {
     const fetchRecord = async () => {
       try {
-        const res = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/church-account/get-church-record/${recordId}`);
+        const res = await fetch(`/api/church-account/get-church-record/${recordId}`);
         if (!res.ok) {
           throw new Error('Failed to fetch record');
         }
@@ -40,26 +40,35 @@ export default function ViewRecord() {
   };
 
   // Calculate totals
-  const totalOffering =
-    (record?.sundayOfferingFirstService || 0) +
-    (record?.sundayOfferingSecondService || 0) +
-    (record?.sundayOfferingThirdService || 0);
+  const calculateTotalOffering = () => {
+    return (
+      (record?.sundayOfferingFirstService || 0) +
+      (record?.sundayOfferingSecondService || 0) +
+      (record?.sundayOfferingThirdService || 0) +
+      (record?.sundayOfferingFirstServiceProject || 0) +
+      (record?.sundayOfferingSecondServiceProject || 0) +
+      (record?.sundayOfferingThirdServiceProject || 0)
+    );
+  };
 
-  const totalTithe = record?.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0;
+  const calculateTotalTithe = () => {
+    return record?.nameOfThoseWhoPaid?.reduce((sum, person) => sum + (person.amount || 0), 0) || 0;
+  };
 
-  const overallTotal =
-    (record?.thanksgiving || 0) +
-    (record?.welfare || 0) +
-    (record?.communityImpact || 0) +
-    (record?.sundayOfferingFirstService || 0) +
-    (record?.sundayOfferingSecondService || 0) +
-    (record?.sundayOfferingThirdService || 0) +
-    (record?.childrenServiceOffering || 0) +
-    (record?.sundaySchool || 0) +
-    (record?.midWeekOffering || 0) +
-    (record?.fridayPrayerOffering || 0) +
-    totalTithe +
-    (record?.ifAnySpecialOfferingSpecify?.reduce((sum, event) => sum + (event.amount || 0), 0) || 0);
+  const calculateOverallTotal = () => {
+    return (
+      (record?.thanksgiving || 0) +
+      (record?.welfare || 0) +
+      (record?.communityImpact || 0) +
+      calculateTotalOffering() +
+      (record?.childrenServiceOffering || 0) +
+      (record?.sundaySchool || 0) +
+      (record?.midWeekOffering || 0) +
+      (record?.fridayPrayerOffering || 0) +
+      calculateTotalTithe() +
+      (record?.ifAnySpecialOfferingSpecify?.reduce((sum, event) => sum + (event.amount || 0), 0) || 0)
+    );
+  };
 
   if (loading) {
     return <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6">Loading...</div>;
@@ -131,6 +140,9 @@ export default function ViewRecord() {
                 { label: 'Sunday Offering (1st Service)', value: record.sundayOfferingFirstService },
                 { label: 'Sunday Offering (2nd Service)', value: record.sundayOfferingSecondService },
                 { label: 'Sunday Offering (3rd Service)', value: record.sundayOfferingThirdService },
+                { label: 'Sunday Offering Project (1st Service)', value: record.sundayOfferingFirstServiceProject },
+                { label: 'Sunday Offering Project (2nd Service)', value: record.sundayOfferingSecondServiceProject },
+                { label: 'Sunday Offering Project (3rd Service)', value: record.sundayOfferingThirdServiceProject },
                 { label: 'Children Service Offering', value: record.childrenServiceOffering },
                 { label: 'Sunday School', value: record.sundaySchool },
                 { label: 'Mid-Week Offering', value: record.midWeekOffering },
@@ -141,7 +153,7 @@ export default function ViewRecord() {
                     {item.label}
                   </p>
                   <p className="text-black dark:text-gray-400 print:text-black print:text-lg">
-                    GHS {item.value}
+                    GHS {item.value || 0}
                   </p>
                 </div>
               ))}
@@ -164,7 +176,7 @@ export default function ViewRecord() {
                     {item.label}
                   </p>
                   <p className="text-black dark:text-gray-400 print:text-black print:text-lg">
-                    GHS {item.value}
+                    GHS {item.value || 0}
                   </p>
                 </div>
               ))}
@@ -172,42 +184,46 @@ export default function ViewRecord() {
           </div>
 
           {/* Name of Those Who Paid */}
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 print:bg-transparent print:dark:bg-transparent">
-            <h2 className="text-xl font-semibold text-black dark:text-white mb-4 print:text-black print:text-2xl">
-              Name of Those Who Paid
-            </h2>
-            <div className="space-y-4">
-              {record.nameOfThoseWhoPaid.map((person, index) => (
-                <div key={index} className="flex justify-between items-center">
-                  <p className="text-black dark:text-white print:text-black print:text-lg">
-                    {person.name}
-                  </p>
-                  <p className="text-black dark:text-gray-400 print:text-black print:text-lg">
-                    GHS {person.amount}
-                  </p>
-                </div>
-              ))}
+          {record.nameOfThoseWhoPaid?.length > 0 && (
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 print:bg-transparent print:dark:bg-transparent">
+              <h2 className="text-xl font-semibold text-black dark:text-white mb-4 print:text-black print:text-2xl">
+                Name of Those Who Paid
+              </h2>
+              <div className="space-y-4">
+                {record.nameOfThoseWhoPaid.map((person, index) => (
+                  <div key={index} className="flex justify-between items-center">
+                    <p className="text-black dark:text-white print:text-black print:text-lg">
+                      {person.name}
+                    </p>
+                    <p className="text-black dark:text-gray-400 print:text-black print:text-lg">
+                      GHS {person.amount || 0}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Special Offerings */}
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 print:bg-transparent print:dark:bg-transparent">
-            <h2 className="text-xl font-semibold text-black dark:text-white mb-4 print:text-black print:text-2xl">
-              Special Offerings
-            </h2>
-            <div className="space-y-4">
-              {record.ifAnySpecialOfferingSpecify.map((event, index) => (
-                <div key={index} className="flex justify-between items-center">
-                  <p className="text-black dark:text-white print:text-black print:text-lg">
-                    {event.event}
-                  </p>
-                  <p className="text-black dark:text-gray-400 print:text-black print:text-lg">
-                    GHS {event.amount}
-                  </p>
-                </div>
-              ))}
+          {record.ifAnySpecialOfferingSpecify?.length > 0 && (
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 print:bg-transparent print:dark:bg-transparent">
+              <h2 className="text-xl font-semibold text-black dark:text-white mb-4 print:text-black print:text-2xl">
+                Special Offerings
+              </h2>
+              <div className="space-y-4">
+                {record.ifAnySpecialOfferingSpecify.map((event, index) => (
+                  <div key={index} className="flex justify-between items-center">
+                    <p className="text-black dark:text-white print:text-black print:text-lg">
+                      {event.event}
+                    </p>
+                    <p className="text-black dark:text-gray-400 print:text-black print:text-lg">
+                      GHS {event.amount || 0}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Totals Section */}
           <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 print:bg-transparent print:dark:bg-transparent">
@@ -216,9 +232,9 @@ export default function ViewRecord() {
             </h2>
             <div className="space-y-4">
               {[
-                { label: 'Total Offering (1st, 2nd, 3rd Services)', value: totalOffering },
-                { label: 'Total Tithe', value: totalTithe },
-                { label: 'Overall Total', value: overallTotal },
+                { label: 'Total Offering (All Services)', value: calculateTotalOffering() },
+                { label: 'Total Tithe', value: calculateTotalTithe() },
+                { label: 'Overall Total', value: calculateOverallTotal() },
               ].map((item, index) => (
                 <div key={index} className="flex justify-between items-center">
                   <p className="text-gray-900 dark:text-white print:text-black print:text-lg">

@@ -17,6 +17,9 @@ interface ChurchRecord {
   sundayOfferingFirstService: number;
   sundayOfferingSecondService: number;
   sundayOfferingThirdService: number;
+  sundayOfferingFirstServiceProject: number;
+  sundayOfferingSecondServiceProject: number;
+  sundayOfferingThirdServiceProject: number;
   childrenServiceOffering: number;
   sundaySchool: number;
   midWeekOffering: number;
@@ -86,6 +89,9 @@ const AccountRecordsScreen = () => {
       (record.sundayOfferingFirstService || 0) +
       (record.sundayOfferingSecondService || 0) +
       (record.sundayOfferingThirdService || 0) +
+      (record.sundayOfferingFirstServiceProject || 0) +
+      (record.sundayOfferingSecondServiceProject || 0) +
+      (record.sundayOfferingThirdServiceProject || 0) +
       (record.childrenServiceOffering || 0) +
       (record.sundaySchool || 0) +
       (record.midWeekOffering || 0) +
@@ -209,6 +215,18 @@ const AccountRecordsScreen = () => {
               <View className="flex-row justify-between">
                 <Text className={textColor}>Sunday Offering (3rd Service)</Text>
                 <Text className={secondaryTextColor}>GHS {firstRecord.sundayOfferingThirdService || 0}</Text>
+              </View>
+              <View className="flex-row justify-between">
+                <Text className={textColor}>Sunday Offering Project (1st Service)</Text>
+                <Text className={secondaryTextColor}>GHS {firstRecord.sundayOfferingFirstServiceProject || 0}</Text>
+              </View>
+              <View className="flex-row justify-between">
+                <Text className={textColor}>Sunday Offering Project (2nd Service)</Text>
+                <Text className={secondaryTextColor}>GHS {firstRecord.sundayOfferingSecondServiceProject || 0}</Text>
+              </View>
+              <View className="flex-row justify-between">
+                <Text className={textColor}>Sunday Offering Project (3rd Service)</Text>
+                <Text className={secondaryTextColor}>GHS {firstRecord.sundayOfferingThirdServiceProject || 0}</Text>
               </View>
               <View className="flex-row justify-between">
                 <Text className={textColor}>Children Service Offering</Text>
