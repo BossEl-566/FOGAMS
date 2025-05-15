@@ -57,6 +57,20 @@ const ChurchAccountForm = () => {
         mode: "",
     });
 
+    useEffect(() => {
+      if(updateTitheId && updateTitheUsername) {
+        setCreateTitheFormData({
+          userID: updateTitheId,
+          username: updateTitheUsername,
+          amount: "",
+          period: "",
+          weekOrMonth: "",
+          paymentForMonth: "",
+          mode: "",
+        });
+      }
+    }, [updateTitheId, updateTitheUsername]);
+
     const addUnsubscribeUser = () => {
         if (name && amount) {
             setFormData((prev) => ({
