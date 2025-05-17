@@ -1,11 +1,12 @@
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl, StatusBar, Image, ActivityIndicator } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AntDesign, MaterialIcons, FontAwesome, Feather, Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import {  Pressable, } from 'react-native';
 import { Link, router, Redirect } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const SkeletonLoader = ({ theme }: { theme: 'light' | 'dark' }) => {
@@ -91,75 +92,80 @@ const DashboardCard = ({
   </TouchableOpacity>
 );
 
-
-
-
 const MemberContent = ({ theme, user, refreshing }: { theme: 'light' | 'dark'; user: any; refreshing: boolean }) => {
   const isDark = theme === 'dark';
-  
-  // Mock data
-  const posts = [
-    { 
-      id: 1, 
-      title: 'Sunday Service', 
-      content: 'Join us this Sunday for a special service at 10 AM',
-      createdAt: "2025-04-05T09:00:00.000Z"
-    },
-    { 
-      id: 2, 
-      title: 'Bible Study', 
-      content: 'Wednesday Bible study at 7 PM in the main hall',
-      createdAt: "2025-04-03T14:30:00.000Z"
-    },
-  ];
-  
-  const announcements = [
-    { 
-      id: 1, 
-      title: 'Food Drive', 
-      content: 'We are collecting non-perishable food items this month to support local families in need.',
-      createdAt: "2025-04-01T10:15:00.000Z"
-    },
-  ];
-  
-  const events = [
-    { 
-      id: 1, 
-      title: 'Easter Celebration', 
-      description: 'A time to celebrate the death and the resurrection of Christ',
-      date: "2025-04-29T05:00:00.000Z",
-      location: "PEDU",
-      imageUrl: "https://images.unsplash.com/photo-1618365908648-e71bd5716cba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-      createdAt: "2025-04-07T02:01:58.950Z"
-    },
-    { 
-      id: 2, 
-      title: 'Youth Camp', 
-      description: 'Annual summer retreat for our youth group',
-      date: '2025-06-15', 
-      endDate: '2025-06-18',
-      location: 'Green Valley Retreat',
-      imageUrl: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
-      createdAt: "2025-03-20T09:45:00.000Z"
-    },
-  ];
+  const [dailyMessage, setDailyMessage] = useState<any>(null);
+  const [announcement, setAnnouncement] = useState<any>(null);
+  const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (refreshing) {
-    return (
-      <View className="flex-1 items-center justify-center py-10 bg-gray-50 dark:bg-gray-900">
-        <ActivityIndicator size="large" color={isDark ? "#3b82f6" : "#2563eb"} />
-        <Text className={`text-lg mt-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-          Refreshing content...
-        </Text>
-      </View>
-    );
-  }
+  const fetchContent = async () => {
+    try {
+      setLoading(true);
+      const token = await AsyncStorage.getItem('token');
+      
+      // Fetch daily bible message (only first one)
+      const messageResponse = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/get-daily-bible-message`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const messageData = await messageResponse.json();
+      if (messageResponse.ok) {
+        setDailyMessage(Array.isArray(messageData.dailyBibleMessage) ? messageData.dailyBibleMessage[0] : messageData.dailyBibleMessage);
+      } else {
+        throw new Error(messageData.message || 'Failed to fetch daily message');
+      }
 
-  interface FormatEventDateProps {
-    dateString: string | null | undefined;
-  }
+      // Fetch announcements (only first one)
+      const announcementResponse = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/announcement/get`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const announcementData = await announcementResponse.json();
+      if (announcementResponse.ok) {
+        setAnnouncement(Array.isArray(announcementData) ? announcementData[0] : announcementData);
+      } else {
+        throw new Error(announcementData.message || 'Failed to fetch announcements');
+      }
 
-  const formatEventDate = ({ dateString }: FormatEventDateProps): string => {
+      // Fetch events (only first one)
+      const eventResponse = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/event/get`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const eventData = await eventResponse.json();
+      if (eventResponse.ok) {
+        setEvent(Array.isArray(eventData.data) ? eventData.data[0] : eventData.data);
+      } else {
+        throw new Error(eventData.message || 'Failed to fetch events');
+      }
+
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to fetch content');
+      Alert.alert('Error', error instanceof Error ? error.message : 'Failed to fetch content');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchContent();
+  }, []);
+
+  useEffect(() => {
+    if (refreshing) {
+      fetchContent();
+    }
+  }, [refreshing]);
+
+  const formatEventDate = (dateString: string | null | undefined): string => {
     if (!dateString) return '';
     
     const date = new Date(dateString);
@@ -171,22 +177,40 @@ const MemberContent = ({ theme, user, refreshing }: { theme: 'light' | 'dark'; u
     });
   };
 
-  interface FormatDateRangeProps {
-    startDate: string | null | undefined;
-    endDate: string | null | undefined;
+  const truncateText = (text: string, maxLength: number = 100): string => {
+    if (!text) return '';
+    return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+  };
+
+  if (refreshing || loading) {
+    return (
+      <View className="flex-1 items-center justify-center py-10 bg-gray-50 dark:bg-gray-900">
+        <ActivityIndicator size="large" color={isDark ? "#3b82f6" : "#2563eb"} />
+        <Text className={`text-lg mt-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+          Loading content...
+        </Text>
+      </View>
+    );
   }
 
-  const formatDateRange = ({ startDate, endDate }: FormatDateRangeProps): string => {
-    if (!startDate || !endDate) return '';
-    
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    
-    if (start.getMonth() === end.getMonth()) {
-      return `${start.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - ${end.getDate()}`;
-    }
-    return `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
-  };
+  if (error) {
+    return (
+      <View className="flex-1 items-center justify-center py-10 bg-gray-50 dark:bg-gray-900">
+        <Text className={`text-lg ${isDark ? 'text-red-400' : 'text-red-600'}`}>
+          {error}
+        </Text>
+        <Pressable
+          onPress={() => {
+            setError(null);
+            fetchContent();
+          }}
+          className={`mt-4 px-4 py-2 rounded-lg ${isDark ? 'bg-blue-600' : 'bg-blue-500'}`}
+        >
+          <Text className="text-white">Retry</Text>
+        </Pressable>
+      </View>
+    );
+  }
 
   return (
     <ScrollView 
@@ -226,111 +250,132 @@ const MemberContent = ({ theme, user, refreshing }: { theme: 'light' | 'dark'; u
         </Text>
       </View>
 
-      {/* Featured Event Banner */}
-      {events.length > 0 && (
-        <View className="px-6 mt-6">
-          <Text className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Featured Event
-          </Text>
-          <Link href={`/events/${String(events[0].id)}`} asChild>
-            <Pressable>
-              <View className="rounded-2xl overflow-hidden">
-                {events[0].imageUrl ? (
-                  <Image 
-                    source={{ uri: events[0].imageUrl }}
-                    className="w-full h-48"
-                    resizeMode="cover"
-                  />
-                ) : (
-                  <View className={`w-full h-48 ${isDark ? 'bg-gray-700' : 'bg-gray-200'} items-center justify-center`}>
-                    <MaterialIcons 
-                      name="event" 
-                      size={48} 
-                      color={isDark ? '#9ca3af' : '#6b7280'} 
-                    />
-                  </View>
-                )}
-                <View className={`absolute bottom-0 left-0 right-0 p-4 ${isDark ? 'bg-gray-900/90' : 'bg-white/90'}`}>
-                  <Text className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {events[0].title}
-                  </Text>
-                  <Text className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'} mt-1`}>
-                    {events[0].endDate 
-                      ? formatDateRange({ startDate: events[0].date, endDate: events[0].endDate })
-                      : formatEventDate({ dateString: events[0].date })
-                    } • {events[0].location}
-                  </Text>
-                </View>
-                <View className={`absolute top-2 right-2 px-2 py-1 rounded-full ${isDark ? 'bg-blue-600/90' : 'bg-blue-500/90'}`}>
-                  <Text className="text-white text-xs font-medium">Upcoming</Text>
-                </View>
-              </View>
-            </Pressable>
-          </Link>
-        </View>
-      )}
+      {/* Daily Bible Message */}
+      {dailyMessage && (
+  <View className="px-6 mt-6">
+    <View className="flex-row justify-between items-center mb-3">
+      <Text className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+        Daily Bible Message
+      </Text>
+      <Link href="/daily-message" asChild>
+        <Pressable>
+          <Text className="text-sm text-purple-500 font-medium">View All</Text>
+        </Pressable>
+      </Link>
+    </View>
 
-      {/* Posts Section */}
-      <View className="px-6 mt-8">
-        <View className="flex-row items-center justify-between mb-4">
-          <Text className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Recent Posts
-          </Text>
-          <Link href="/posts" asChild>
-            <Pressable>
-              <Text className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-600'} font-medium`}>
-                View All
-              </Text>
-            </Pressable>
-          </Link>
-        </View>
-        
-        {posts.map(post => (
-          <Link key={post.id} href={`/posts/${String(post.id)}`} asChild>
-            <Pressable className={`p-5 rounded-xl mb-3 ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-sm`}>
-              <View className="flex-row items-start">
-                <View className={`p-2 rounded-lg ${isDark ? 'bg-blue-900/30' : 'bg-blue-100'} mr-3`}>
-                  <Feather 
-                    name="file-text" 
-                    size={18} 
-                    color={isDark ? '#3b82f6' : '#2563eb'} 
-                  />
-                </View>
-                <View className="flex-1">
-                  <Text className={`font-bold text-lg mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {post.title}
-                  </Text>
-                  <Text className={`${isDark ? 'text-gray-300' : 'text-gray-600'} mb-2`}>
-                    {post.content}
-                  </Text>
-                  <Text className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-                    Posted {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                  </Text>
-                </View>
-              </View>
-            </Pressable>
-          </Link>
-        ))}
-      </View>
+    <Link href={`/daily-message/${dailyMessage._id}`} asChild>
+      <Pressable>
+        <View className="rounded-2xl overflow-hidden">
+          {dailyMessage.imageUrl ? (
+            <Image
+              source={{ uri: dailyMessage.imageUrl }}
+              className="w-full h-48"
+              resizeMode="cover"
+            />
+          ) : (
+            <View className={`w-full h-48 ${isDark ? 'bg-purple-900' : 'bg-purple-100'} items-center justify-center`}>
+              <Feather
+                name="book"
+                size={48}
+                color={isDark ? '#d8b4fe' : '#7e22ce'}
+              />
+            </View>
+          )}
+          <View className={`absolute bottom-0 left-0 right-0 p-4 ${isDark ? 'bg-gray-900/90' : 'bg-white/90'}`}>
+            <Text className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              {dailyMessage.title}
+            </Text>
+            <Text className={`text-sm mt-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              {truncateText(dailyMessage.content, 90)}
+            </Text>
+          </View>
 
-      {/* Announcements Section */}
-      <View className="px-6 mt-8">
-        <View className="flex-row items-center justify-between mb-4">
-          <Text className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Announcements
-          </Text>
-          <Link href="/announcements" asChild>
-            <Pressable>
-              <Text className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-600'} font-medium`}>
-                View All
-              </Text>
-            </Pressable>
-          </Link>
+          <View className={`absolute top-2 right-2 px-2 py-1 rounded-full ${isDark ? 'bg-purple-700/90' : 'bg-purple-600/90'}`}>
+            <Text className="text-white text-xs font-medium">Today</Text>
+          </View>
         </View>
-        
-        {announcements.map(announcement => (
-          <Link key={announcement.id} href={`/announcements/${announcement.id}`} asChild>
-            <Pressable className={`p-5 rounded-xl mb-3 ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-sm border-l-4 ${isDark ? 'border-blue-600' : 'border-blue-500'}`}>
+      </Pressable>
+    </Link>
+  </View>
+)}
+
+
+      {/* Featured Event */}
+      {event && (
+  <View className="px-6 mt-6">
+    {/* Section header with View All */}
+    <View className="flex-row justify-between items-center mb-3">
+      <Text className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+        Featured Event
+      </Text>
+      <Link href="/event" asChild>
+        <Pressable>
+          <Text className="text-sm text-blue-500 font-medium">View All</Text>
+        </Pressable>
+      </Link>
+    </View>
+
+    {/* Single Featured Event Card */}
+    <Link href={`/event/${event._id}`} asChild>
+      <Pressable>
+        <View className="rounded-2xl overflow-hidden">
+          {/* Image or fallback icon */}
+          {event.imageUrl ? (
+            <Image 
+              source={{ uri: event.imageUrl }}
+              className="w-full h-48"
+              resizeMode="cover"
+            />
+          ) : (
+            <View className={`w-full h-48 ${isDark ? 'bg-gray-700' : 'bg-gray-200'} items-center justify-center`}>
+              <MaterialIcons 
+                name="event" 
+                size={48} 
+                color={isDark ? '#9ca3af' : '#6b7280'} 
+              />
+            </View>
+          )}
+
+          {/* Overlay content */}
+          <View className={`absolute bottom-0 left-0 right-0 p-4 ${isDark ? 'bg-gray-900/90' : 'bg-white/90'}`}>
+            <Text className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              {event.title}
+            </Text>
+            <Text className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'} mt-1`}>
+              {formatEventDate(event.date)} • {event.location}
+            </Text>
+          </View>
+
+          {/* Badge */}
+          <View className={`absolute top-2 right-2 px-2 py-1 rounded-full ${isDark ? 'bg-blue-600/90' : 'bg-blue-500/90'}`}>
+            <Text className="text-white text-xs font-medium">Upcoming</Text>
+          </View>
+        </View>
+      </Pressable>
+    </Link>
+  </View>
+)}
+
+
+      {/* Announcement Section */}
+      {announcement && (
+        <View className="px-6 mt-8">
+          <View className="flex-row items-center justify-between mb-4">
+            <Text className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              Latest Announcement
+            </Text>
+            <Link href="/announcements" asChild>
+              <Pressable>
+                <Text className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-600'} font-medium`}>
+                  View All
+                </Text>
+              </Pressable>
+            </Link>
+          </View>
+          
+          <Link key={announcement._id} href={`/announcement/${announcement._id}`} asChild>
+            <Pressable className={`p-5 rounded-xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-sm border-l-4 ${isDark ? 'border-yellow-600' : 'border-yellow-500'}`}>
               <View className="flex-row items-start">
                 <View className={`p-2 rounded-lg ${isDark ? 'bg-yellow-900/30' : 'bg-yellow-100'} mr-3`}>
                   <Feather 
@@ -344,104 +389,32 @@ const MemberContent = ({ theme, user, refreshing }: { theme: 'light' | 'dark'; u
                     {announcement.title}
                   </Text>
                   <Text className={`${isDark ? 'text-gray-300' : 'text-gray-600'} mb-2`}>
-                    {announcement.content}
+                    {truncateText(announcement.description)}
                   </Text>
                   <Text className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-                    Posted {new Date(announcement.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    {formatEventDate(announcement.date)} • Posted by {announcement.username}
                   </Text>
                 </View>
               </View>
-            </Pressable>
-          </Link>
-        ))}
-      </View>
-
-      {/* Upcoming Events Section */}
-      <View className="px-6 mt-8 mb-10">
-        <View className="flex-row items-center justify-between mb-4">
-          <Text className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Upcoming Events
-          </Text>
-          <Link href="/events" asChild>
-            <Pressable>
-              <Text className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-600'} font-medium`}>
-                View All
-              </Text>
             </Pressable>
           </Link>
         </View>
-        
-        {events.map(event => (
-          <Link key={event.id} href={`/events/${event.id}`} asChild>
-            <Pressable className={`p-0 rounded-xl mb-4 overflow-hidden ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
-              {event.imageUrl ? (
-                <Image 
-                  source={{ uri: event.imageUrl }}
-                  className="w-full h-32"
-                  resizeMode="cover"
-                />
-              ) : (
-                <View className={`w-full h-32 ${isDark ? 'bg-gray-700' : 'bg-gray-200'} items-center justify-center`}>
-                  <MaterialIcons 
-                    name="event" 
-                    size={40} 
-                    color={isDark ? '#9ca3af' : '#6b7280'} 
-                  />
-                </View>
-              )}
-              <View className="p-4">
-                <View className="flex-row justify-between items-start">
-                  <View className="flex-1">
-                    <Text className={`font-bold text-lg mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {event.title}
-                    </Text>
-                    <Text className={`${isDark ? 'text-gray-300' : 'text-gray-600'} mb-2`}>
-                      {event.description}
-                    </Text>
-                  </View>
-                  <Pressable 
-                    className={`px-3 py-1 rounded-full ${isDark ? 'bg-blue-600' : 'bg-blue-500'}`}
-                    onPress={(e) => {
-                      e.stopPropagation();
-                      // Handle RSVP logic here
-                    }}
-                  >
-                    <Text className="text-white text-sm font-medium">RSVP</Text>
-                  </Pressable>
-                </View>
-                
-                <View className="flex-row items-center mt-3">
-                  <MaterialIcons 
-                    name="location-on" 
-                    size={16} 
-                    color={isDark ? '#9ca3af' : '#6b7280'} 
-                  />
-                  <Text className={`ml-1 text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                    {event.location}
-                  </Text>
-                  
-                  <MaterialIcons 
-                    name="access-time" 
-                    size={16} 
-                    color={isDark ? '#9ca3af' : '#6b7280'} 
-                    style={{ marginLeft: 12 }}
-                  />
-                  <Text className={`ml-1 text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                    {event.endDate 
-                      ? formatDateRange({ startDate: event.date, endDate: event.endDate })
-                      : formatEventDate({ dateString: event.date })
-                    }
-                  </Text>
-                </View>
-              </View>
-            </Pressable>
-          </Link>
-        ))}
-      </View>
-      
+      )}
+
+      {/* Empty state messages */}
+      {!dailyMessage && !event && !announcement && (
+        <View className="px-6 mt-8">
+          <Text className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-500'} text-center`}>
+            No content available at the moment
+          </Text>
+        </View>
+      )}
     </ScrollView>
   );
 };
+
+
+
 
 
 
@@ -576,11 +549,7 @@ const home = () => {
   const onRefresh = () => {
     setRefreshing(true);
     // Simulate a network request
-    setTimeout(() => {
-      setRefreshing(false);
-      console.log('Refresh complete!');
-      // Here you would typically refetch your data
-    }, 1500);
+    MemberContent({ theme, user: currentUser, refreshing })
   };
  
 

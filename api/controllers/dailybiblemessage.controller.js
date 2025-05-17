@@ -110,3 +110,16 @@ export const updateDailyBibleMessage = async (req, res, next) => {
         next(error); // Pass error to middleware
     }
 };
+
+export const getPaticularDailyBibleMessage = async (req, res, next) => {
+    try {
+        const dailyBibleMessage = await DailyBibleMessage.findById(req.params.dailyBibleMessageId);
+        if (!dailyBibleMessage) {
+            return res.status(404).json({ message: 'Daily Bible Message not found' });
+        }
+        res.status(200).json(dailyBibleMessage);
+    } catch (error) {
+        next(error)
+        
+    }
+};
