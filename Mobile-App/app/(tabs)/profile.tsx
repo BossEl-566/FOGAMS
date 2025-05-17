@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { signoutSuccess } from '../../src/features/users/userSlice';
 import { toggleTheme } from '../../src/features/theme/themeSlice';
 import { AntDesign, Ionicons, Feather } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_900Black, Inter_600SemiBold, Inter_400Regular } from '@expo-google-fonts/inter';
 import { ToastAndroid } from 'react-native';
@@ -16,8 +15,6 @@ const Profile = () => {
   const router = useRouter();
   const { theme } = useSelector((state: any) => state.theme);
   const dispatch = useDispatch();
-  const [image, setImage] = useState(currentUser?.profilePicture || null);
-  const [uploading, setUploading] = useState(false);
   const [showSignOutModal, setShowSignOutModal] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [fontsLoaded] = useFonts({
@@ -46,24 +43,6 @@ const Profile = () => {
     }
   };
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setUploading(true);
-      setImage(result.assets[0].uri);
-      setTimeout(() => {
-        setUploading(false);
-        ToastAndroid.show('Profile picture updated!', ToastAndroid.SHORT);
-      }, 1500);
-    }
-  };
- 
   const handleSignOut = async () => {
     setShowSignOutModal(false);
     try {
@@ -117,23 +96,12 @@ const Profile = () => {
         >
           {/* Header */}
           <View className="items-center pt-12 pb-6 px-6">
-            <TouchableOpacity 
-              onPress={pickImage}
-              className="relative mb-4"
-            >
+            <View className="relative mb-4">
               <Image
-                source={{ uri: image || 'https://via.placeholder.com/150' }}
+                source={{ uri: currentUser?.profilePicture || 'https://via.placeholder.com/150' }}
                 className="w-32 h-32 rounded-full border-4 border-blue-500"
               />
-              {uploading && (
-                <View className="absolute inset-0 bg-black bg-opacity-50 rounded-full items-center justify-center">
-                  <Text className="text-white">Uploading...</Text>
-                </View>
-              )}
-              <View className="absolute bottom-0 right-0 bg-blue-500 p-2 rounded-full">
-                <Feather name="edit-2" size={16} color="white" />
-              </View>
-            </TouchableOpacity>
+            </View>
             
             <Text style={{ fontFamily: 'Inter_900Black' }} className={`text-2xl ${textStyles}`}>
               {currentUser.username}

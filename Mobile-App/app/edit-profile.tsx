@@ -1,14 +1,15 @@
-import { View, Text, TouchableOpacity, Image, ScrollView, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, TextInput, ActivityIndicator, Platform } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateStart, updateSuccess, updateFailure } from '../src/features/users/userSlice';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { ToastAndroid, Platform } from 'react-native';
+import { ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import { ID } from 'react-native-appwrite';
 import { AppwriteClientFactory } from '../appwrite-client';
+import * as FileSystem from 'expo-file-system';
 
 const storage = AppwriteClientFactory.getInstance().storage;
 
@@ -22,7 +23,6 @@ const EditProfile = () => {
   const [imageFileUrl, setImageFileUrl] = useState<string | null>(null);
   const [uploadImageError, setUploadImageError] = useState<string | null>(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
-  const [debugInfo, setDebugInfo] = useState<string>('');
   
   interface FormData {
     username: string;
@@ -58,54 +58,35 @@ const EditProfile = () => {
     asset: ImagePicker.ImagePickerAsset
   ): Promise<{ name: string; type: string; size: number; uri: string }> => {
     try {
-      // Get filename or generate one
-      let fileName = asset.uri.split('/').pop() || `file-${Date.now()}`;
+      const fileInfo = await FileSystem.getInfoAsync(asset.uri);
+      let fileName = asset.uri.split('/').pop() || `file-${Date.now()}.jpg`;
       
       // Normalize extensions
-      if (fileName.endsWith('.jpeg')) {
-        fileName = fileName.replace('.jpeg', '.jpg');
-      }
-
-      // Ensure the file has an extension
-      if (!fileName.includes('.')) {
-        fileName = `${fileName}.jpg`;
-      }
+      fileName = fileName.replace('.jpeg', '.jpg');
 
       const fileExt = fileName.split('.').pop()?.toLowerCase() || 'jpg';
       const mimeType = asset.mimeType || `image/${fileExt === 'jpg' ? 'jpeg' : fileExt}`;
 
       return {
         name: fileName,
-        size: asset.fileSize || 0,
+        size: fileInfo.exists ? fileInfo.size || 0 : 0,
         type: mimeType,
-        uri: Platform.OS === "android" ? asset.uri : asset.uri.replace('file://', ''),
+        uri: asset.uri,
       };
     } catch (error) {
-      const errorMsg = `File preparation failed: ${error}`;
-      setDebugInfo(errorMsg);
-      console.error(errorMsg);
-      return Promise.reject(error);
+      console.error('File preparation error:', error);
+      throw error;
     }
   };
 
   async function uploadImageAsync(asset: ImagePicker.ImagePickerAsset) {
     try {
+      setImageFileUploading(true);
+      setUploadImageError(null);
+      
+      console.log('Starting upload...');
       const fileToUpload = await prepareNativeFile(asset);
-      
-      // Double-check the extension
-      const fileExt = fileToUpload.name.split('.').pop()?.toLowerCase();
-      const allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-      
-      if (!fileExt || !allowedExts.includes(fileExt)) {
-        throw new Error(`Invalid file extension: ${fileExt || 'none'}`);
-      }
-
-      console.log('Uploading file:', {
-        name: fileToUpload.name,
-        type: fileToUpload.type,
-        size: fileToUpload.size,
-        uri: fileToUpload.uri.substring(0, 50) + '...'
-      });
+      console.log('File prepared:', fileToUpload);
 
       const response = await storage.createFile(
         process.env.EXPO_PUBLIC_APPWRITE_BUCKET_ID!,
@@ -113,21 +94,19 @@ const EditProfile = () => {
         fileToUpload
       );
 
-      console.log('Upload response:', response);
-      
+      console.log('Upload completed:', response);
       const fileUrl = storage.getFileView(
         process.env.EXPO_PUBLIC_APPWRITE_BUCKET_ID!,
         response.$id
       );
 
-      setDebugInfo(prev => prev + `\n\n✅ Upload successful! File ID: ${response.$id}`);
       return fileUrl;
     } catch (error: any) {
-      const errorMsg = `❌ Upload failed: ${error.message}\n\n${debugInfo}`;
-      console.error(errorMsg);
-      setDebugInfo(errorMsg);
+      console.error('Upload failed:', error);
       setUploadImageError(error.message);
       throw error;
+    } finally {
+      setImageFileUploading(false);
     }
   }
 
@@ -141,8 +120,6 @@ const EditProfile = () => {
       });
   
       if (!result.canceled && result.assets && result.assets[0].uri) {
-        setImageFileUploading(true);
-        setUploadImageError(null);
         try {
           const fileUrl = await uploadImageAsync(result.assets[0]);
           setImageFileUrl(fileUrl.href);
@@ -150,8 +127,6 @@ const EditProfile = () => {
           ToastAndroid.show('Profile picture uploaded successfully', ToastAndroid.SHORT);
         } catch (error) {
           ToastAndroid.show('Image upload failed', ToastAndroid.SHORT);
-        } finally {
-          setImageFileUploading(false);
         }
       }
     } catch (error) {
@@ -214,80 +189,93 @@ const EditProfile = () => {
   // Theme styles
   const bgColor = theme === 'dark' ? 'bg-gray-900' : 'bg-white';
   const textColor = theme === 'dark' ? 'text-white' : 'text-gray-900';
-  const inputBg = theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100';
+  const inputBg = theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50';
+  const borderColor = theme === 'dark' ? 'border-gray-700' : 'border-gray-200';
+  const buttonBg = theme === 'dark' ? 'bg-indigo-600' : 'bg-indigo-500';
+  const buttonDisabledBg = theme === 'dark' ? 'bg-indigo-800' : 'bg-indigo-300';
 
   return (
-    <View className={`flex-1 ${bgColor}`}>
+    <View className={`flex-1 ${bgColor} pt-10`}>
       <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
       
-      <ScrollView className="flex-1 p-4">
+      <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 24 }}>
+        {/* Header */}
+        <View className={`px-6 pt-6 pb-4 flex-row items-center justify-between border-b ${borderColor}`}>
+          <Text className={`text-2xl font-bold ${textColor}`}>Edit Profile</Text>
+        </View>
+
         {/* Profile Picture */}
-        <View className="items-center my-6">
+        <View className="items-center my-8">
           <TouchableOpacity 
             onPress={handleImageChange}
             disabled={imageFileUploading}
             className="relative"
           >
-            <View className="w-32 h-32 rounded-full border-4 border-gray-200 dark:border-gray-600 overflow-hidden">
+            <View className="w-36 h-36 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
               <Image
                 source={{ uri: imageFileUrl || 'https://via.placeholder.com/150' }}
                 className="w-full h-full"
                 resizeMode="cover"
               />
-              <View className="absolute inset-0 bg-black/30 items-center justify-center opacity-0 hover:opacity-100">
-                <Text className="text-slate-950 font-medium">Change Photo</Text>
-              </View>
+            </View>
+            <View className="absolute bottom-0 right-0 bg-indigo-500 dark:bg-indigo-600 w-10 h-10 rounded-full items-center justify-center shadow-md">
+              <Ionicons 
+                name="camera" 
+                size={20} 
+                color="white" 
+              />
             </View>
           </TouchableOpacity>
           
           {imageFileUploading && (
-            <Text className="mt-2 text-sm text-blue-600">Uploading image...</Text>
+            <View className="mt-4 flex-row items-center space-x-2">
+              <ActivityIndicator size="small" color="#6366f1" />
+              <Text className="text-sm text-indigo-500 dark:text-indigo-400">Uploading image...</Text>
+            </View>
           )}
           {uploadImageError && (
-            <Text className="mt-2 text-sm text-red-600">{uploadImageError}</Text>
+            <Text className="mt-2 text-sm text-red-500 dark:text-red-400">{uploadImageError}</Text>
           )}
-
-          
         </View>
 
         {/* Edit Form */}
-        <View className="space-y-4">
+        <View className="px-6 space-y-6">
           {/* Username */}
           <View>
-            <Text className={`text-sm mb-1 ${textColor}`}>Username</Text>
+            <Text className={`text-sm font-medium mb-2 ${textColor}`}>Username</Text>
             <TextInput
               value={formData.username}
               onChangeText={(text) => handleChange('username', text)}
-              className={`p-3 rounded-lg ${inputBg} ${textColor}`}
-              placeholder="Username"
-              placeholderTextColor={theme === 'dark' ? '#9CA3AF' : '#6B7280'}
+              className={`p-4 rounded-xl ${inputBg} ${textColor} border ${borderColor}`}
+              placeholder="Enter your username"
+              placeholderTextColor={theme === 'dark' ? '#6B7280' : '#9CA3AF'}
             />
           </View>
 
           {/* Email */}
           <View>
-            <Text className={`text-sm mb-1 ${textColor}`}>Email</Text>
+            <Text className={`text-sm font-medium mb-2 ${textColor}`}>Email</Text>
             <TextInput
               value={formData.email}
               onChangeText={(text) => handleChange('email', text)}
-              className={`p-3 rounded-lg ${inputBg} ${textColor}`}
-              placeholder="Email"
+              className={`p-4 rounded-xl ${inputBg} ${textColor} border ${borderColor}`}
+              placeholder="Enter your email"
               keyboardType="email-address"
-              placeholderTextColor={theme === 'dark' ? '#9CA3AF' : '#6B7280'}
+              placeholderTextColor={theme === 'dark' ? '#6B7280' : '#9CA3AF'}
             />
           </View>
 
           {/* Password */}
           <View>
-            <Text className={`text-sm mb-1 ${textColor}`}>Password</Text>
-            <View className={`flex-row items-center p-3 rounded-lg ${inputBg}`}>
+            <Text className={`text-sm font-medium mb-2 ${textColor}`}>Password</Text>
+            <View className={`flex-row items-center p-4 rounded-xl ${inputBg} border ${borderColor}`}>
               <TextInput
                 value={formData.password}
                 onChangeText={(text) => handleChange('password', text)}
                 className={`flex-1 ${textColor}`}
-                placeholder="••••••••"
+                placeholder="Enter new password"
                 secureTextEntry={!showPassword}
-                placeholderTextColor={theme === 'dark' ? '#9CA3AF' : '#6B7280'}
+                placeholderTextColor={theme === 'dark' ? '#6B7280' : '#9CA3AF'}
               />
               <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                 <Ionicons 
@@ -297,22 +285,22 @@ const EditProfile = () => {
                 />
               </TouchableOpacity>
             </View>
-            <Text className={`text-xs mt-1 ${textColor} opacity-70`}>
+            <Text className={`text-xs mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
               Leave blank to keep current password
             </Text>
           </View>
 
           {/* Save Button */}
-          <View className="flex-row justify-end gap-4 pt-4">
+          <View className="pt-4">
             <TouchableOpacity
               onPress={handleSubmit}
               disabled={loading || imageFileUploading}
-              className={`px-6 py-3 rounded-lg ${loading || imageFileUploading ? 'bg-blue-400' : 'bg-blue-500'}`}
+              className={`py-4 rounded-xl ${loading || imageFileUploading ? buttonDisabledBg : buttonBg} items-center justify-center shadow-md`}
             >
               {loading ? (
                 <ActivityIndicator color="white" />
               ) : (
-                <Text className="text-white font-bold">Save Changes</Text>
+                <Text className="text-white font-bold text-lg">Save Changes</Text>
               )}
             </TouchableOpacity>
           </View>

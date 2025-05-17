@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { PieChart, BarChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import React from 'react';
@@ -38,7 +38,6 @@ const PollScreen = () => {
   const [visualData, setVisualData] = useState<Poll[]>([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [pollToDelete, setPollToDelete] = useState<Poll | null>(null);
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const getThemeColors = (): Record<string, string> => {
@@ -112,6 +111,19 @@ const PollScreen = () => {
     const newCandidates = [...candidates];
     newCandidates[index] = value;
     setCandidates(newCandidates);
+  };
+
+  const showDatepicker = () => {
+    DateTimePickerAndroid.open({
+      value: expiresAt ? new Date(expiresAt) : new Date(),
+      onChange: (event, selectedDate) => {
+        if (selectedDate) {
+          setExpiresAt(selectedDate.toISOString());
+        }
+      },
+      mode: 'datetime',
+      minimumDate: new Date(),
+    });
   };
 
   const handleCreatePoll = async () => {
@@ -325,26 +337,13 @@ const PollScreen = () => {
 
             <Text className={`text-sm font-medium ${colors.text} mb-2`}>Expiration Date</Text>
             <TouchableOpacity
-              onPress={() => setShowDatePicker(true)}
+              onPress={showDatepicker}
               className={`${colors.input} p-3 rounded-lg mb-4`}
             >
-              <Text className={colors.text}>{expiresAt || 'Select expiration date'}</Text>
+              <Text className={colors.text}>
+                {expiresAt ? new Date(expiresAt).toLocaleString() : 'Select expiration date'}
+              </Text>
             </TouchableOpacity>
-
-            {showDatePicker && (
-              <DateTimePicker
-                value={expiresAt ? new Date(expiresAt) : new Date()}
-                mode="datetime"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  setShowDatePicker(false);
-                  if (selectedDate) {
-                    setExpiresAt(selectedDate.toISOString());
-                  }
-                }}
-                minimumDate={new Date()}
-              />
-            )}
 
             <TouchableOpacity
               onPress={handleCreatePoll}

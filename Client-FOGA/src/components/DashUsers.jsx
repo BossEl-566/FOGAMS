@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { FaCheck, FaTimes, FaSearch, FaUserEdit, FaTrash } from 'react-icons/fa';
+import { FaCheck, FaTimes, FaSearch, FaUserEdit, FaTrash, FaKey } from 'react-icons/fa';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { toast } from 'react-hot-toast';
 import { Modal, Button, Badge, Card, Avatar } from 'flowbite-react';
@@ -11,8 +11,10 @@ export default function MembersDashboard() {
   const [members, setMembers] = useState([]);
   const [users, setUsers] = useState([]);
   const [showMore, setShowMore] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState('');
+  const [userToReset, setUserToReset] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -85,7 +87,7 @@ export default function MembersDashboard() {
       const data = await res.json();
       if (res.ok) {
         setMembers(prev => prev.filter(member => member.userId !== userIdToDelete));
-        setShowModal(false);
+        setShowDeleteModal(false);
         toast.success("User deleted successfully!");
       } else {
         toast.error(data.message || "Failed to delete user.");
@@ -93,6 +95,34 @@ export default function MembersDashboard() {
       }
     } catch (error) {
       toast.error("Error deleting user!");
+      console.error(error.message);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!currentUser.isAdmin || !userToReset) return;
+
+    try {
+      const res = await fetch(`/api/user/update/${userToReset._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          password: userToReset.email
+        })
+      });
+      
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(`Password reset successfully! New password is ${userToReset.email}`);
+        setShowResetModal(false);
+        setUserToReset(null);
+      } else {
+        toast.error(data.message || "Failed to reset password.");
+      }
+    } catch (error) {
+      toast.error("Error resetting password!");
       console.error(error.message);
     }
   };
@@ -171,15 +201,26 @@ export default function MembersDashboard() {
                 </div>
 
                 <div className="flex gap-3 mt-4">
-                  <Button outline gradientDuoTone="purpleToBlue" size="sm">
-                    <FaUserEdit className="mr-2" /> Edit
+                  <Button
+                    outline
+                    gradientDuoTone="cyanToBlue"
+                    size="sm"
+                    onClick={() => {
+                      const user = users.find(u => u._id === member.userId);
+                      if (user) {
+                        setUserToReset(user);
+                        setShowResetModal(true);
+                      }
+                    }}
+                  >
+                    <FaKey className="mr-2" /> Reset PW
                   </Button>
                   <Button
                     outline
                     gradientDuoTone="pinkToOrange"
                     size="sm"
                     onClick={() => {
-                      setShowModal(true);
+                      setShowDeleteModal(true);
                       setUserIdToDelete(member.userId);
                     }}
                   >
@@ -206,7 +247,8 @@ export default function MembersDashboard() {
         </div>
       )}
 
-      <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">
+      {/* Delete Confirmation Modal */}
+      <Modal show={showDeleteModal} onClose={() => setShowDeleteModal(false)} popup size="md">
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
@@ -218,7 +260,36 @@ export default function MembersDashboard() {
               <Button color="failure" onClick={handleDeleteUser}>
                 Yes, I'm sure
               </Button>
-              <Button color="gray" onClick={() => setShowModal(false)}>
+              <Button color="gray" onClick={() => setShowDeleteModal(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      {/* Password Reset Confirmation Modal */}
+      <Modal show={showResetModal} onClose={() => setShowResetModal(false)} popup size="md">
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <div className="mx-auto mb-4 h-14 w-14 text-blue-500">
+              <FaKey className="h-full w-full" />
+            </div>
+            <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
+              Reset Password
+            </h3>
+            <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">
+              Are you sure you want to reset password for {userToReset?.username}?
+            </p>
+            <p className="mb-5 text-xs text-gray-500 dark:text-gray-400">
+              Password will be reset to the user's email: {userToReset?.email}
+            </p>
+            <div className="flex justify-center gap-4">
+              <Button color="blue" onClick={handleResetPassword}>
+                Yes, Reset
+              </Button>
+              <Button color="gray" onClick={() => setShowResetModal(false)}>
                 Cancel
               </Button>
             </div>
