@@ -257,7 +257,7 @@ const MemberContent = ({ theme, user, refreshing }: { theme: 'light' | 'dark'; u
       <Text className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
         Daily Bible Message
       </Text>
-      <Link href="/daily-message" asChild>
+      <Link href="/dailymessage" asChild>
         <Pressable>
           <Text className="text-sm text-purple-500 font-medium">View All</Text>
         </Pressable>
@@ -309,7 +309,7 @@ const MemberContent = ({ theme, user, refreshing }: { theme: 'light' | 'dark'; u
       <Text className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
         Featured Event
       </Text>
-      <Link href="/event" asChild>
+      <Link href="/events" asChild>
         <Pressable>
           <Text className="text-sm text-blue-500 font-medium">View All</Text>
         </Pressable>

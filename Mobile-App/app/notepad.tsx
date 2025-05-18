@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { AntDesign, Feather, FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { router } from 'expo-router';
 
 const NotepadScreen = () => {
   const { currentUser } = useSelector((state: any) => state.user);
@@ -192,7 +193,7 @@ const NotepadScreen = () => {
             
             <TouchableOpacity
               className={`ml-2 p-2 rounded-lg ${colors.button}`}
-              onPress={() => console.log('Create new note')}
+              onPress={() => router.push('/createnote')}
             >
               <Feather name="plus" size={20} color="white" />
             </TouchableOpacity>

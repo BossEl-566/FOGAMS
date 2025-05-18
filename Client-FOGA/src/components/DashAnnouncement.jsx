@@ -210,9 +210,11 @@ export default function DashAnnouncement() {
 
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Announcements</h1>
+        {currentUser.isAdmin && (
         <Link to="/announcement/create">
           <Button gradientDuoTone="purpleToBlue">+ New Announcement</Button>
         </Link>
+        )}
       </div>
 
       {Object.entries(groupedAnnouncements).length === 0 ? (
