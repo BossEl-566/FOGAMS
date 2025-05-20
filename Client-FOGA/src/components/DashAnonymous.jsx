@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 export default function DashAnonymous() {
   const { currentUser } = useSelector((state) => state.user);
   const [message, setMessage] = useState('');
+  const [showUsername, setShowUsername] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,13 +41,20 @@ export default function DashAnonymous() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ 
+          message,
+          username: currentUser.username,
+          isShowUsername: showUsername 
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to send message');
       
-      toast.success('Message sent anonymously!');
+      toast.success(showUsername 
+        ? 'Message sent with your username!' 
+        : 'Message sent anonymously!');
       setMessage('');
+      setShowUsername(false);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -55,7 +63,6 @@ export default function DashAnonymous() {
   };
 
   const handleDeleteMessage = async (messageId) => {
-    
     try {
       setIsDeleting(true);
       const response = await fetch(`/api/anonymous/delete/${messageId}`, {
@@ -83,10 +90,12 @@ export default function DashAnonymous() {
             <div className="p-8">
               <div className="text-center mb-8">
                 <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
-                  Send Anonymous Message
+                  {showUsername ? 'Confidential Message' : 'Anonymous Message'}
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300 mt-2">
-                  Share your thoughts confidentially with church leadership
+                  {showUsername 
+                    ? 'Your message will include your username' 
+                    : 'Your identity will not be shared'}
                 </p>
               </div>
 
@@ -106,6 +115,19 @@ export default function DashAnonymous() {
                   />
                 </div>
 
+                <div className="flex items-center mb-6">
+                  <input
+                    id="show-username"
+                    type="checkbox"
+                    checked={showUsername}
+                    onChange={(e) => setShowUsername(e.target.checked)}
+                    className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label htmlFor="show-username" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                    Show my username to pastor
+                  </label>
+                </div>
+
                 <button
                   type="submit"
                   disabled={isSubmitting || !message.trim()}
@@ -120,13 +142,15 @@ export default function DashAnonymous() {
                       Sending...
                     </span>
                   ) : (
-                    'Send Anonymously'
+                    showUsername ? 'Send with My Name' : 'Send Anonymously'
                   )}
                 </button>
               </form>
 
               <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                <p>Your identity will not be recorded with this message</p>
+                <p>{showUsername 
+                  ? 'Pastor will see your username with this message' 
+                  : 'Your identity will remain confidential'}</p>
               </div>
             </div>
           </div>
@@ -173,9 +197,11 @@ export default function DashAnonymous() {
                       <span className="text-xs text-indigo-600 dark:text-indigo-400">
                         {new Date(msg.createdAt).toLocaleDateString()}
                       </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
+                      {msg.isShowUsername && (
+                        <span className="text-xs px-2 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 rounded-full">
+                          {msg.username}
+                        </span>
+                      )}
                     </div>
                     <p className="text-gray-800 dark:text-gray-200 line-clamp-3">
                       {msg.message}
@@ -209,11 +235,22 @@ export default function DashAnonymous() {
                     </span>
                   </div>
                   
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
                     <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">
                       {selectedMessage.message}
                     </p>
                   </div>
+
+                  {selectedMessage.isShowUsername && (
+                    <div className="mb-6 p-4 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg">
+                      <h3 className="text-sm font-medium text-indigo-800 dark:text-indigo-200 mb-1">
+                        Member who sent this message:
+                      </h3>
+                      <p className="text-indigo-600 dark:text-indigo-300 font-medium">
+                        {selectedMessage.username}
+                      </p>
+                    </div>
+                  )}
 
                   <div className="mt-6 flex justify-end gap-3">
                     <button

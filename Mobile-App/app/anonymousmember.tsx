@@ -1,12 +1,16 @@
-import { View, ScrollView, TextInput, TouchableOpacity, ActivityIndicator, Text, Alert } from 'react-native';
+import { View, ScrollView, TextInput, TouchableOpacity, ActivityIndicator, Text, Alert, Switch } from 'react-native';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 
 const AnonymousMessageScreen = () => {
-  const { theme } = useSelector((state: any) => state.theme);
+  const { theme, currentUser } = useSelector((state: any) => ({
+    theme: state.theme.theme,
+    currentUser: state.user.currentUser
+  }));
   const [message, setMessage] = useState('');
+  const [showUsername, setShowUsername] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getThemeColors = () => {
@@ -20,6 +24,8 @@ const AnonymousMessageScreen = () => {
       button: theme === 'dark' ? 'bg-blue-700' : 'bg-blue-600',
       buttonText: 'text-white',
       border: theme === 'dark' ? 'border-gray-600' : 'border-gray-300',
+      switchTrack: theme === 'dark' ? '#4b5563' : '#d1d5db',
+      switchThumb: theme === 'dark' ? '#1e40af' : '#2563eb',
     };
   };
 
@@ -41,7 +47,11 @@ const AnonymousMessageScreen = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ 
+          message,
+          username: currentUser.username,
+          isShowUsername: showUsername
+        }),
       });
 
       const data = await response.json();
@@ -50,8 +60,14 @@ const AnonymousMessageScreen = () => {
         throw new Error(data.message || 'Failed to send message');
       }
 
-      Alert.alert('Success', 'Your anonymous message has been sent');
+      Alert.alert(
+        'Success', 
+        showUsername 
+          ? 'Your message has been sent with your username' 
+          : 'Your anonymous message has been sent'
+      );
       setMessage('');
+      setShowUsername(false);
     } catch (error) {
       console.error('Error sending message:', error);
       Alert.alert(
@@ -70,10 +86,12 @@ const AnonymousMessageScreen = () => {
           <View className={`${colors.card} rounded-2xl shadow-md overflow-hidden p-6`}>
             <View className="items-center mb-6">
               <Text className={`text-2xl font-bold ${colors.text} mb-1`}>
-                Send Anonymous Message
+                {showUsername ? 'Confidential Message' : 'Anonymous Message'}
               </Text>
-              <Text className={`text-sm ${colors.secondaryText}`}>
-                Share your thoughts confidentially with church leadership
+              <Text className={`text-sm ${colors.secondaryText} text-center`}>
+                {showUsername 
+                  ? 'Your message will include your username' 
+                  : 'Your identity will not be shared'}
               </Text>
             </View>
 
@@ -84,9 +102,21 @@ const AnonymousMessageScreen = () => {
               onChangeText={setMessage}
               multiline
               numberOfLines={5}
-              className={`${colors.input} ${colors.text} rounded-lg p-4 border ${colors.border} mb-6 min-h-[120px]`}
+              className={`${colors.input} ${colors.text} rounded-lg p-4 border ${colors.border} mb-4 min-h-[120px]`}
               textAlignVertical="top"
             />
+
+            <View className={`flex-row items-center justify-between p-3 rounded-lg ${colors.input} mb-6`}>
+              <Text className={`${colors.text}`}>
+                Show my username to pastor
+              </Text>
+              <Switch
+                value={showUsername}
+                onValueChange={setShowUsername}
+                trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
+                thumbColor={showUsername ? colors.switchThumb : '#f3f4f6'}
+              />
+            </View>
 
             <TouchableOpacity
               onPress={handleSubmit}
@@ -99,14 +129,16 @@ const AnonymousMessageScreen = () => {
                 <ActivityIndicator color="white" />
               ) : (
                 <Text className={`${colors.buttonText} font-medium`}>
-                  Send Anonymously
+                  {showUsername ? 'Send with My Name' : 'Send Anonymously'}
                 </Text>
               )}
             </TouchableOpacity>
 
             <View className="mt-4 items-center">
-              <Text className={`text-xs ${colors.secondaryText}`}>
-                Your identity will not be recorded with this message
+              <Text className={`text-xs ${colors.secondaryText} text-center`}>
+                {showUsername 
+                  ? 'Pastor will see your username with this message' 
+                  : 'Your identity will remain confidential'}
               </Text>
             </View>
           </View>

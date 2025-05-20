@@ -8,6 +8,8 @@ import React from 'react';
 type AnonymousMessage = {
   _id: string;
   message: string;
+  username?: string;
+  isShowUsername: boolean;
   createdAt: string;
 };
 
@@ -30,6 +32,8 @@ const AnonymousPastorScreen = () => {
       danger: theme === 'dark' ? 'bg-red-700' : 'bg-red-600',
       border: theme === 'dark' ? 'border-gray-600' : 'border-gray-300',
       accent: theme === 'dark' ? 'text-blue-400' : 'text-blue-600',
+      usernameBg: theme === 'dark' ? 'bg-blue-900' : 'bg-blue-100',
+      usernameText: theme === 'dark' ? 'text-blue-200' : 'text-blue-800',
     };
   };
 
@@ -71,7 +75,7 @@ const AnonymousPastorScreen = () => {
     setIsDeleting(true);
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://192.168.148.105:3000/api/anonymous/delete/${messageId}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/anonymous/delete/${messageId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -158,9 +162,13 @@ const AnonymousPastorScreen = () => {
                     <Text className={`text-xs ${colors.accent}`}>
                       {formatDate(msg.createdAt).split(',')[0]}
                     </Text>
-                    <Text className={`text-xs ${colors.secondaryText}`}>
-                      {formatDate(msg.createdAt).split(',')[1]}
-                    </Text>
+                    {msg.isShowUsername && msg.username && (
+                      <View className={`px-2 py-1 rounded-full ${colors.usernameBg}`}>
+                        <Text className={`text-xs ${colors.usernameText}`}>
+                          {msg.username}
+                        </Text>
+                      </View>
+                    )}
                   </View>
                   <Text 
                     className={`${colors.text}`}
@@ -193,11 +201,22 @@ const AnonymousPastorScreen = () => {
                   Received: {formatDate(selectedMessage.createdAt)}
                 </Text>
 
-                <View className={`${colors.input} rounded-lg p-4 mb-6`}>
+                <View className={`${colors.input} rounded-lg p-4 mb-4`}>
                   <Text className={`${colors.text}`}>
                     {selectedMessage.message}
                   </Text>
                 </View>
+
+                {selectedMessage.isShowUsername && selectedMessage.username && (
+                  <View className={`${colors.usernameBg} rounded-lg p-4 mb-6`}>
+                    <Text className={`text-sm ${colors.usernameText} mb-1`}>
+                      Member who sent this message:
+                    </Text>
+                    <Text className={`font-medium ${colors.usernameText}`}>
+                      {selectedMessage.username}
+                    </Text>
+                  </View>
+                )}
 
                 <TouchableOpacity
                   onPress={() => handleDeleteMessage(selectedMessage._id)}

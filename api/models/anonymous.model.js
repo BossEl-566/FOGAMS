@@ -6,6 +6,14 @@ const anonymousSchema = new mongoose.Schema(
         type: String,
         required: true,
         },
+        username: {
+        type: String,
+        required: true,
+        },
+        isShowUsername: {
+        type: Boolean,
+        default: false,
+        },
     },
     { timestamps: true }
     );

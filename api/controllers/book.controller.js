@@ -69,6 +69,10 @@ export const bookAppointment = async (req, res, next) => {
     if (!timeSlot) {
       return res.status(404).json({ message: 'Time slot not found' });
     }
+    // Check if the time slot is already booked
+    if (timeSlot.bookedBy.length >= 1) {
+      return res.status(400).json({ message: 'Time slot is already booked' });
+    }
 
     // Check if already booked
     if (timeSlot.bookedBy.some(booking => booking.userId === userId)) {

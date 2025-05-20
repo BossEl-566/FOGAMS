@@ -10,10 +10,10 @@ export const createMessage = async (req, res, next) => {
         return next(errorHandler(400, "Message is required"));
     }
 
-    const { message } = req.body;
+    const { message, username, isShowUsername  } = req.body;
 
     try {
-        const anonymousMessage = new Anonymous({ message });
+        const anonymousMessage = new Anonymous({ message, username, isShowUsername });
         await anonymousMessage.save();
         res.status(201).json(anonymousMessage);
     } catch (error) {

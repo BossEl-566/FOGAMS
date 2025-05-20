@@ -36,6 +36,8 @@ const BookTimeScreen = () => {
   const [bookingId, setBookingId] = useState('');
   const [viewingBookedMembers, setViewingBookedMembers] = useState<{username: string}[] | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState<{slotId: string, bookingId: string} | null>(null);
 
   const getThemeColors = () => {
     return {
@@ -141,21 +143,31 @@ const BookTimeScreen = () => {
     }
   };
 
-  const handleBookSlot = async (slotId: string, bookingId: string) => {
+  const handleBookingConfirmation = (slotId: string, bookingId: string) => {
+    setSelectedSlot({ slotId, bookingId });
+    setShowConfirmationModal(true);
+  };
+
+  const handleBookSlot = async () => {
+    if (!selectedSlot) return;
+    
     try {
       setIsLoading(true);
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/book/book-appointment/${bookingId}/${slotId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          userId: currentUser._id,
-          username: currentUser.username
-        }),
-      });
+      const response = await fetch(
+        `http://${process.env.EXPO_PUBLIC_IP}/api/book/book-appointment/${selectedSlot.bookingId}/${selectedSlot.slotId}`, 
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            userId: currentUser._id,
+            username: currentUser.username
+          }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -168,17 +180,25 @@ const BookTimeScreen = () => {
       Alert.alert('Error', error instanceof Error ? error.message : 'Failed to book appointment');
     } finally {
       setIsLoading(false);
+      setShowConfirmationModal(false);
+      setSelectedSlot(null);
     }
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
     });
+  };
+
+  const formatTime = (timeString: string) => {
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours);
+    return `${hour > 12 ? hour - 12 : hour}:${minutes} ${hour >= 12 ? 'PM' : 'AM'}`;
   };
 
   const fetchBookedMembers = async (slotId: string) => {
@@ -199,29 +219,48 @@ const BookTimeScreen = () => {
   };
 
   const handleDeleteSlot = async (slotId: string, bookingId: string) => {
-    try {
-      setIsLoading(true);
-      const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/book/delete/${bookingId}/${slotId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+    Alert.alert(
+      'Confirm Delete',
+      'Are you sure you want to delete this time slot?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
         },
-      });
+        {
+          text: 'Delete',
+          onPress: async () => {
+            try {
+              setIsLoading(true);
+              const token = await AsyncStorage.getItem('token');
+              const response = await fetch(
+                `http://${process.env.EXPO_PUBLIC_IP}/api/book/delete/${bookingId}/${slotId}`, 
+                {
+                  method: 'DELETE',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to delete time slot');
-      }
+              if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to delete time slot');
+              }
 
-      Alert.alert('Success', 'Time slot deleted successfully!');
-      fetchBookings();
-    } catch (error) {
-      Alert.alert('Error', error instanceof Error ? error.message : 'Failed to delete time slot');
-    } finally {
-      setIsLoading(false);
-    }
+              Alert.alert('Success', 'Time slot deleted successfully!');
+              fetchBookings();
+            } catch (error) {
+              Alert.alert('Error', error instanceof Error ? error.message : 'Failed to delete time slot');
+            } finally {
+              setIsLoading(false);
+            }
+          },
+          style: 'destructive',
+        },
+      ]
+    );
   };
 
   const availableSlots = bookings.flatMap(booking => 
@@ -241,10 +280,10 @@ const BookTimeScreen = () => {
   if (currentUser.isPastor) {
     return (
       <View className={`flex-1 ${colors.background} p-4`}>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps="handled">
           <Text className={`text-2xl font-bold ${colors.text} mb-6`}>Create Available Time Slots</Text>
           
-          <View className={`${colors.card} rounded-xl p-6 mb-6`}>
+          <View className={`${colors.card} rounded-xl p-4 mb-6`}>
             <Text className={`text-sm font-medium ${colors.text} mb-2`}>Select Date</Text>
             <TouchableOpacity
               onPress={() => setShowDatePicker(true)}
@@ -274,18 +313,20 @@ const BookTimeScreen = () => {
               <View key={index} className="flex-row items-center mb-3">
                 <View className="flex-1 flex-row gap-2">
                   <TextInput
-                    placeholder="Start time"
+                    placeholder="HH:MM"
                     placeholderTextColor={theme === 'dark' ? '#9ca3af' : '#6b7280'}
                     value={slot.start}
                     onChangeText={(text) => handleTimeChange(index, 'start', text)}
                     className={`${colors.input} flex-1 p-2 rounded-md ${colors.text}`}
+                    keyboardType="numbers-and-punctuation"
                   />
                   <TextInput
-                    placeholder="End time"
+                    placeholder="HH:MM"
                     placeholderTextColor={theme === 'dark' ? '#9ca3af' : '#6b7280'}
                     value={slot.end}
                     onChangeText={(text) => handleTimeChange(index, 'end', text)}
                     className={`${colors.input} flex-1 p-2 rounded-md ${colors.text}`}
+                    keyboardType="numbers-and-punctuation"
                   />
                 </View>
                 <TouchableOpacity
@@ -304,7 +345,7 @@ const BookTimeScreen = () => {
 
             <TouchableOpacity
               onPress={handleAddTimeSlot}
-              className="flex-row items-center mt-2"
+              className="flex-row items-center mt-2 mb-4"
             >
               <AntDesign
                 name="pluscircleo"
@@ -318,7 +359,7 @@ const BookTimeScreen = () => {
             <TouchableOpacity
               onPress={handleSubmit}
               disabled={isSubmitting}
-              className={`${colors.button} p-3 rounded-lg mt-4 items-center`}
+              className={`${colors.button} p-3 rounded-lg items-center`}
             >
               {isSubmitting ? (
                 <ActivityIndicator color="white" />
@@ -343,37 +384,42 @@ const BookTimeScreen = () => {
                       {formatDate(slot.date)}
                     </Text>
                     <View className="gap-2">
-                      {slot.timeSlots.map((timeSlot) => (
-                        <View key={timeSlot._id} className={`${colors.input} rounded-lg p-3`}>
-                          <View className="flex-row justify-between items-center">
-                            <Text className={`font-medium ${colors.text}`}>
-                              {timeSlot.startTime} - {timeSlot.endTime}
-                            </Text>
-                            <View className="flex-row items-center gap-2">
-                              <Text className={`text-sm ${colors.secondaryText}`}>
-                                {timeSlot.bookedBy.length} booked
+                      {slot.timeSlots.map((timeSlot) => {
+                        const userBooked = timeSlot.bookedBy.some(b => b.userId === currentUser._id);
+                        const isBooked = timeSlot.bookedBy.length > 0;
+                        
+                        return (
+                          <View key={timeSlot._id} className={`${colors.input} rounded-lg p-3`}>
+                            <View className="flex-row justify-between items-center">
+                              <Text className={`font-medium ${colors.text}`}>
+                                {formatTime(timeSlot.startTime)} - {formatTime(timeSlot.endTime)}
                               </Text>
-                              {timeSlot.bookedBy.length > 0 && (
+                              <View className="flex-row items-center gap-2">
+                                <Text className={`text-xs ${colors.secondaryText}`}>
+                                  {timeSlot.bookedBy.length} booked
+                                </Text>
+                                {timeSlot.bookedBy.length > 0 && (
+                                  <TouchableOpacity
+                                    onPress={() => fetchBookedMembers(timeSlot._id)}
+                                  >
+                                    <Text className={`text-xs ${colors.accent}`}>View</Text>
+                                  </TouchableOpacity>
+                                )}
                                 <TouchableOpacity
-                                  onPress={() => fetchBookedMembers(timeSlot._id)}
+                                  onPress={() => handleDeleteSlot(timeSlot._id, booking._id)}
+                                  disabled={isLoading}
                                 >
-                                  <Text className={`text-sm ${colors.accent}`}>View names</Text>
+                                  <AntDesign
+                                    name="delete"
+                                    size={16}
+                                    color={theme === 'dark' ? '#ef4444' : '#dc2626'}
+                                  />
                                 </TouchableOpacity>
-                              )}
-                              <TouchableOpacity
-                                onPress={() => handleDeleteSlot(timeSlot._id, booking._id)}
-                                disabled={isLoading}
-                              >
-                                <AntDesign
-                                  name="delete"
-                                  size={16}
-                                  color={theme === 'dark' ? '#ef4444' : '#dc2626'}
-                                />
-                              </TouchableOpacity>
+                              </View>
                             </View>
                           </View>
-                        </View>
-                      ))}
+                        );
+                      })}
                     </View>
                   </View>
                 ))
@@ -385,12 +431,12 @@ const BookTimeScreen = () => {
         <Modal
           visible={viewingBookedMembers !== null}
           transparent={true}
-          animationType="slide"
+          animationType="fade"
           onRequestClose={() => setViewingBookedMembers(null)}
         >
           <View className="flex-1 justify-center items-center bg-black/50 p-4">
-            <View className={`${colors.card} rounded-xl p-6 w-full max-w-md`}>
-              <View className="flex-row justify-between items-center mb-4">
+            <View className={`${colors.card} rounded-xl p-4 w-full max-w-sm`}>
+              <View className="flex-row justify-between items-center mb-3">
                 <Text className={`text-lg font-bold ${colors.text}`}>Booked Members</Text>
                 <TouchableOpacity onPress={() => setViewingBookedMembers(null)}>
                   <Feather
@@ -401,17 +447,19 @@ const BookTimeScreen = () => {
                 </TouchableOpacity>
               </View>
               
-              {viewingBookedMembers && viewingBookedMembers.length > 0 ? (
-                <View className="gap-2">
-                  {viewingBookedMembers.map((member, index) => (
-                    <View key={index} className={`${colors.input} p-3 rounded-lg`}>
-                      <Text className={colors.text}>{member.username}</Text>
-                    </View>
-                  ))}
-                </View>
-              ) : (
-                <Text className={`${colors.secondaryText} text-center py-4`}>No members booked yet</Text>
-              )}
+              <ScrollView className="max-h-64">
+                {viewingBookedMembers && viewingBookedMembers.length > 0 ? (
+                  <View className="gap-2">
+                    {viewingBookedMembers.map((member, index) => (
+                      <View key={index} className={`${colors.input} p-3 rounded-lg`}>
+                        <Text className={colors.text}>{member.username}</Text>
+                      </View>
+                    ))}
+                  </View>
+                ) : (
+                  <Text className={`${colors.secondaryText} text-center py-4`}>No members booked yet</Text>
+                )}
+              </ScrollView>
             </View>
           </View>
         </Modal>
@@ -422,25 +470,27 @@ const BookTimeScreen = () => {
   // Member view
   return (
     <View className={`flex-1 ${colors.background} p-4`}>
-      <ScrollView>
-        <Text className={`text-2xl font-bold ${colors.text} mb-6`}>Pastor's Availability</Text>
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <Text className={`text-2xl font-bold ${colors.text} mb-4`}>Pastor's Availability</Text>
         
         <View className="mb-4">
           <Text className={`text-sm font-medium ${colors.text} mb-2`}>Filter by Date</Text>
-          <TouchableOpacity
-            onPress={() => setShowDatePicker(true)}
-            className={`${colors.input} p-3 rounded-lg`}
-          >
-            <Text className={colors.text}>{selectedDateFilter || 'Select a date to filter'}</Text>
-          </TouchableOpacity>
-          {selectedDateFilter && (
+          <View className="flex-row items-center gap-2">
             <TouchableOpacity
-              onPress={() => setSelectedDateFilter('')}
-              className="mt-2"
+              onPress={() => setShowDatePicker(true)}
+              className={`${colors.input} flex-1 p-3 rounded-lg`}
             >
-              <Text className={`text-sm ${colors.accent}`}>Clear filter</Text>
+              <Text className={colors.text}>{selectedDateFilter || 'Select a date to filter'}</Text>
             </TouchableOpacity>
-          )}
+            {selectedDateFilter && (
+              <TouchableOpacity
+                onPress={() => setSelectedDateFilter('')}
+                className={`p-3 ${colors.input} rounded-lg`}
+              >
+                <Feather name="x" size={16} color={theme === 'dark' ? '#9ca3af' : '#6b7280'} />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
 
         {showDatePicker && (
@@ -460,11 +510,22 @@ const BookTimeScreen = () => {
         {isLoading ? (
           <ActivityIndicator size="large" color={theme === 'dark' ? '#3b82f6' : '#2563eb'} />
         ) : filteredSlots.length === 0 ? (
-          <Text className={`${colors.secondaryText} text-center py-8`}>
-            {selectedDateFilter ? 'No available slots for selected date' : 'No available slots found'}
-          </Text>
+          <View className={`${colors.card} p-6 rounded-xl items-center justify-center`}>
+            <MaterialIcons 
+              name="schedule" 
+              size={40} 
+              color={theme === 'dark' ? '#6b7280' : '#9ca3af'} 
+              style={{ marginBottom: 16 }}
+            />
+            <Text className={`${colors.text} text-center mb-1`}>
+              {selectedDateFilter ? 'No available slots' : 'No available slots found'}
+            </Text>
+            <Text className={`${colors.secondaryText} text-center`}>
+              {selectedDateFilter ? 'for selected date' : 'Check back later'}
+            </Text>
+          </View>
         ) : (
-          <View className="gap-6">
+          <View className="gap-4">
             {bookings.map((booking) => (
               booking.availableSlots
                 .filter(slot => 
@@ -472,42 +533,63 @@ const BookTimeScreen = () => {
                 )
                 .map((slot) => (
                   <View key={slot._id} className={`${colors.card} rounded-xl overflow-hidden`}>
-                    <View className={`${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-50'} p-4`}>
-                      <Text className={`font-semibold text-lg ${colors.text}`}>
+                    <View className={`${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-50'} p-3`}>
+                      <Text className={`font-semibold ${colors.text}`}>
                         {formatDate(slot.date)}
                       </Text>
                     </View>
-                    <View className="p-4 gap-3">
-                      {slot.timeSlots.map((timeSlot) => (
-                        <View key={timeSlot._id} className={`${colors.input} rounded-lg p-4`}>
-                          <View className="flex-row justify-between items-start mb-2">
-                            <Text className={`font-medium ${colors.text}`}>
-                              {timeSlot.startTime} - {timeSlot.endTime}
-                            </Text>
-                            {timeSlot.bookedBy.some(booking => booking.userId === currentUser._id) && (
-                              <View className={`${theme === 'dark' ? 'bg-green-900' : 'bg-green-100'} px-2 py-1 rounded-full`}>
-                                <Text className={`text-xs ${theme === 'dark' ? 'text-green-200' : 'text-green-800'}`}>
-                                  You're booked
-                                </Text>
-                              </View>
-                            )}
+                    <View className="p-3 gap-2">
+                      {slot.timeSlots.map((timeSlot) => {
+                        const userBooked = timeSlot.bookedBy.some(b => b.userId === currentUser._id);
+                        const isBooked = timeSlot.bookedBy.length > 0;
+                        
+                        return (
+                          <View key={timeSlot._id} className={`${colors.input} rounded-lg p-3`}>
+                            <View className="flex-row justify-between items-start mb-2">
+                              <Text className={`font-medium ${colors.text}`}>
+                                {formatTime(timeSlot.startTime)} - {formatTime(timeSlot.endTime)}
+                              </Text>
+                              {userBooked && (
+                                <View className={`${theme === 'dark' ? 'bg-green-900' : 'bg-green-100'} px-2 py-1 rounded-full`}>
+                                  <Text className={`text-xs ${theme === 'dark' ? 'text-green-200' : 'text-green-800'}`}>
+                                    You're booked
+                                  </Text>
+                                </View>
+                              )}
+                              {isBooked && !userBooked && (
+                                <View className={`${theme === 'dark' ? 'bg-red-900/30' : 'bg-red-100'} px-2 py-1 rounded-full`}>
+                                  <Text className={`text-xs ${theme === 'dark' ? 'text-red-200' : 'text-red-800'}`}>
+                                    Booked
+                                  </Text>
+                                </View>
+                              )}
+                            </View>
+                            <TouchableOpacity
+                              onPress={() => {
+                                if (!isBooked) {
+                                  handleBookingConfirmation(timeSlot._id, booking._id);
+                                }
+                              }}
+                              disabled={isBooked || isLoading}
+                              className={`${
+                                userBooked 
+                                  ? 'bg-gray-400' 
+                                  : isBooked 
+                                    ? 'bg-gray-400' 
+                                    : colors.button
+                              } p-2 rounded-md`}
+                            >
+                              <Text className="text-white text-center font-medium">
+                                {userBooked 
+                                  ? 'You booked this' 
+                                  : isBooked 
+                                    ? 'Already booked' 
+                                    : 'Book Appointment'}
+                              </Text>
+                            </TouchableOpacity>
                           </View>
-                          <TouchableOpacity
-                            onPress={() => {
-                              setBookingId(booking._id);
-                              handleBookSlot(timeSlot._id, booking._id);
-                            }}
-                            disabled={timeSlot.bookedBy.some(booking => booking.userId === currentUser._id) || isLoading}
-                            className={`${colors.button} p-2 rounded-md mt-2`}
-                          >
-                            <Text className="text-white text-center">
-                              {timeSlot.bookedBy.some(booking => booking.userId === currentUser._id) 
-                                ? 'Already Booked' 
-                                : 'Book Appointment'}
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      ))}
+                        );
+                      })}
                     </View>
                   </View>
                 ))
@@ -515,6 +597,43 @@ const BookTimeScreen = () => {
           </View>
         )}
       </ScrollView>
+
+      {/* Booking Confirmation Modal */}
+      <Modal
+        visible={showConfirmationModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowConfirmationModal(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-black/50 p-4">
+          <View className={`${colors.card} rounded-xl p-4 w-full max-w-sm`}>
+            <Text className={`text-lg font-bold ${colors.text} mb-2`}>Confirm Booking</Text>
+            <Text className={`${colors.secondaryText} mb-4`}>
+              Are you sure you want to book this appointment? This cannot be undone.
+            </Text>
+            
+            <View className="flex-row justify-end gap-2">
+              <TouchableOpacity
+                onPress={() => setShowConfirmationModal(false)}
+                className={`px-4 py-2 ${colors.input} rounded-lg`}
+              >
+                <Text className={colors.text}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleBookSlot}
+                disabled={isLoading}
+                className={`px-4 py-2 ${colors.button} rounded-lg`}
+              >
+                {isLoading ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <Text className="text-white font-medium">Confirm</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
