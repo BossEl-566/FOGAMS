@@ -21,14 +21,11 @@ function ThemedLayout() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="signup" options={{ headerShown: false }} />
         <Stack.Screen name="signin" options={{ headerShown: false }} />
+        <Stack.Screen name="study-resources" options={{ headerShown: false }} />
         <Stack.Screen
-    name="study-resources"
-    options={{ headerShown: false }}
-  />
-  <Stack.Screen
-    name="edit-profile"
-    options={{ headerShown: false }}
-  />
+       name="edit-profile"
+       options={{ headerShown: false }}
+       />
         
         {/* All your other screens with themed headers */}
         <Stack.Screen

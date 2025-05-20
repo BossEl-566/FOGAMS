@@ -107,7 +107,19 @@ export default function DashEvents() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {monthEvents.map((event) => (
+                <Link to={`/events/${event._id}`} key={event._id} className="block" state={{ eventId: event._id }}>
                 <Card key={event._id} className="hover:shadow-lg transition-shadow">
+                  {/* Event Image */}
+                  {event.imageUrl && (
+                    <div className="h-48 overflow-hidden rounded-t-lg">
+                      <img
+                        src={event.imageUrl}
+                        alt={event.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                  
                   <div className="flex justify-between items-start">
                     <div className="flex items-center">
                       <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-lg mr-4">
@@ -164,6 +176,7 @@ export default function DashEvents() {
                     </div>
                   )}
                 </Card>
+                </Link>
               ))}
             </div>
           </div>

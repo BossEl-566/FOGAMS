@@ -155,6 +155,24 @@ export default function DashSidebar() {
                   Message Box
                   </Sidebar.Item>
                 </SidebarLink>
+                <SidebarLink to='/dashboard?tab=events' tabValue='events'>
+                    <Sidebar.Item
+                      active={tab === 'events'}
+                      icon={MdEventAvailable}
+                      as='div'
+                    >
+                      Events
+                    </Sidebar.Item>
+                  </SidebarLink>
+                  <SidebarLink to='/dashboard?tab=resources' tabValue='resources'>
+                    <Sidebar.Item
+                      active={tab === 'resources'}
+                      icon={HiFolderDownload}
+                      as='div'
+                    >
+                      Resources
+                    </Sidebar.Item>
+                  </SidebarLink>
                 <SidebarLink to='/dashboard?tab=bible' tabValue='bible'>
                   <Sidebar.Item active={tab === 'bible'} href="#" icon={FaBookBible} as='div'>
                   Bible
@@ -217,24 +235,8 @@ export default function DashSidebar() {
                       Comments
                     </Sidebar.Item>
                   </SidebarLink>
-                  <SidebarLink to='/dashboard?tab=resources' tabValue='resources'>
-                    <Sidebar.Item
-                      active={tab === 'resources'}
-                      icon={HiFolderDownload}
-                      as='div'
-                    >
-                      Resources
-                    </Sidebar.Item>
-                  </SidebarLink>
-                  <SidebarLink to='/dashboard?tab=events' tabValue='events'>
-                    <Sidebar.Item
-                      active={tab === 'events'}
-                      icon={MdEventAvailable}
-                      as='div'
-                    >
-                      Events
-                    </Sidebar.Item>
-                  </SidebarLink>
+                  
+                  
                   <SidebarLink to='/dashboard?tab=membership' tabValue='membership'>
                     <Sidebar.Item
                       active={tab === 'membership'}
