@@ -97,3 +97,60 @@ export const editTithe = async (req, res, next) => {
         
     }
 };
+
+export const requestEditTithe = async (req, res, next) => {
+    if (!req.user.isMember) {
+      return next(errorHandler(403, 'You must be a member to request edit tithes'));
+    }
+  
+    try {
+      const tithe = await Tithe.findById(req.params.titheId);
+  
+      if (!tithe) {
+        return next(errorHandler(404, 'Tithe not found'));
+      }
+  
+      // Toggle the value
+      tithe.requestEdit = !tithe.requestEdit;
+      await tithe.save();
+  
+      res.status(200).json({
+        success: true,
+        message: `Edit request is now ${tithe.requestEdit ? 'enabled' : 'disabled'}`,
+        requestEdit: tithe.requestEdit
+      });
+  
+    } catch (error) {
+      next(error);
+    }
+  };
+  
+
+
+  export const approveEditTithe = async (req, res, next) => {
+    if (!req.user.isMember) {
+        return next(errorHandler(403, 'You must be a member to approve edit tithes'));
+    }
+
+    try {
+        const tithe = await Tithe.findById(req.params.titheId);
+
+        if (!tithe) {
+            return next(errorHandler(404, 'Tithe not found'));
+        }
+
+        // Toggle the requestApprove value
+        tithe.requestApprove = !tithe.requestApprove;
+        await tithe.save();
+
+        res.status(200).json({
+            success: true,
+            message: `Approve request is now ${tithe.requestApprove ? 'enabled' : 'disabled'}`,
+            requestApprove: tithe.requestApprove
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+

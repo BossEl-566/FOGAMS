@@ -43,6 +43,14 @@ const TitheSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    requestEdit: {
+      type: Boolean,
+      default: false,
+    },
+    requestApprove: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true } 
 );

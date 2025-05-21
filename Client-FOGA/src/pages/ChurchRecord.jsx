@@ -134,6 +134,31 @@ const ChurchAccountForm = () => {
         getMembers();
     }, []);
 
+
+    const handleRequestEdit = async (titheId) => {
+      try {
+          const res = await fetch(`/api/tithe/requestEdit/${titheId}`, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+          });
+  
+          const data = await res.json();
+          if (res.ok) {
+              toast.success(data.message || 'RequestEdit toggled successfully');
+              // Optionally, refetch data or update state
+              console.log(data.message);
+          } else {
+              toast.error(data.message || 'Failed to toggle requestEdit');
+              console.error(data.message || 'Failed to toggle requestEdit');
+          }
+      } catch (err) {
+          console.error('Error:', err);
+      }
+  };
+  
+
     const handleApproveUser = async () => {
         try {
             const res = await fetch(`/api/church-account/approve-tithe/${pendingTitheId}`, {
@@ -624,38 +649,56 @@ const ChurchAccountForm = () => {
 
             {/* Members Needing Approval Section */}
             <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Members Needing Approval</h2>
-                <div className="space-y-4">
-                    {membersNeedingApproval.map((member) => (
-                        <div key={member.id} className="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                            <div>
-                                <p className="text-lg font-semibold text-gray-800 dark:text-white">{member.username}</p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Amount: GHS{member.amount}</p>
-                            </div>
-                            <div className="flex space-x-2">
-                                <button
-                                    onClick={() => {setShowApproveModal(true); setPendingTitheId(member._id)}}
-                                    className="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-3 rounded-lg shadow-md transition duration-300"
-                                >
-                                    Approve
-                                </button>
-                                <button
-                                    onClick={() => {setShowEditModal(true), setPendingTitheId(member._id)}}
-                                    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-3 rounded-lg shadow-md transition duration-300"
-                                >
-                                    Edit
-                                </button>
-                                <button onClick={() => {setShowDeleteModal(true), setPendingTitheId(member._id)}}
-                                    className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-lg shadow-md transition duration-300">
-                                        Delete
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+    <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Members Needing Approval</h2>
+    <div className="space-y-4">
+        {membersNeedingApproval.map((member) => (
+            <div key={member.id} className="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div>
+                    <p className="text-lg font-semibold text-gray-800 dark:text-white">{member.username}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Amount: GHS{member.amount}</p>
+                </div>
+                <div className="flex space-x-2">
+                    <button
+                        onClick={() => { setShowApproveModal(true); setPendingTitheId(member._id); }}
+                        className="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-3 rounded-lg shadow-md transition duration-300"
+                    >
+                        Approve
+                    </button>
+
+                    <button
+                        onClick={() => { setShowEditModal(true); setPendingTitheId(member._id); }}
+                        disabled={!member.requestApprove}
+                        className={`${
+                            member.requestApprove 
+                                ? "bg-blue-500 hover:bg-blue-600" 
+                                : "bg-blue-300 cursor-not-allowed"
+                        } text-white font-semibold py-1 px-3 rounded-lg shadow-md transition duration-300`}
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        onClick={() => handleRequestEdit(member._id)}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-1 px-3 rounded-lg shadow-md transition duration-300"
+                    >
+                        Request Edit
+                    </button>
+
+                    <button
+                        onClick={() => { setShowDeleteModal(true); setPendingTitheId(member._id); }}
+                        className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-lg shadow-md transition duration-300"
+                    >
+                        Delete
+                    </button>
                 </div>
             </div>
+        ))}
+    </div>
+</div>
+
 
             {/* Modals */}
+            {/* Modal for Approve */}
             <Modal show={showApproveModal} onClose={() => setShowApproveModal(false)} popup size="md">
                 <Modal.Header />
                 <Modal.Body>
@@ -669,6 +712,7 @@ const ChurchAccountForm = () => {
                     </div>
                 </Modal.Body>
             </Modal>
+            {/* Modal for Delete */}
 
             <Modal show={showDeleteModal} onClose={() => setShowDeleteModal(false)} popup size="md">
                 <Modal.Header />
@@ -683,6 +727,8 @@ const ChurchAccountForm = () => {
                     </div>
                 </Modal.Body>
             </Modal>
+
+            {/* Edit Modal */}
 
             <Modal show={showEditModal} onClose={() => setShowEditModal(false)} popup size="lg">
                 <Modal.Header />
@@ -771,6 +817,7 @@ const ChurchAccountForm = () => {
                     </div>
                 </Modal.Body>
             </Modal>
+            {/* Update Tithe Modal */}
 
             <Modal show={updateTitheModal} onClose={() => setUpdateTitheModal(false)} popup size="lg">
                 <Modal.Header />

@@ -4,15 +4,21 @@ import toast from "react-hot-toast";
 import { FaMoneyBillWave, FaCalendarAlt, FaCashRegister } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { FiCheckCircle } from "react-icons/fi";
+import { FiClock } from "react-icons/fi";
+import { FaReceipt } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
 
 export default function DashAccountRecord() {
- const { currentUser } = useSelector((state) => state.user);
- const [transactions, setTransactions] = useState([]);
- const [isApproved, setIsApproved] = useState([]);
-const [isPending, setIsPending] = useState([]);
- const [titheId, setTitheId] = useState(null);
- const [firstTransaction, setFirstTransaction] = useState(null);
+  const { currentUser } = useSelector((state) => state.user);
+  const [transactions, setTransactions] = useState([]);
+  const [isApproved, setIsApproved] = useState([]);
+  const [isPending, setIsPending] = useState([]);
+  const [titheId, setTitheId] = useState(null);
+  const [firstTransaction, setFirstTransaction] = useState(null);
+  const [needsApproval, setNeedsApproval] = useState([]);
+  const [showEditRequestModal, setShowEditRequestModal] = useState(false);
+
   const [formData, setFormData] = useState({
     username: currentUser.username,
     userID: currentUser._id,
@@ -22,7 +28,6 @@ const [isPending, setIsPending] = useState([]);
     weekOrMonth: "",
     mode: "mobile money",
   });
-  console.log(formData);
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -39,7 +44,7 @@ const [isPending, setIsPending] = useState([]);
         console.log(data.message);
         toast.error(data.message);
       } else {
-        setFormData({  // Reset form after successful payment
+        setFormData({
           username: currentUser.username,
           userID: currentUser._id,
           amount: "",
@@ -48,352 +53,426 @@ const [isPending, setIsPending] = useState([]);
           weekOrMonth: "",
           mode: "mobile money",
         });
-        console.log(data);
         toast.success("Payment successful");
-        fetch("/api/tithe/getTithe", {
-          method: "GET",
-        });
-
+        getTransactions(); // Call getTransactions to refresh the list
       }
     } catch (error) {
       console.error(error);
-      
-      
+      toast.error("Payment failed");
     }
-  
   };
-
 
   const getTransactions = async () => {
     try {
       const res = await fetch("/api/tithe/getTithe", {
         method: "GET",
       });
-  
+
       const data = await res.json();
-  
+
       if (!res.ok) {
         console.log(data.message);
       } else {
-        console.log("Fetched transactions:", data);
         setTransactions(data);
-  
+
         // Filter transactions
-        const approved = data.filter(tx => tx.isApproved === true);
-        const pending = data.filter(tx => tx.isApproved === false);
-  
+        const approved = data.filter((tx) => tx.isApproved === true);
+        const pending = data.filter((tx) => tx.isApproved === false);
+        const approvalNeeded = data.filter((tx) => tx.requestEdit === true);
+
         setIsApproved(approved);
         setIsPending(pending);
-  
-        console.log("Approved Transactions:", approved);
-        console.log("Pending Transactions:", pending);
-  
+        setNeedsApproval(approvalNeeded);
+
         // Set first transaction correctly
         if (approved.length > 0) {
-          setFirstTransaction(approved[0]); // Use 'approved' instead of 'isApproved'
+          setFirstTransaction(approved[0]);
+        }
+        if (approvalNeeded.length > 0) {
+          setShowEditRequestModal(true);
         }
       }
     } catch (error) {
       console.error(error);
     }
   };
-  
 
-// Fetch transactions when the component mounts
-useEffect(() => {
-  getTransactions();
-}, []);
-
-  
   // Fetch transactions when the component mounts
   useEffect(() => {
     getTransactions();
   }, []);
-  
-  useEffect(() => {
-    console.log("First Transaction:", firstTransaction); // Check when it updates
-  }, [firstTransaction]);
-  
 
   useEffect(() => {
-    getTransactions();
-  }, []);
+    console.log("First Transaction:", firstTransaction);
+  }, [firstTransaction]);
+
+  const handleEditRequest = async (id) => {
+    try {
+      // First: Approve the edit
+      const res = await fetch(`/api/tithe/approveTithe/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      // Second: Update the requestEdit state
+      const res1 = await fetch(`/api/tithe/requestEdit/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      const data = await res.json();
+  
+      if (!res.ok) {
+        console.log(data.message);
+        toast.error(data.message);
+      } else {
+        setShowEditRequestModal(false);
+        toast.success("Edit request accepted");
+        getTransactions(); // Refresh transactions
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to accept edit request");
+    }
+  };
+  
 
   return (
-  <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white w-full">
-    {/* Main Content */}
-    <div className="flex-1 p-6">
-      <Link to="/all-transaction">
-    <Button gradientDuoTone="purpleToBlue" outline className="ml-96">
-  View All Records 
-</Button>
-</Link>
-      <h1 className="text-2xl font-semibold mb-6">Tithe Dashboard</h1>
-      <div className="p-4 bg-white dark:bg-gray-800 rounded-lg flex items-center shadow-md">
-        <FaMoneyBillWave className="text-green-400 text-2xl mr-2" />
-        <div className="bg-white dark:bg-gray-800 p-6">
-        {firstTransaction ? (
-    <>
-      {/* Title */}
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-        Last Tithe Record
-      </h2>
-
-      {/* Amount */}
-      <p className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        GHS {firstTransaction.amount}
-      </p>
-
-      {/* Payment Mode */}
-      <div className="flex items-center space-x-2 mb-2">
-        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-          Mode:
-        </span>
-        <span className="text-sm text-gray-900 dark:text-white">
-          {firstTransaction.mode}
-        </span>
-      </div>
-
-      {/* Period and Payment Month */}
-      <div className="flex items-center space-x-2 mb-2">
-        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-          Period:
-        </span>
-        <span className="text-sm text-gray-900 dark:text-white">
-          {firstTransaction.period} - {firstTransaction.paymentForMonth}
-        </span>
-      </div>
-
-      {/* Date & Time of Transaction */}
-      <div className="flex justify-between text-sm font-medium text-gray-600 dark:text-gray-300 mt-2">
-        {/* Created Date */}
-        <div>
-          <span className="mr-1">Paid On:</span>
-          <span className="text-gray-500 dark:text-white">
-            {new Date(firstTransaction.createdAt).toLocaleDateString("en-GB", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </span>
-        </div>
-
-        {/* Updated Time */}
-        <div>
-          <span className="ml-24">Updated:</span>
-          <span className="text-gray-900 dark:text-white">
-            {new Date(firstTransaction.updatedAt).toLocaleDateString("en-GB", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </span>
-        </div>
-      </div>
-    </>
-  ) : (
-    <p className="text-gray-600 dark:text-gray-400 text-center py-6">
-      No Tithe Record available
-    </p>
-  )}
-
-</div>
-
-      </div>
-          
-
-      {/* Total Contributions */}
-      <div className="p-6 bg-white dark:bg-gray-900 shadow-md rounded-lg mt-4">
-  <h2 className="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">
-    Mobile Money
-  </h2>
-
-  <h4 className="text-sm font-semibold mb-1 text-gray-500 dark:text-gray-300">
-    Select a Mobile Money Network to Pay your Tithe
-  </h4>
-
-  {/* Cards Section */}
-  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-    {/* MTN Mobile Money Card */}
-    <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg flex flex-col items-center transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
-      <img
-        src="src/assets/pngfind.com-money-symbol-png-163563.png"
-        alt="MTN Mobile Money"
-        className="w-20 h-20 mb-2"
-      />
-      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-        MTN Mobile Money
-      </p>
-    </div>
-
-    {/* Telecel Cash Card */}
-    <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg flex flex-col items-center transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
-      <img
-        src="src/assets/telecel-cash.jpg"
-        alt="Telecel Cash"
-        className="w-20 h-20 mb-2"
-      />
-      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-        Telecel Cash
-      </p>
-    </div>
-
-    {/* AirtelTigo Mobile Money Card */}
-    <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg flex flex-col items-center transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
-      <img
-        src="src/assets/airteltigo.png"
-        alt="AirtelTigo Mobile Money"
-        className="w-20 h-20 mb-2"
-      />
-      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-        AirtelTigo Mobile Money
-      </p>
-    </div>
-  </div>
-</div>
-
-
-
-
-      
-      {/* Payment Form */}
-      <form onSubmit={handlePayment} className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-  <h2 className="text-lg font-semibold mb-2">Make a Payment</h2>
-
-  <label className="block mb-1">Enter an Amount</label>
-  <input 
-    type="number" 
-    placeholder="Enter amount" 
-    value={formData.amount} 
-    onChange={(e) => setFormData({...formData, amount: e.target.value})} 
-    className="mb-2 w-full p-2 rounded bg-white dark:bg-gray-800" 
-    required 
-  />
-
-  <label className="block mb-1">Select Period</label>
-  <select 
-    value={formData.period} 
-    onChange={(e) =>
-      setFormData({ ...formData, period: e.target.value })
-    } 
-    className="mb-2 w-full p-2 rounded bg-white dark:bg-gray-800" 
-    required
-  >
-    <option value="weekly">Weekly</option>
-    <option value="monthly">Monthly</option>
-  </select>
-
-  <label className="block mb-1">Select Month</label>
-  <select 
-    value={formData.paymentForMonth} 
-    onChange={(e) => setFormData({...formData, paymentForMonth: e.target.value})} 
-    className="mb-2 w-full p-2 rounded bg-white dark:bg-gray-800"
-    required
-  >
-    {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month) => (
-      <option key={month} value={month}>{month}</option>
-    ))}
-  </select>
-
-  <label className="block mb-1">Describe Week or Month (e.g., "Week 2 of March 2025" or "March 2025")</label>
-  <textarea 
-    maxLength="30" 
-    value={formData.weekOrMonth} 
-    onChange={(e) => setFormData({...formData, weekOrMonth: e.target.value})} 
-    className="w-full p-2 rounded bg-white dark:bg-gray-800 mb-1"
-    required
-  />
-  <p className="text-sm text-gray-500">{formData.weekOrMonth.length} / 30 characters</p>
-
-  <label className="block mb-1">Select Payment Mode</label>
-  <select 
-    value={formData.mode} 
-    onChange={(e) => setFormData({...formData, mode: e.target.value})}
-    className="mb-2 w-full p-2 rounded bg-white dark:bg-gray-800"
-    required
-  >
-    <option value="physical cash">Physical Cash</option>
-    <option value="mobile money">Mobile Money</option>
-  </select>
-
-  <button type="submit" className="w-full mt-2 p-2 bg-blue-600 rounded flex items-center justify-center">
-    <FaCashRegister className="mr-2" /> Pay
-  </button>
-</form>
-
-    </div>
-    
-    {/* Right Sidebar - Transaction History */}
-    <div className="w-1/3 bg-white dark:bg-gray-800 p-4 text-gray-900 dark:text-white hidden md:block">
-  {/* Transaction History */}
-  <div>
-    <h2 className="text-lg font-semibold mb-4">Transaction History</h2>
-    
-    <div className="h-[80vh] overflow-y-auto">
-      {isApproved.map((tx) => (
-        <div key={tx.id} className="p-3 border-b border-gray-700">
-          <p className="text-sm">{tx.timestamp}</p>
-          <p className="text-lg font-semibold">GHS {tx.amount}</p>
-          <p className="text-sm text-gray-900 dark:text-white">
-            {tx.period} - {tx.paymentForMonth}
-          </p>
-          <p className="text-sm text-gray-900 dark:text-white">{tx.mode}</p>
-          <div className="mt-2 w-20 h-6 flex items-center justify-center bg-green-500 text-white text-xs font-semibold rounded-full">
-            Completed
-          </div>
-          <p className="text-sm text-blue-500 mt-2 cursor-pointer">
-  <Link
-    to={`/receipt/${tx._id}`}  // Corrected template literal
-    state={{ titheId: tx._id }}
-    className="text-sm text-blue-500"
-    onClick={() => setTitheId(tx._id)}  // Kept only one onClick
-  >
-    View Receipt
-  </Link>
-</p>
-        </div>
-      ))}
-      <Link to="/all-transaction">
-      <p className="text-sm text-blue-500 mt-2">View All Records</p>
-      </Link>
-    </div>
-  </div>
-
-  {/* Divider */}
-  <div className="border-t border-blue-600 my-4"></div>
-
-  {/* Pending Transactions */}
-  <div>
-    <h2 className="text-lg font-semibold mb-4">Pending Transactions</h2>
-    <div className="h-[80vh] overflow-y-auto">
-    {isPending.map((tx) => (
-      <div key={tx.id} className="p-3 border-b border-gray-700">
-        <p className="text-sm">{tx.timestamp}</p>
-        <p className="text-lg font-semibold">GHS {tx.amount}</p>
-        <p className="text-sm text-gray-900 dark:text-white">
-          {tx.period} - {tx.paymentForMonth}
-        </p>
-        <p className="text-sm text-gray-900 dark:text-white">{tx.mode}</p>
-        <div className="mt-2 w-20 h-6 flex items-center justify-center bg-yellow-500 text-black text-xs font-semibold rounded-full">
-          Pending
-        </div>
-        <p className="text-sm text-blue-500 mt-2 cursor-pointer">
-          <Link
-            to={`/receipt/${tx._id}`}  // Corrected template literal
-            state={{ titheId: tx._id }}
-            className="text-sm text-blue-500"
-            onClick={() => setTitheId(tx._id)}  // Kept only one onClick
-          >
-            View Receipt
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-white">
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Tithe Dashboard</h1>
+          <Link to="/all-transaction">
+            <Button gradientDuoTone="purpleToBlue" className="shadow-lg hover:shadow-xl transition-shadow">
+              View All Records
+            </Button>
           </Link>
-        </p>
-      
+        </div>
+
+        {/* Dashboard Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Last Tithe Card */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all hover:shadow-xl">
+              <div className="p-6">
+                <div className="flex items-center mb-4">
+                  <div className="p-3 rounded-full bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-300">
+                    <FaMoneyBillWave className="text-2xl" />
+                  </div>
+                  <h2 className="text-xl font-bold ml-3">Last Tithe Record</h2>
+                </div>
+                
+                {firstTransaction ? (
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-end">
+                      <p className="text-4xl font-bold text-gray-900 dark:text-white">
+                        GHS {firstTransaction.amount}
+                      </p>
+                      <span className="px-3 py-1 bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
+                        Verified
+                      </span>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Mode</p>
+                        <p className="font-medium">{firstTransaction.mode}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Period</p>
+                        <p className="font-medium">{firstTransaction.period} - {firstTransaction.paymentForMonth}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                      <div className="flex justify-between text-sm">
+                        <div className="flex items-center text-gray-500 dark:text-gray-400">
+                          <FaCalendarAlt className="mr-2" />
+                          <span>
+                            {new Date(firstTransaction.createdAt).toLocaleDateString("en-GB", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
+                          </span>
+                        </div>
+                        <div className="text-gray-500 dark:text-gray-400">
+                          Updated: {new Date(firstTransaction.updatedAt).toLocaleDateString("en-GB", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 dark:text-gray-400">No Tithe Record available</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Payment Methods */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+              <div className="p-6">
+                <h2 className="text-xl font-bold mb-4">Mobile Money Payment</h2>
+                <p className="text-gray-500 dark:text-gray-400 mb-6">Select a Mobile Money Network to Pay your Tithe</p>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {[
+                    { name: "MTN Mobile Money", image: "/src/assets/pngfind.com-money-symbol-png-163563.png" },
+                    { name: "Telecel Cash", image: "/src/assets/telecel-cash.jpg" },
+                    { name: "AirtelTigo Mobile Money", image: "/src/assets/airteltigo.png" }
+                  ].map((method, index) => (
+                    <div 
+                      key={index}
+                      className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg flex flex-col items-center cursor-pointer transition-all hover:bg-gray-100 dark:hover:bg-gray-600 hover:-translate-y-1"
+                    >
+                      <img
+                        src={method.image}
+                        alt={method.name}
+                        className="w-16 h-16 mb-3 object-contain"
+                      />
+                      <p className="text-sm font-medium text-center">{method.name}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Payment Form */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+              <div className="p-6">
+                <h2 className="text-xl font-bold mb-4">Make a Payment</h2>
+                <form onSubmit={handlePayment} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount (GHS)</label>
+                    <input
+                      type="number"
+                      placeholder="Enter amount"
+                      value={formData.amount}
+                      onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Period</label>
+                      <select
+                        value={formData.period}
+                        onChange={(e) => setFormData({ ...formData, period: e.target.value })}
+                        className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        required
+                      >
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Month</label>
+                      <select
+                        value={formData.paymentForMonth}
+                        onChange={(e) => setFormData({ ...formData, paymentForMonth: e.target.value })}
+                        className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        required
+                      >
+                        {[
+                          "January", "February", "March", "April", "May", "June",
+                          "July", "August", "September", "October", "November", "December"
+                        ].map((month) => (
+                          <option key={month} value={month}>{month}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Description (e.g., "Week 2 of March 2025")
+                    </label>
+                    <textarea
+                      maxLength="30"
+                      value={formData.weekOrMonth}
+                      onChange={(e) => setFormData({ ...formData, weekOrMonth: e.target.value })}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                    <p className="text-xs text-gray-500 mt-1">{formData.weekOrMonth.length} / 30 characters</p>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Method</label>
+                    <select
+                      value={formData.mode}
+                      onChange={(e) => setFormData({ ...formData, mode: e.target.value })}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    >
+                      <option value="physical cash">Physical Cash</option>
+                      <option value="mobile money">Mobile Money</option>
+                    </select>
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    className="w-full mt-2 py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg flex items-center justify-center transition-all shadow-md hover:shadow-lg"
+                  >
+                    <FaCashRegister className="mr-2" /> Make Payment
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Transaction History */}
+          <div className="space-y-6">
+            {/* Completed Transactions */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden h-[calc(50vh-1rem)]">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold">Transaction History</h2>
+                  <FiCheckCircle className="text-green-500 text-xl" />
+                </div>
+                
+                <div className="h-[calc(100%-3rem)] overflow-y-auto pr-2">
+                  {isApproved.length > 0 ? (
+                    isApproved.map((tx) => (
+                      <div key={tx._id} className="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 last:border-0 last:mb-0 last:pb-0">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="font-semibold">GHS {tx.amount}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {tx.period} - {tx.paymentForMonth}
+                            </p>
+                          </div>
+                          <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 px-2 py-1 rounded-full">
+                            Completed
+                          </span>
+                        </div>
+                        
+                        <div className="flex justify-between items-center mt-2">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {new Date(tx.createdAt).toLocaleDateString()}
+                          </p>
+                          <Link
+                            to={`/receipt/${tx._id}`}
+                            state={{ titheId: tx._id }}
+                            className="text-sm text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 flex items-center"
+                          >
+                            <FaReceipt className="mr-1" /> Receipt
+                          </Link>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                      No completed transactions
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Pending Transactions */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden h-[calc(50vh-1rem)]">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold">Pending Transactions</h2>
+                  <FiClock className="text-yellow-500 text-xl" />
+                </div>
+                
+                <div className="h-[calc(100%-3rem)] overflow-y-auto pr-2">
+                  {isPending.length > 0 ? (
+                    isPending.map((tx) => (
+                      <div key={tx._id} className="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 last:border-0 last:mb-0 last:pb-0">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="font-semibold">GHS {tx.amount}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {tx.period} - {tx.paymentForMonth}
+                            </p>
+                          </div>
+                          <span className="text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded-full">
+                            Pending
+                          </span>
+                        </div>
+                        
+                        <div className="flex justify-between items-center mt-2">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {new Date(tx.createdAt).toLocaleDateString()}
+                          </p>
+                          <Link
+                            to={`/receipt/${tx._id}`}
+                            state={{ titheId: tx._id }}
+                            className="text-sm text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 flex items-center"
+                          >
+                            <FaReceipt className="mr-1" /> Receipt
+                          </Link>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                      No pending transactions
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    ))}
+
+      {/* Edit Request Modal */}
+      {showEditRequestModal && needsApproval.length > 0 && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+            <div className="p-6 text-center">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                <FiEdit className="h-6 w-6 text-red-600 dark:text-red-400" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                Tithe Edit Request
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Your tithe of <span className="font-semibold">GHS {needsApproval[0].amount}</span> requires an edit
+              </p>
+              
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => {
+                    setShowEditRequestModal(false);
+                    handleEditRequest(needsApproval[0]._id);
+                  }}
+                  className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() => {
+                    handleRejectRequest(needsApproval[0]._id);
+                    setShowEditRequestModal(false);
+                  }}
+                  className="px-6 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition-colors"
+                >
+                  Reject
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-    
-   </div>
-</div>
-</div>
-  )
+  );
 }
