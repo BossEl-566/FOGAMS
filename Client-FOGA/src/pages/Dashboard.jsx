@@ -47,19 +47,10 @@ export default function Dashboard() {
 
   return (
     <div className='min-h-screen flex flex-col md:flex-row'>
-      {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'block' : 'hidden'} md:block md:w-56 fixed md:relative z-30`}>
-        <DashSidebar 
-          isSidebarOpen={sidebarOpen} 
-          toggleSidebar={toggleSidebar} 
-          closeSidebar={closeSidebar}
-        />
-      </div>
-      
       {/* Mobile menu button */}
       <button
         onClick={toggleSidebar}
-        className="md:hidden fixed z-40 p-2 m-2 rounded-lg bg-gray-100 dark:bg-gray-700"
+        className="md:hidden fixed z-50 p-2 m-2 rounded-lg bg-gray-100 dark:bg-gray-700"
       >
         {sidebarOpen ? (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -72,8 +63,14 @@ export default function Dashboard() {
         )}
       </button>
 
+      {/* Sidebar */}
+      <DashSidebar 
+        isOpen={sidebarOpen}
+        onClose={closeSidebar}
+      />
+      
       {/* Main content */}
-      <div className="flex-1 p-4 md:ml-0 mt-12 md:mt-0">
+      <div className="flex-1 p-4 md:mt-0" style={{ marginBottom: '60px' }}>
         {/* Profile */}
         {tab === 'profile' && <DashProfile />}
         {tab === 'join' && <DashJoinChurch />}

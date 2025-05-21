@@ -21,11 +21,10 @@ import { FaUserPlus } from "react-icons/fa";
 import { HiMenuAlt2 } from "react-icons/hi";
 import { TfiAnnouncement } from "react-icons/tfi";
 
-export default function DashSidebar() {
+export default function DashSidebar({ isOpen, onClose }) {
   const location = useLocation();
   const { currentUser } = useSelector(state => state.user);
   const [tab, setTab] = useState('');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const dispatch = useDispatch();
   const sidebarRef = useRef(null);
 
@@ -41,7 +40,7 @@ export default function DashSidebar() {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setIsSidebarOpen(false);
+        onClose();
       }
     };
 
@@ -49,7 +48,7 @@ export default function DashSidebar() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [onClose]);
 
   const handleSignout = async () => {
     try {
@@ -61,20 +60,12 @@ export default function DashSidebar() {
       } else {
         dispatch(signoutSuccess());
         toast.success('Successfully signed out!');
-        setIsSidebarOpen(false);
+        onClose();
       }
     } catch (error) {
       console.log(error.message);
       toast.error('An error occurred during sign out.');
     }
-  };
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const closeSidebar = () => {
-    setIsSidebarOpen(false);
   };
 
   // Wrapper function for sidebar items that closes the sidebar
@@ -83,7 +74,7 @@ export default function DashSidebar() {
       to={to} 
       onClick={() => {
         setTab(tabValue);
-        closeSidebar();
+        onClose();
       }}
       {...props}
     >
@@ -92,194 +83,182 @@ export default function DashSidebar() {
   );
 
   return (
-    <>
-      {/* Mobile menu button */}
-      <button
-        onClick={toggleSidebar}
-        className="fixed md:hidden z-50 p-2 m-2 rounded-lg bg-gray-100 dark:bg-gray-700"
-      >
-        {isSidebarOpen ? <HiX className="w-6 h-6" /> : <HiMenuAlt2 className="w-6 h-6" />}
-      </button>
-
-      {/* Sidebar with responsive classes */}
-      <div 
-        ref={sidebarRef}
-        className={`fixed md:relative z-40 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out`}
-      >
-        <Sidebar className='w-64 h-screen fixed md:w-56'>
-          <Sidebar.Items>
-            {currentUser && currentUser.isAdmin && (
-              <Sidebar.ItemGroup className='flex flex-col gap-1'>
-                <SidebarLink to='/dashboard?tab=dash' tabValue='dash'>
-                  <Sidebar.Item active={tab === 'dash' || !tab} href="#" icon={HiChartPie} as='div'>
-                    Dashboard
-                  </Sidebar.Item>
-                </SidebarLink>
-              </Sidebar.ItemGroup>
-            )}
+    <div 
+      ref={sidebarRef}
+      className={`fixed md:relative z-40 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out`}
+      style={{ height: 'calc(100vh - 60px)', overflowY: 'auto' }}
+    >
+      <Sidebar className='w-64 md:w-56'>
+        <Sidebar.Items>
+          {currentUser && currentUser.isAdmin && (
             <Sidebar.ItemGroup className='flex flex-col gap-1'>
-              <SidebarLink to='/dashboard?tab=profile' tabValue='profile'>
-                <Sidebar.Item active={tab === 'profile'} href="#" icon={HiUser} label={currentUser.isAdmin ? 'Admin' : 'User'} labelColor='dark' as='div'>
-                  Profile
+              <SidebarLink to='/dashboard?tab=dash' tabValue='dash'>
+                <Sidebar.Item active={tab === 'dash' || !tab} href="#" icon={HiChartPie} as='div'>
+                  Dashboard
                 </Sidebar.Item>
               </SidebarLink>
-              {currentUser.isMember && (
-                <>
-                <SidebarLink to='/dashboard?tab=announcement' tabValue='announcement'>
-                  <Sidebar.Item active={tab === 'announcement'} href="#" icon={TfiAnnouncement} as='div'>
-                    Announcement
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=tithe' tabValue='tithe'>
-                  <Sidebar.Item active={tab === 'tithe'} href="#" icon={ MdOutlineAttachMoney } as='div'>
-                    Account
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=baptism' tabValue='baptism'>
-                  <Sidebar.Item active={tab === 'baptism'} href="#" icon={FaPray} as='div'>
-                    Baptism
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=poll' tabValue='poll'>
-                  <Sidebar.Item active={tab === 'poll'} href="#" icon={FaPollH} as='div'>
-                    Poll
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=book' tabValue='book'>
-                  <Sidebar.Item active={tab === 'book'} href="#" icon={BsCalendarCheck} as='div'>
-                  Appointments
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=anonymous' tabValue='anonymous'>
-                  <Sidebar.Item active={tab === 'anonymous'} href="#" icon={BiMessageRounded} as='div'>
-                  Message Box
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=events' tabValue='events'>
-                    <Sidebar.Item
-                      active={tab === 'events'}
-                      icon={MdEventAvailable}
-                      as='div'
-                    >
-                      Events
-                    </Sidebar.Item>
-                  </SidebarLink>
-                  <SidebarLink to='/dashboard?tab=resources' tabValue='resources'>
-                    <Sidebar.Item
-                      active={tab === 'resources'}
-                      icon={HiFolderDownload}
-                      as='div'
-                    >
-                      Resources
-                    </Sidebar.Item>
-                  </SidebarLink>
-                <SidebarLink to='/dashboard?tab=bible' tabValue='bible'>
-                  <Sidebar.Item active={tab === 'bible'} href="#" icon={FaBookBible} as='div'>
-                  Bible
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=notepad' tabValue='notepad'>
-                  <Sidebar.Item active={tab === 'notepad'} href="#" icon={BiNotepad} as='div'>
-                  Notepad
-                  </Sidebar.Item>
-                </SidebarLink>
-                </>
-              )}
-              {!currentUser.isMember && (
-                <SidebarLink to='/dashboard?tab=join' tabValue='join'>
-                  <Sidebar.Item active={tab === 'join'} href="#" icon={HiTable}>
-                    Join Church
-                  </Sidebar.Item>
-                </SidebarLink>
-              )}
-              {currentUser.isAdmin && (
-                <>
-                <SidebarLink to='/dashboard?tab=daily-bible-message' tabValue='daily-bible-message'>
-                  <Sidebar.Item active={tab === 'daily-bible-message'} href="#" icon={HiDocumentText} as='div'>
-                    Daily Message
-                  </Sidebar.Item>
-                </SidebarLink>
-                </>
-              )}
-              {currentUser.isAdmin && (
-                <>
-                <SidebarLink to='/dashboard?tab=account' tabValue='account'>
-                  <Sidebar.Item active={tab === 'account'} href="#" icon={ FaMoneyBillTransfer } as='div'>
-                   Church Account
-                  </Sidebar.Item>
-                </SidebarLink>
-                  <SidebarLink to='/dashboard?tab=users' tabValue='users'>
-                    <Sidebar.Item
-                      active={tab === 'users'}
-                      icon={HiOutlineUserGroup}
-                      as='div'
-                    >
-                      Users
-                    </Sidebar.Item>
-                  </SidebarLink>
-                  <SidebarLink to='/dashboard?tab=birthday' tabValue='birthday'>
-                    <Sidebar.Item
-                      active={tab === 'birthday'}
-                      icon={FaBirthdayCake}
-                      as='div'
-                    >
-                      Birthday  
-                  </Sidebar.Item>
-                  </SidebarLink>
-                  <SidebarLink to='/dashboard?tab=comments' tabValue='comments'>
-                    <Sidebar.Item
-                      active={tab === 'comments'}
-                      icon={HiAnnotation}
-                      as='div'
-                    >
-                      Comments
-                    </Sidebar.Item>
-                  </SidebarLink>
-                  
-                  
-                  <SidebarLink to='/dashboard?tab=membership' tabValue='membership'>
-                    <Sidebar.Item
-                      active={tab === 'membership'}
-                      icon={FaUserPlus}
-                      as='div'
-                    >
-                      Requests
-                    </Sidebar.Item>
-                  </SidebarLink>
-                  <SidebarLink to='/dashboard?tab=contact' tabValue='contact'>
-                    <Sidebar.Item
-                      active={tab === 'contact'}
-                      icon={MdOutlineContactSupport}
-                      as='div'
-                    >
-                      Contact
-                    </Sidebar.Item>
-                  </SidebarLink>
-                  <SidebarLink to='/dashboard?tab=broadcast' tabValue='broadcast'>
-                    <Sidebar.Item
-                      active={tab === 'broadcast'}
-                      icon={FaBullhorn}
-                      as='div'
-                    >
-                      Broadcast
-                    </Sidebar.Item>
-                  </SidebarLink>
-                </>
-              )}
-              <Sidebar.Item 
-                onClick={() => {
-                  handleSignout();
-                  closeSidebar();
-                }} 
-                icon={HiArrowSmRight} 
-                as='div'
-              >
-                Sign Out
-              </Sidebar.Item>
             </Sidebar.ItemGroup>
-          </Sidebar.Items>
-        </Sidebar>
-      </div>
-    </>
+          )}
+          <Sidebar.ItemGroup className='flex flex-col gap-1'>
+            <SidebarLink to='/dashboard?tab=profile' tabValue='profile'>
+              <Sidebar.Item active={tab === 'profile'} href="#" icon={HiUser} label={currentUser.isAdmin ? 'Admin' : 'User'} labelColor='dark' as='div'>
+                Profile
+              </Sidebar.Item>
+            </SidebarLink>
+            {currentUser.isMember && (
+              <>
+              <SidebarLink to='/dashboard?tab=announcement' tabValue='announcement'>
+                <Sidebar.Item active={tab === 'announcement'} href="#" icon={TfiAnnouncement} as='div'>
+                  Announcement
+                </Sidebar.Item>
+              </SidebarLink>
+              <SidebarLink to='/dashboard?tab=tithe' tabValue='tithe'>
+                <Sidebar.Item active={tab === 'tithe'} href="#" icon={ MdOutlineAttachMoney } as='div'>
+                  Account
+                </Sidebar.Item>
+              </SidebarLink>
+              <SidebarLink to='/dashboard?tab=baptism' tabValue='baptism'>
+                <Sidebar.Item active={tab === 'baptism'} href="#" icon={FaPray} as='div'>
+                  Baptism
+                </Sidebar.Item>
+              </SidebarLink>
+              <SidebarLink to='/dashboard?tab=poll' tabValue='poll'>
+                <Sidebar.Item active={tab === 'poll'} href="#" icon={FaPollH} as='div'>
+                  Poll
+                </Sidebar.Item>
+              </SidebarLink>
+              <SidebarLink to='/dashboard?tab=book' tabValue='book'>
+                <Sidebar.Item active={tab === 'book'} href="#" icon={BsCalendarCheck} as='div'>
+                Appointments
+                </Sidebar.Item>
+              </SidebarLink>
+              <SidebarLink to='/dashboard?tab=anonymous' tabValue='anonymous'>
+                <Sidebar.Item active={tab === 'anonymous'} href="#" icon={BiMessageRounded} as='div'>
+                Message Box
+                </Sidebar.Item>
+              </SidebarLink>
+              <SidebarLink to='/dashboard?tab=events' tabValue='events'>
+                  <Sidebar.Item
+                    active={tab === 'events'}
+                    icon={MdEventAvailable}
+                    as='div'
+                  >
+                    Events
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=resources' tabValue='resources'>
+                  <Sidebar.Item
+                    active={tab === 'resources'}
+                    icon={HiFolderDownload}
+                    as='div'
+                  >
+                    Resources
+                  </Sidebar.Item>
+                </SidebarLink>
+              <SidebarLink to='/dashboard?tab=bible' tabValue='bible'>
+                <Sidebar.Item active={tab === 'bible'} href="#" icon={FaBookBible} as='div'>
+                Bible
+                </Sidebar.Item>
+              </SidebarLink>
+              <SidebarLink to='/dashboard?tab=notepad' tabValue='notepad'>
+                <Sidebar.Item active={tab === 'notepad'} href="#" icon={BiNotepad} as='div'>
+                Notepad
+                </Sidebar.Item>
+              </SidebarLink>
+              </>
+            )}
+            {!currentUser.isMember && (
+              <SidebarLink to='/dashboard?tab=join' tabValue='join'>
+                <Sidebar.Item active={tab === 'join'} href="#" icon={HiTable}>
+                  Join Church
+                </Sidebar.Item>
+              </SidebarLink>
+            )}
+            {currentUser.isAdmin && (
+              <>
+              <SidebarLink to='/dashboard?tab=daily-bible-message' tabValue='daily-bible-message'>
+                <Sidebar.Item active={tab === 'daily-bible-message'} href="#" icon={HiDocumentText} as='div'>
+                  Daily Message
+                </Sidebar.Item>
+              </SidebarLink>
+              </>
+            )}
+            {currentUser.isAdmin && (
+              <>
+              <SidebarLink to='/dashboard?tab=account' tabValue='account'>
+                <Sidebar.Item active={tab === 'account'} href="#" icon={ FaMoneyBillTransfer } as='div'>
+                 Church Account
+                </Sidebar.Item>
+              </SidebarLink>
+                <SidebarLink to='/dashboard?tab=users' tabValue='users'>
+                  <Sidebar.Item
+                    active={tab === 'users'}
+                    icon={HiOutlineUserGroup}
+                    as='div'
+                  >
+                    Users
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=birthday' tabValue='birthday'>
+                  <Sidebar.Item
+                    active={tab === 'birthday'}
+                    icon={FaBirthdayCake}
+                    as='div'
+                  >
+                    Birthday  
+                </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=comments' tabValue='comments'>
+                  <Sidebar.Item
+                    active={tab === 'comments'}
+                    icon={HiAnnotation}
+                    as='div'
+                  >
+                    Comments
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=membership' tabValue='membership'>
+                  <Sidebar.Item
+                    active={tab === 'membership'}
+                    icon={FaUserPlus}
+                    as='div'
+                  >
+                    Requests
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=contact' tabValue='contact'>
+                  <Sidebar.Item
+                    active={tab === 'contact'}
+                    icon={MdOutlineContactSupport}
+                    as='div'
+                  >
+                    Contact
+                  </Sidebar.Item>
+                </SidebarLink>
+                <SidebarLink to='/dashboard?tab=broadcast' tabValue='broadcast'>
+                  <Sidebar.Item
+                    active={tab === 'broadcast'}
+                    icon={FaBullhorn}
+                    as='div'
+                  >
+                    Broadcast
+                  </Sidebar.Item>
+                </SidebarLink>
+              </>
+            )}
+            <Sidebar.Item 
+              onClick={() => {
+                handleSignout();
+                onClose();
+              }} 
+              icon={HiArrowSmRight} 
+              as='div'
+            >
+              Sign Out
+            </Sidebar.Item>
+          </Sidebar.ItemGroup>
+        </Sidebar.Items>
+      </Sidebar>
+    </div>
   );
 }
