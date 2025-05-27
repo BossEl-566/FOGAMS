@@ -13,9 +13,9 @@ export default function ChildrenMin() {
   const galleryImages = [
     '/src/assets/children-evengelism.jpg',
     '/src/assets/pastor-with-children.jpg',
-    '/images/children3.jpg',
-    '/images/children4.jpg',
-    '/images/children5.jpg',
+    '/src/assets/missiontte.jpg',
+    '/src/assets/Poem.jpg',
+    '/src/assets/dancing-children.jpg',
   ];
 
   const events = [
@@ -26,12 +26,12 @@ export default function ChildrenMin() {
   ];
 
   const teamMembers = [
-    { name: "Pastor Sarah Johnson", role: "Children's Ministry Director", image: "/images/pastor-sarah.jpg" },
-    { name: "Brother Michael Lee", role: "Sunday School Teacher", image: "/images/teacher-michael.jpg" },
-    { name: "Sister Emily Chen", role: "Music Coordinator", image: "/images/teacher-emily.jpg" },
-    { name: "Sister Emily Chen", role: "Music Coordinator", image: "/images/teacher-emily.jpg" },
-    { name: "Sister Emily Chen", role: "Music Coordinator", image: "/images/teacher-emily.jpg" },
-    { name: "Sister Emily Chen", role: "Music Coordinator", image: "/images/teacher-emily.jpg" },
+    { name: "Rev Patrick", role: "Children's Ministry Director", image: "/src/assets/rev-patrick.jpg" },
+    { name: "Sister Baaba Koomson", role: "Sunday School Teacher", image: "/src/assets/sis-baaba.jpg" },
+    { name: "Mrs Lydia Atia", role: "Sunday School Teacher", image: "/src/assets/Mama-Lee.jpg" },
+    { name: "Mrs Baaba Twentoh", role: "Sunday School Teacher", image: "/src/assets/Joyce-twentoh.jpg" },
+    { name: "Mrs Emmanuella Donkor", role: "Sunday School Teacher", image: "/src/assets/.jpg" },
+    { name: "Sister Emily Chen", role: "Music Coordinator", image: "/src/assets/.jpg" },
   ];
 
   // Optional: Close video after certain time

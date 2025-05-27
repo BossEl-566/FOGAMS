@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, FlatList, RefreshControl, Modal, Pressable, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
-import { AntDesign, Feather, FontAwesome } from '@expo/vector-icons';
+import { AntDesign, Feather, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { router } from 'expo-router';
@@ -13,6 +13,8 @@ const NotepadScreen = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
+  const [showRoutesModal, setShowRoutesModal] = useState(false);
+  const [selectedNote, setSelectedNote] = useState<any>(null);
 
   const getThemeColors = () => {
     return {
@@ -23,6 +25,7 @@ const NotepadScreen = () => {
       input: theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100',
       button: theme === 'dark' ? 'bg-blue-700' : 'bg-blue-600',
       border: theme === 'dark' ? 'border-gray-600' : 'border-gray-300',
+      modalBackground: theme === 'dark' ? 'bg-gray-800' : 'bg-white',
     };
   };
 
@@ -98,6 +101,52 @@ const NotepadScreen = () => {
     }
   };
 
+  const deleteNote = async (noteId: string) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/notepad/delete/${noteId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (response.ok) {
+        setNotes(notes.filter(note => note._id !== noteId));
+        Toast.show({
+          type: 'success',
+          text1: 'Note deleted successfully',
+        });
+      }
+    } catch (error) {
+      console.error('Error deleting note:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to delete note',
+        text2: error instanceof Error ? error.message : 'An unknown error occurred',
+      });
+    }
+  };
+
+  const confirmDelete = (noteId: string) => {
+    Alert.alert(
+      'Delete Note',
+      'Are you sure you want to delete this note?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => deleteNote(noteId),
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   const filteredNotes = notes.filter(note => 
     note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     note.content.toLowerCase().includes(searchQuery.toLowerCase())
@@ -108,6 +157,7 @@ const NotepadScreen = () => {
 
   const NoteCard = ({ note }: { note: any }) => {
     const [isPressed, setIsPressed] = useState(false);
+    const [showActions, setShowActions] = useState(false);
 
     return (
       <TouchableOpacity
@@ -120,21 +170,55 @@ const NotepadScreen = () => {
           <Text className={`text-lg font-bold mb-2 ${colors.text}`} numberOfLines={2}>
             {note.title}
           </Text>
-          <TouchableOpacity
-            onPress={() => toggleFavorite(note._id, note.isFavorite)}
-            className="p-2"
-          >
-            {note.isFavorite ? (
-              <AntDesign name="star" size={20} color="#f59e0b" />
-            ) : (
-              <AntDesign 
-                name="staro" 
-                size={20} 
-                color={isPressed ? '#9ca3af' : '#d1d5db'} 
-              />
-            )}
-          </TouchableOpacity>
+          <View className="flex-row">
+            <TouchableOpacity
+              onPress={() => toggleFavorite(note._id, note.isFavorite)}
+              className="p-2"
+            >
+              {note.isFavorite ? (
+                <AntDesign name="star" size={20} color="#f59e0b" />
+              ) : (
+                <AntDesign 
+                  name="staro" 
+                  size={20} 
+                  color={isPressed ? '#9ca3af' : '#d1d5db'} 
+                />
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setShowActions(!showActions)}
+              className="p-2"
+            >
+              <Feather name="more-vertical" size={20} color={colors.secondaryText} />
+            </TouchableOpacity>
+          </View>
         </View>
+        
+        {showActions && (
+          <View className={`absolute right-2 top-12 z-10 ${colors.card} rounded-md shadow-lg p-2 border ${colors.border}`}>
+            <TouchableOpacity 
+              className="flex-row items-center p-2"
+              onPress={() => {
+                setSelectedNote(note);
+                setShowRoutesModal(true);
+                setShowActions(false);
+              }}
+            >
+              <MaterialIcons name="edit" size={18} color={colors.text} />
+              <Text className={`ml-2 ${colors.text}`}>Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              className="flex-row items-center p-2"
+              onPress={() => {
+                confirmDelete(note._id);
+                setShowActions(false);
+              }}
+            >
+              <MaterialIcons name="delete" size={18} color="#ef4444" />
+              <Text className="ml-2 text-red-500">Delete</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         
         <Text className={`${colors.secondaryText} mb-4`} numberOfLines={4}>
           {note.content}
@@ -146,7 +230,7 @@ const NotepadScreen = () => {
           </Text>
           <TouchableOpacity
             className={`px-3 py-1 rounded ${colors.button}`}
-            onPress={() => console.log('View note', note._id)}
+            onPress={() => router.push(`/viewnote/${note._id}`)}
           >
             <Text className="text-white">View</Text>
           </TouchableOpacity>
@@ -229,6 +313,48 @@ const NotepadScreen = () => {
           )}
         </View>
       </ScrollView>
+
+      {/* Routes Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showRoutesModal}
+        onRequestClose={() => setShowRoutesModal(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
+          <View className={`m-5 p-5 rounded-lg w-11/12 ${colors.modalBackground}`}>
+            <Text className={`text-lg font-bold mb-4 ${colors.text}`}>Available Routes</Text>
+            <Text className={`mb-4 ${colors.text}`}>
+              router.post('/create', verifyToken, createNotepad);{"\n"}
+              router.get('/get', verifyToken, getNotepad);{"\n"}
+              router.get('/get/:notepadId', verifyToken, viewNotepad);{"\n"}
+              router.delete('/delete/:notepadId', verifyToken, deleteNotepad);{"\n"}
+              router.patch('/patch/:notepadId', verifyToken, patchNotepad);{"\n"}
+              router.put('/update/:notepadId', verifyToken, updateNotepad);
+            </Text>
+            <View className="flex-row justify-end space-x-2">
+              <Pressable
+                className={`px-4 py-2 rounded ${colors.button}`}
+                onPress={() => {
+                  setShowRoutesModal(false);
+                  router.push({
+                    pathname: '/editnote',
+                    params: { noteId: selectedNote._id }
+                  });
+                }}
+              >
+                <Text className="text-white">Edit Note</Text>
+              </Pressable>
+              <Pressable
+                className={`px-4 py-2 rounded border ${colors.border}`}
+                onPress={() => setShowRoutesModal(false)}
+              >
+                <Text className={colors.text}>Cancel</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       {/* Toast Notification */}
       <Toast />

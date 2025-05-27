@@ -22,74 +22,74 @@ export default function SundaySchoolMin() {
     {
       name: "MAD. CLARISSA BOADI MENDS",
       role: "SECRETARY",
-      image: "/images/leadership/secretary1.jpg"
+      image: "/src/assets/CLARISSA.jpg"
     },
     {
       name: "MAD KHADIJA",
       role: "SECRETARY",
-      image: "/images/leadership/secretary2.jpg"
+      image: "/src/assets/Khadija.jpg"
     },
     {
       name: "MRS. BETTY OFORI AIDOO",
       role: "TREASURER",
-      image: "/images/leadership/treasurer.jpg"
+      image: "/src/assets/mrs-Aidoo.jpg"
     }
   ];
 
   const teachers = {
     english: [
       {
-        name: "Teacher John",
+        name: "Teacher Stella",
         role: "English Class Teacher",
-        image: "/images/teachers/english/john.jpg",
+        image: "/src/assets/Stella.jpg",
         bio: "Teaching Sunday School for 5 years with a passion for making Bible stories come alive"
       },
       {
-        name: "Teacher Grace",
+        name: "Teacher Justina",
         role: "English Class Teacher",
-        image: "/images/teachers/english/grace.jpg",
+        image: "/src/assets/justina-baidoo.jpg",
         bio: "Specializes in creative teaching methods for all age groups"
       }
     ],
     akan: [
       {
-        name: "Teacher Kwame",
+        name: "Teacher Betty",
         role: "Akan Class Teacher",
-        image: "/images/teachers/akan/kwame.jpg",
+        image: "/src/assets/mrs-Aidoo.jpg",
         bio: "Bringing cultural heritage and faith together through language"
       },
       {
-        name: "Teacher Ama",
+        name: "Teacher Geoge",
         role: "Akan Class Teacher",
-        image: "/images/teachers/akan/ama.jpg",
+        image: "/src/assets/Pastor-Aidoo.jpg",
         bio: "Dedicated to preserving our traditions while teaching God's word"
       }
     ],
     youth: [
       {
-        name: "Teacher David",
+        name: "Teacher Linus",
         role: "Youth Class Teacher",
-        image: "/images/teachers/youth/david.jpg",
+        image: "/src/assets/Linus.jpg",
         bio: "Connecting with teenagers through relevant Bible teachings"
       },
       {
-        name: "Teacher Esther",
+        name: "Teacher Anthony",
         role: "Youth Class Teacher",
-        image: "/images/teachers/youth/esther.jpg",
+        image: "/src/assets/Anthony.jpg",
         bio: "Mentoring young adults in their faith journey"
       }
     ],
     adult: [
       {
-        name: "Teacher Samuel",
+        name: "Teacher Shibu",
         role: "Adult Class Teacher",
-        image: "/images/teachers/adult/samuel.jpg",
+        image: "/src/assets/Dr-Shibu.jpg",
         bio: "Deep Bible study for mature believers"
       },
       {
-        name: "Teacher Deborah",
+        name: "Teacher Addison",
         role: "Adult Class Teacher",
-        image: "/images/teachers/adult/deborah.jpg",
+        image: "/src/assets/Mr-Addison.jpg",
         bio: "Practical applications of Scripture for daily living"
       }
     ]
@@ -99,25 +99,25 @@ export default function SundaySchoolMin() {
     {
       name: "English Class",
       description: "Biblical teachings in English for all age groups - children, youth, and adults",
-      image: "/images/classes/english.jpg",
+      image: "/src/assets/Dr-Shibu.jpg",
       time: "Saturday 5:00 PM"
     },
     {
       name: "Akan Class",
       description: "Traditional language instruction connecting faith with cultural heritage for all generations",
-      image: "/images/classes/akan.jpg",
+      image: "/src/assets/Mr-Manu.jpg",
       time: "Saturday 5:00 PM"
     },
     {
       name: "Youth Class",
       description: "Engaging Bible study and discussions tailored for teenagers and young adults",
-      image: "/images/classes/youth.jpg",
+      image: "/src/assets/pastor-Eric.jpg",
       time: "Saturday 5:00 PM"
     },
     {
       name: "Adult Class",
       description: "In-depth Bible study and discussion for mature believers",
-      image: "/images/classes/adult.jpg",
+      image: "/src/assets/Mrs-Adomako.jpg",
       time: "Saturday 5:00 PM"
     }
   ];

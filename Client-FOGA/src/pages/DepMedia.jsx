@@ -17,21 +17,21 @@ const DepMedia = () => {
       name: "DR. DANIEL OBENG - MENSAH",
       role: "Chairperson",
       expertise: "Media Strategy & Content Direction",
-      image: "/media-chair.jpg",
+      image: "/src/assets/DANIEL.jpg",
       quote: "We don't just share content, we spread the Gospel through digital means."
-    },
+    }, 
     {
       name: "KARIM YUSSIF SAAMID",
       role: "Multimedia Producer",
-      expertise: "Video Production & Live Streaming",
+      expertise: "Social Media Manager",
       image: "/src/assets/Karim.jpg",
       quote: "Every frame we capture tells a story of faith."
     },
     {
       name: "EMMANUEL P.K. OKYERE",
-      role: "Social Media Manager",
+      role: "Video Production & Live Streaming ",
       expertise: "Digital Engagement & Branding",
-      image: "/media-social.jpg",
+      image: "/src/assets/Emma-Media.jpg",
       quote: "Turning likes into spiritual connections."
     },
     {
@@ -77,8 +77,8 @@ const DepMedia = () => {
   ];
 
   const stats = [
-    { value: "10K+", label: "Weekly Reach" },
-    { value: "500+", label: "Videos Produced" },
+    { value: "5K+", label: "Weekly Reach" },
+    { value: "100+", label: "Videos Produced" },
     { value: "24/7", label: "Content Updates" },
     { value: "100%", label: "Holy Spirit Led" }
   ];

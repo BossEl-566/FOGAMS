@@ -55,7 +55,7 @@ export default function DepCreativeArt() {
       title: 'Grace Motion',
       icon: '💃',
       description: 'Expressing worship through movement, our dance team incorporates liturgical, contemporary, and African dance styles. We believe the body is an instrument of praise and use choreography to tell God\'s stories.',
-      image: '/images/dance-team.jpg',
+      image: '/src/assets/thelma.jpg',
       schedule: 'Saturday, 6:00 PM - 8:00 PM'
     },
     {
@@ -82,7 +82,7 @@ export default function DepCreativeArt() {
     '/src/assets/Ministries31.jpg',
     '/src/assets/voices.jpg',
     '/src/assets/Actors-of-Faith.jpg',
-    '/src/assets/gallery5.jpg',
+    '/src/assets/actors-display.jpg',
   ];
 
   // Rehearsal Schedule

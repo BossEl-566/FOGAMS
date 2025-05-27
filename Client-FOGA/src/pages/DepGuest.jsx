@@ -8,25 +8,25 @@ const DepGuest = () => {
       name: "DR. NANA ABEKA TWENTOH", 
       role: "Co-Chairperson", 
       description: "Overseeing all guest experience operations and strategic direction",
-      img: "/chairperson1.jpg"
+      img: "/src/assets/Deacon-Twentoh.jpg"
     },
     { 
       name: "MRS FELICIA ADOMAKO", 
       role: "Co-Chairperson", 
       description: "Managing guest experience programs and volunteer coordination",
-      img: "/chairperson2.jpg"
+      img: "/src/assets/Mrs-Adomako.jpg"
     },
     { 
       name: "L.P SAMUEL NUAMEH", 
       role: "Men's Representative", 
       description: "Ensuring men feel welcomed and connected to church activities",
-      img: "/men-rep.jpg"
+      img: "src/assets/.jpg"
     },
     { 
       name: "MISS MERCY ANNAN", 
       role: "Youth Representative", 
       description: "Creating engaging experiences for young visitors and youth integration",
-      img: "/youth-rep.jpg"
+      img: "/src/assets/.jpg"
     }
   ];
 
@@ -126,7 +126,7 @@ const DepGuest = () => {
             >
               <div className="h-48 bg-gray-200 overflow-hidden flex items-center justify-center">
                 {/* Placeholder for actual image */}
-                <div className="text-gray-500 text-xl">Member Photo</div>
+                <div className="text-gray-500 text-xl"><img src={member.img}/></div>
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-800">{member.name}</h3>

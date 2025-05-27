@@ -14,8 +14,8 @@ export default function WomenMin() {
   ];
 
   const galleryImages = [
-    "/images/event1.jpg", "/images/event2.jpg", "/images/event3.jpg", "/images/event4.jpg",
-    "/images/event5.jpg", "/images/event6.jpg", "/images/event7.jpg", "/images/event8.jpg"
+    "/src/assets/women-cutting-cake.jpg", "/src/assets/women-action.jpg", "/src/assets/women-friends.jpg", "/src/assets/women-in-worship.jpg",
+    "/src/assets/women-celebration.jpg", "/src/assets/women-africa-dressed.jpg", "/src/assets/asafo-mamee-yamoah.jpg", "/src/assets/singing-women.jpg"
   ];
 
   const leadership = [
@@ -267,7 +267,7 @@ export default function WomenMin() {
             </div>
             <div className="md:w-1/2">
               <img 
-                src="/images/women-group.jpg" 
+                src="/src/assets/women-in-pink.jpg" 
                 alt="Women's Ministry Group"
                 className="w-full h-full object-cover"
               />

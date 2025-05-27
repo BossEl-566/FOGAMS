@@ -99,13 +99,6 @@ const DepFundraising = () => {
     }
   ];
 
-  const stats = [
-    { value: "5.2M", label: "Annual Budget Managed" },
-    { value: "18+", label: "Business Ventures" },
-    { value: "100%", label: "Financial Transparency" },
-    { value: "7YRS", label: "Investment Growth" }
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50">
       {/* Hero Section */}
@@ -219,40 +212,6 @@ const DepFundraising = () => {
                     ))}
                   </ul>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-800 to-green-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="p-6"
-              >
-                <motion.p 
-                  className="text-5xl font-bold mb-2"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    textShadow: ["0 0 0px #fff", "0 0 10px #fff", "0 0 0px #fff"]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    repeatDelay: 2
-                  }}
-                >
-                  {stat.value}
-                </motion.p>
-                <p className="text-blue-200 uppercase text-sm tracking-wider">{stat.label}</p>
               </motion.div>
             ))}
           </div>

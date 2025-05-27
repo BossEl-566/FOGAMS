@@ -18,19 +18,14 @@ const CustomHeader = () => {
       className={`rounded-b-3xl overflow-hidden shadow-lg ${
         isDark ? 'bg-gray-900' : 'bg-white'
       }`}
-      style={{
-        shadowColor: isDark ? '#3b82f6' : '#2563eb',
-        shadowOpacity: 0.2,
-        shadowRadius: 16,
-        shadowOffset: { width: 0, height: 4 },
-      }}
+      
     >
       <LinearGradient
         colors={isDark ? ['#1e293b', '#0f172a'] : ['#3b82f6', '#2563eb']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        className="pb-6 px-6"
-        style={{ paddingTop: insets.top }}
+        className="pb-6 px-3"
+        style={{ paddingTop: insets.top - 6 }}
       >
         <View className="flex-row justify-between items-center">
           {/* Left side with logo and church info */}
@@ -63,7 +58,7 @@ const CustomHeader = () => {
         </View>
 
         {/* Decorative elements */}
-        <View className="absolute top-0 right-0 w-32 h-32 rounded-full bg-white/5" />
+        <View className="absolute top-0 right-0 w-32 h-24 rounded-full bg-white/5" />
         <View className="absolute -bottom-10 -left-10 w-24 h-24 rounded-full bg-white/5" />
       </LinearGradient>
     </View>

@@ -3,12 +3,12 @@ import { motion } from 'framer-motion';
 
 const DepWelfare = () => {
   const welfareTeam = [
-    { name: "MR. EVANS PAEMUKA", role: "Head of Welfare", img: "/welfare1.jpg" },
-    { name: "MRS ERNESTINA APEATSE", role: "Deputy Head", img: "/welfare2.jpg" },
-    { name: "MAD. JOSEPINE YAWSON", role: "Secretary", img: "/welfare3.jpg" },
-    { name: "MR EMMANUEL ARTHUR", role: "Treasurer", img: "/welfare4.jpg" },
-    { name: "MRS JOYCE BAABA TWENTOH", role: "Events Coordinator", img: "/welfare5.jpg" },
-    { name: "MR. FRANCIS ANSAH", role: "Member Relations", img: "/welfare6.jpg" },
+    { name: "MR. EVANS PAEMUKA", role: "Head of Welfare", img: "/src/assets/.jpg" },
+    { name: "MRS ERNESTINA APEATSE", role: "Deputy Head", img: "/src/assets/APEATSE.jpg" },
+    { name: "MAD. JOSEPINE YAWSON", role: "Secretary", img: "/src/assets/maa-Josephine.jpg" },
+    { name: "MR EMMANUEL ARTHUR", role: "Treasurer", img: "/src/assets/.jpg" },
+    { name: "MRS JOYCE BAABA TWENTOH", role: "Events Coordinator", img: "/src/assets/Joyce-twentoh.jpg" },
+    { name: "MR. FRANCIS ANSAH", role: "Member Relations", img: "/src/assets/Francis-Ansah.jpg" },
   ];
 
   const services = [
@@ -106,7 +106,7 @@ const DepWelfare = () => {
               <div className="h-48 bg-purple-100 overflow-hidden">
                 {/* In a real implementation, replace with actual images */}
                 <div className="w-full h-full bg-gradient-to-r from-purple-300 to-blue-300 flex items-center justify-center text-white text-5xl">
-                  {member.name.charAt(0)}
+                  <img src={member.img} className="w-full h-full object-cover"/>
                 </div>
               </div>
               <div className="p-6">

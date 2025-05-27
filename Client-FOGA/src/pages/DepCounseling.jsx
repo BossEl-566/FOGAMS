@@ -7,21 +7,21 @@ const DepCounseling = () => {
       name: "Her Ladyship Veronique Praba Tetteh", 
       role: "Chairperson", 
       specialty: "Pastoral Care & Crisis Counseling",
-      img: "/chairperson-counseling.jpg",
+      img: "/src/assets/Veronique.jpg",
       quote: "Every visit is an opportunity to bring God's comfort to those in need."
     },
     { 
       name: "MRS. RHODA ACQUAAH", 
       role: "Senior Counselor", 
       specialty: "Marriage & Family Counseling",
-      img: "/counselor1.jpg",
+      img: "/src/assets/.jpg",
       quote: "Strong families build a strong church community."
     },
     { 
       name: "MRS. STELLA KALU", 
       role: "Visitation Coordinator", 
       specialty: "Home Visits & Hospital Chaplaincy",
-      img: "/counselor2.jpg",
+      img: "/src/assets/stella.jpg",
       quote: "We meet people where they are, physically and spiritually."
     }
   ];
@@ -52,12 +52,6 @@ const DepCounseling = () => {
       color: "bg-indigo-100 border-indigo-200"
     }
   ];
-
-  const testimonial = {
-    quote: "When I lost my job, the counseling team didn't just pray with me - they walked with me through the entire journey until I was back on my feet.",
-    author: "Sister Ama Mensah",
-    role: "Church Member for 8 years"
-  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -103,7 +97,7 @@ const DepCounseling = () => {
               >
                 <div className="md:w-1/3 h-64 bg-gray-200 flex items-center justify-center">
                   {/* Placeholder for image */}
-                  <div className="text-gray-500">Counselor Photo</div>
+                  <div className="text-gray-500"><img src={member.img} /></div>
                 </div>
                 <div className="md:w-2/3 p-8">
                   <div className="flex items-start">
@@ -153,27 +147,6 @@ const DepCounseling = () => {
                     </div>
                   </motion.div>
                 ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonial with Photo */}
-        <section className="mb-24">
-          <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <div className="md:flex">
-              <div className="md:w-1/3 bg-gray-200 h-64 flex items-center justify-center">
-                {/* Placeholder for testimonial photo */}
-                <div className="text-gray-500">Member Photo</div>
-              </div>
-              <div className="md:w-2/3 p-8 md:p-12 bg-gradient-to-r from-blue-50 to-indigo-50">
-                <blockquote className="text-2xl text-gray-800 italic mb-6">
-                  "{testimonial.quote}"
-                </blockquote>
-                <div className="font-medium text-gray-700">
-                  <p>{testimonial.author}</p>
-                  <p className="text-blue-600">{testimonial.role}</p>
-                </div>
               </div>
             </div>
           </div>

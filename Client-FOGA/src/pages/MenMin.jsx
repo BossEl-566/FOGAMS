@@ -15,7 +15,7 @@ export default function MenMin() {
 
   const galleryImages = [
     "/src/assets/men-at-beach.jpg", "/src/assets/men-at-beach1.jpg", "/src/assets/men-with-mrs.jpg",
-    "/src/assets/men-at-beach.jpg", "/src/assets/men-at-beach.jpg", "/src/assets/men-at-beach.jpg"
+    "/src/assets/men-at-beach.jpg", "/src/assets/men-eating.jpg", "/src/assets/men-praying.jpg"
   ];
 
   const leadership = [

@@ -4,45 +4,66 @@ import { motion } from 'framer-motion';
 const DepProtocol = () => {
   const teamMembers = [
     {
-      name: "Elder Samuel Owusu",
+      name: "Brother Elliot Datsomor",
       role: "Head Usher",
       department: "Sanctuary",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=761&q=80",
+      image: "/src/assets/.jpg",
       quote: "We create the first impression of God's house"
     },
     {
-      name: "Deaconess Grace Mensah",
+      name: "Brother Linus Datsomor",
       role: "Cleaning Coordinator",
       department: "Sanctuary Care",
-      image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+      image: "/src/assets/.jpg",
       quote: "A clean temple honors our holy God"
     },
     {
-      name: "Brother Kwame Asante",
+      name: "Mr. Amos Botchway",
       role: "Parking Team Lead",
       department: "Logistics",
-      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      image: "/src/assets/Bra-Cann.jpg",
       quote: "Order reflects the nature of our God"
     },
     {
-      name: "Sister Abena Danso",
+      name: "Sister Savina",
+      role: "Treasurer",
+      department: "Intercession",
+      image: "/src/assets/savina.jpg",
+      quote: "Prayer prepares the spiritual atmosphere"
+    },
+    {
+      name: "Miss Hawawu Kassim",
       role: "Welcome Team",
       department: "First Impressions",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      image: "/src/assets/Hawa.jpg",
       quote: "Every smile can open a heart to the Gospel"
     },
     {
-      name: "Brother Yaw Boateng",
+      name: "Miss Bridget Mawuli",
+      role: "Welcome Team",
+      department: "First Impressions",
+      image: "/src/assets/.jpg",
+      quote: "Every smile can open a heart to the Gospel"
+    },
+    {
+      name: "Brother Dickson",
+      role: "Welcome Team",
+      department: "First Impressions",
+      image: "/src/assets/.jpg",
+      quote: "Every smile can open a heart to the Gospel"
+    },
+    {
+      name: "Mr Alexanda Manu",
       role: "Security Lead",
-      department: "Safety",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80",
+      department: "Safety & Time keeper",
+      image: "/src/assets/Mr-Manu.jpg",
       quote: "Protecting God's people is sacred work"
     },
     {
-      name: "Sister Akua Nyamekye",
+      name: "Sister Rejoice",
       role: "Prayer Coordinator",
       department: "Intercession",
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80",
+      image: "/src/assets/rejoyce.jpg",
       quote: "Prayer prepares the spiritual atmosphere"
     }
   ];

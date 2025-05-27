@@ -33,20 +33,21 @@ const churchImages = [
   { id: 3, src: BaptismImage, alt: 'Baptism', category: 'Sacraments', description: 'Baptism service' },
   { id: 4, src: BaptismImage1, alt: 'Baptism', category: 'Sacraments', description: 'Holy Spirit Baptism' },
   { id: 5, src: ChoirImage, alt: 'Choir', category: 'Community', description: 'Church choir performance' },
-  { id: 6, src: 'https://source.unsplash.com/random/800x600?bible', alt: 'Bible Study', category: 'Groups', description: 'Weekly bible study' },
+  { id: 6, src: '/src/assets/bible-studies.jpg', alt: 'Bible Study', category: 'Groups', description: 'Weekly bible study' },
   { id: 7, src: Event, alt: 'Wedding', category: 'Events', description: 'Church wedding ceremony' },
-  { id: 8, src: 'https://source.unsplash.com/random/800x600?community', alt: 'Community', category: 'Outreach', description: 'Community service day' },
+  { id: 8, src: '/src/assets/community-service.jpg', alt: 'Community', category: 'Outreach', description: 'Community service day' },
+  { id: 9, src: '/src/assets/young-singles-4.jpg', alt: 'Community', category: 'Outreach', description: 'Young Singles Community outreach' },
 
   
-  { id: 10, src: 'https://source.unsplash.com/random/800x600?cross', alt: 'Cross', category: 'Symbols', description: 'Church cross' },
+  { id: 10, src: '/src/assets/women-in-pink.jpg', alt: 'Cross', category: 'Symbols', description: 'Women' },
   { id: 11, src: BaptismImage2, alt: 'Baptism', category: 'Sacraments', description: 'Baptism service' },
   { id: 12, src: Community, alt: 'Community', category: 'Community', description: 'Community gathering' },
   { id: 13, src: Community1, alt: 'Community', category: 'Community', description: 'Community gathering' },
   { id: 14, src: Community2, alt: 'Community', category: 'Community', description: 'Community gathering' },
   { id: 15, src: Community4, alt: 'Community', category: 'Community', description: 'Community gathering' },
-  { id: 16, src: 'https://source.unsplash.com/random/800x600?celebration', alt: 'Celebration', category: 'Events', description: 'Church celebration' },
+  { id: 16, src: '/src/assets/women-celebration.jpg', alt: 'Celebration', category: 'Events', description: 'Women celebration' },
   { id: 17, src: Ministries, alt: 'Service', category: 'Ministries', description: 'Church service' },
-  { id: 18, src: 'https://source.unsplash.com/random/800x600?yout', alt: 'Youth Group', category: 'Community', description: 'Youth group meeting' },
+  { id: 18, src: '/src/assets/youth-acting.jpg', alt: 'Youth Group', category: 'Community', description: 'Youth group acting' },
   { id: 19, src: Family1, alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
   { id: 20, src: Family2, alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
   { id: 21, src: Ministries1, alt: 'Service', category: 'Ministries', description: 'Church service' },
@@ -54,8 +55,14 @@ const churchImages = [
   { id: 23, src: Ministries3, alt: 'Service', category: 'Ministries', description: 'Church service' },
   { id: 24, src: Services1, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
   { id: 25, src: Services2, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
-  { id: 26, src: Services3, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
-
+  { id: 26, src: Services3, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' }, 
+  { id: 27, src: '/src/assets/youth-with-patron.jpg', alt: 'Worship Service', category: 'Ministries', description: 'Youth with Patron' },
+  { id: 28, src: '/src/assets/women-action.jpg', alt: 'Worship Service', category: 'Ministries', description: 'Women in action' },
+  { id: 29, src: '/src/assets/men-beach.jpg', alt: 'Worship Service', category: 'Ministries', description: 'Men Breakfast meeting at the beach' },
+  { id: 30, src: '/src/assets/missiontte.jpg', alt: 'Worship Service', category: 'Ministries', description: 'Church Missionette' },
+  { id: 31, src: '/src/assets/AsaafoMaame-Pastor.jpg', alt: 'Church Family', category: 'Family', description: 'Pastoral family' },
+  { id: 32, src: '/src/assets/Aidoo-Family.jpg', alt: 'Church Family', category: 'Family', description: 'Aidoo Family' },
+  { id: 33, src: '/src/assets/Pastors.jpg', alt: 'Church Family', category: 'Family', description: 'Pastors' },
 ];
 
 const GalleryCard = ({ image, onClick }) => {

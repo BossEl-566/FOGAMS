@@ -14,7 +14,7 @@ function ThemedLayout() {
   const isDark = theme === 'dark'
 
   return (
-    <View className={`flex-1 pt-5 ${isDark ? 'bg-black' : 'bg-white'}`}>
+    <View className={`flex-1 pt-3 ${isDark ? 'bg-black' : 'bg-white'}`}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -100,7 +100,7 @@ function ThemedLayout() {
     })}
   />
   <Stack.Screen
-    name="announcement"
+    name="announcements"
     options={() => ({
       headerShown: true,
       title: 'Announcement',

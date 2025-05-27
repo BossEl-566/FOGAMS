@@ -17,48 +17,52 @@ const DepProject = () => {
       role: "Chairperson", 
       expertise: "Project Oversight & Fundraising",
       contact: "024-427-4915",
-      quote: "Building God's house requires both faith and diligence"
+      quote: "Building God's house requires both faith and diligence",
+      img: "/src/assets/Mr-Manu.jpg"
     },
     { 
       name: "MR ALEX MANU", 
       role: "Men's Representative", 
       expertise: "Construction Coordination",
       contact: "",
-      quote: "Strong foundations for future generations"
+      quote: "Strong foundations for future generations",
+      img: "/src/assets/Mr-Manu.jpg"
     },
     { 
       name: "MR KARIM YUSSIF", 
       role: "Youth Representative", 
       expertise: "Volunteer Mobilization",
       contact: "",
-      quote: "Engaging young hands in kingdom building"
+      quote: "Engaging young hands in kingdom building",
+      img: "/src/assets/Karim.jpg"
     },
     { 
       name: "MRS OPHELIA BOATENG", 
       role: "Women's Ministry Rep", 
       expertise: "Interior Design & Decor",
       contact: "",
-      quote: "Creating a welcoming house of worship"
+      quote: "Creating a welcoming house of worship",
+      img: "/src/assets/Mr-Manu.jpg"
     }
   ];
 
   const projectPhases = [
     {
       name: "Phase 1: Foundation",
-      progress: 78,
+      progress: 0,
       amount: "₵500,000",
       status: "Completed",
       description: "Site preparation and foundation work completed"
     },
     {
       name: "Phase 2: Structure",
-      progress: 65,
+      progress: 0,
       amount: "₵1,200,000",
       status: "In Progress",
       description: "Steel framework and roofing currently underway"
     },
     {
-      name: "Phase 3: Finishes",
+      name: "Phase 0: Finishes",
       progress: 0,
       amount: "₵800,000",
       status: "Pending",
@@ -250,7 +254,7 @@ const DepProject = () => {
           >
             <div className="rounded-lg overflow-hidden">
               <div className="bg-gray-200 h-96 flex items-center justify-center">
-                <span className="text-gray-500">Architectural Rendering</span>
+                <span className="text-gray-500"><img src='/src/assets/church-project.jpg'/></span>
               </div>
             </div>
           </motion.div>
@@ -341,7 +345,7 @@ const DepProject = () => {
             >
               <div className="h-48 bg-gradient-to-r from-gray-800 to-gray-700 flex items-center justify-center">
                 <div className="text-white text-4xl font-light">
-                  {member.name.split(' ')[1].charAt(0)}{member.name.split(' ')[2].charAt(0)}
+                  <img src={member.img} />
                 </div>
               </div>
               <div className="p-6">

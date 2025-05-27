@@ -73,7 +73,7 @@ export default function About() {
         {
           name: "Lay Pastor Francis Dorduno",
           role: "Missions Ministry",
-          image: "/images/francis-dorduno.jpg"
+          image: "/src/assets/francis-dorduno.jpg"
         },
         {
           name: "Lay Pastor Mary Opoku",
@@ -119,7 +119,7 @@ export default function About() {
         {
           name: "Miss Hawawu Kassim",
           role: "Youth Ministry President",
-          image: "/images/hawawu-kassim.jpg"
+          image: "/src/assets/Hawa.jpg"
         },
         {name: "Mrs Joyce Baaba Twentoh",
         role: "Children Ministry President",

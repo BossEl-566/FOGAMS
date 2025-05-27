@@ -24,7 +24,7 @@ function ThemedLayout() {
                 name="index"
                 options={{
                     headerShown: true,
-                    title: 'Church Record',
+                    title: '',
                     headerStyle: {
                         backgroundColor: isDark ? '#000' : '#fff',
                     },
