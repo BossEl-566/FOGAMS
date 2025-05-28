@@ -7,6 +7,7 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import * as WebBrowser from 'expo-web-browser';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import { router } from 'expo-router';
 
 const ResourcesScreen = () => {
   const { currentUser } = useSelector((state: any) => state.user);
@@ -318,7 +319,7 @@ const ResourcesScreen = () => {
           {currentUser?.isAdmin && (
             <TouchableOpacity
               className="flex-row items-center px-4 py-2 rounded-lg bg-white bg-opacity-20"
-              onPress={() => console.log('Add new resource')}
+              onPress={() => router.push('/upload-resource')}
             >
               <Feather name="upload" size={18} color="#38A169" />
               <Text className="text-black ml-2">Upload</Text>

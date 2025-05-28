@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, FlatList, RefreshControl, Modal, Pressable, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, FlatList, RefreshControl, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import { AntDesign, Feather, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,7 +13,6 @@ const NotepadScreen = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
-  const [showRoutesModal, setShowRoutesModal] = useState(false);
   const [selectedNote, setSelectedNote] = useState<any>(null);
 
   const getThemeColors = () => {
@@ -160,48 +159,65 @@ const NotepadScreen = () => {
     const [showActions, setShowActions] = useState(false);
 
     return (
-      <TouchableOpacity
-        className={`p-4 rounded-lg mb-4 ${colors.card} border ${colors.border}`}
-        onPressIn={() => setIsPressed(true)}
-        onPressOut={() => setIsPressed(false)}
-        activeOpacity={0.8}
-      >
-        <View className="flex-row justify-between items-start">
-          <Text className={`text-lg font-bold mb-2 ${colors.text}`} numberOfLines={2}>
-            {note.title}
-          </Text>
-          <View className="flex-row">
-            <TouchableOpacity
-              onPress={() => toggleFavorite(note._id, note.isFavorite)}
-              className="p-2"
-            >
-              {note.isFavorite ? (
-                <AntDesign name="star" size={20} color="#f59e0b" />
-              ) : (
-                <AntDesign 
-                  name="staro" 
-                  size={20} 
-                  color={isPressed ? '#9ca3af' : '#d1d5db'} 
-                />
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setShowActions(!showActions)}
-              className="p-2"
-            >
-              <Feather name="more-vertical" size={20} color={colors.secondaryText} />
-            </TouchableOpacity>
+      <View className={`p-4 rounded-lg mb-4 ${colors.card} border ${colors.border}`}>
+        {/* Main content that's tappable for viewing */}
+        <TouchableOpacity
+          onPress={() => router.push(`/viewnote/${note._id}`)}
+          activeOpacity={0.8}
+        >
+          <View className="flex-row justify-between items-start">
+            <Text className={`text-lg font-bold mb-2 ${colors.text}`} numberOfLines={2}>
+              {note.title}
+            </Text>
+            <View className="flex-row">
+              <TouchableOpacity
+                onPress={(e) => {
+                  e.stopPropagation(); // Prevent triggering the parent's onPress
+                  toggleFavorite(note._id, note.isFavorite);
+                }}
+                className="p-2"
+              >
+                {note.isFavorite ? (
+                  <AntDesign name="star" size={20} color="#f59e0b" />
+                ) : (
+                  <AntDesign 
+                    name="staro" 
+                    size={20} 
+                    color={isPressed ? '#9ca3af' : '#d1d5db'} 
+                  />
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={(e) => {
+                  e.stopPropagation(); // Prevent triggering the parent's onPress
+                  setShowActions(!showActions);
+                }}
+                className="p-2"
+              >
+                <Feather name="more-vertical" size={20} color={colors.secondaryText} />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+          
+          <Text className={`${colors.secondaryText} mb-4`} numberOfLines={4}>
+            {note.content}
+          </Text>
+          
+          <View className="flex-row justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700">
+            <Text className={`text-sm ${colors.secondaryText}`}>
+              {new Date(note.updatedAt).toLocaleDateString()}
+            </Text>
+          </View>
+        </TouchableOpacity>
         
+        {/* Actions menu */}
         {showActions && (
-          <View className={`absolute right-2 top-12 z-10 ${colors.card} rounded-md shadow-lg p-2 border ${colors.border}`}>
+          <View className={`mt-2 ${colors.card} rounded-md shadow-lg p-2 border ${colors.border}`}>
             <TouchableOpacity 
               className="flex-row items-center p-2"
               onPress={() => {
-                setSelectedNote(note);
-                setShowRoutesModal(true);
                 setShowActions(false);
+                router.push(`/editnote/${note._id}`);
               }}
             >
               <MaterialIcons name="edit" size={18} color={colors.text} />
@@ -219,23 +235,7 @@ const NotepadScreen = () => {
             </TouchableOpacity>
           </View>
         )}
-        
-        <Text className={`${colors.secondaryText} mb-4`} numberOfLines={4}>
-          {note.content}
-        </Text>
-        
-        <View className="flex-row justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700">
-          <Text className={`text-sm ${colors.secondaryText}`}>
-            {new Date(note.updatedAt).toLocaleDateString()}
-          </Text>
-          <TouchableOpacity
-            className={`px-3 py-1 rounded ${colors.button}`}
-            onPress={() => router.push(`/viewnote/${note._id}`)}
-          >
-            <Text className="text-white">View</Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
+      </View>
     );
   };
 
@@ -313,48 +313,6 @@ const NotepadScreen = () => {
           )}
         </View>
       </ScrollView>
-
-      {/* Routes Modal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={showRoutesModal}
-        onRequestClose={() => setShowRoutesModal(false)}
-      >
-        <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
-          <View className={`m-5 p-5 rounded-lg w-11/12 ${colors.modalBackground}`}>
-            <Text className={`text-lg font-bold mb-4 ${colors.text}`}>Available Routes</Text>
-            <Text className={`mb-4 ${colors.text}`}>
-              router.post('/create', verifyToken, createNotepad);{"\n"}
-              router.get('/get', verifyToken, getNotepad);{"\n"}
-              router.get('/get/:notepadId', verifyToken, viewNotepad);{"\n"}
-              router.delete('/delete/:notepadId', verifyToken, deleteNotepad);{"\n"}
-              router.patch('/patch/:notepadId', verifyToken, patchNotepad);{"\n"}
-              router.put('/update/:notepadId', verifyToken, updateNotepad);
-            </Text>
-            <View className="flex-row justify-end space-x-2">
-              <Pressable
-                className={`px-4 py-2 rounded ${colors.button}`}
-                onPress={() => {
-                  setShowRoutesModal(false);
-                  router.push({
-                    pathname: '/editnote',
-                    params: { noteId: selectedNote._id }
-                  });
-                }}
-              >
-                <Text className="text-white">Edit Note</Text>
-              </Pressable>
-              <Pressable
-                className={`px-4 py-2 rounded border ${colors.border}`}
-                onPress={() => setShowRoutesModal(false)}
-              >
-                <Text className={colors.text}>Cancel</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
 
       {/* Toast Notification */}
       <Toast />

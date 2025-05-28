@@ -10,7 +10,7 @@ const ViewNoteScreen = () => {
   const { theme } = useSelector((state: any) => state.theme);
   const [note, setNote] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const { notepadId } = useLocalSearchParams();
+  const { id } = useLocalSearchParams();
 
   const getThemeColors = () => {
     return {
@@ -29,7 +29,7 @@ const ViewNoteScreen = () => {
       setLoading(true);
       const token = await AsyncStorage.getItem('token');
       
-      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/notepad/get/${notepadId}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/notepad/get/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -56,7 +56,7 @@ const ViewNoteScreen = () => {
   const deleteNote = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/notepad/delete/${notepadId}`, {
+      const response = await fetch(`http://${process.env.EXPO_PUBLIC_IP}/api/notepad/delete/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -101,7 +101,7 @@ const ViewNoteScreen = () => {
 
   useEffect(() => {
     fetchNote();
-  }, [notepadId]);
+  }, [id]);
 
   if (loading || !note) {
     return (
@@ -118,10 +118,7 @@ const ViewNoteScreen = () => {
         <View className={`p-4 rounded-lg mb-4 ${colors.card} border ${colors.border}`}>
           <View className="flex-row justify-between items-center mb-4">
             <Text className={`text-2xl font-bold ${colors.text}`}>{note.title}</Text>
-            <TouchableOpacity onPress={() => router.push({
-              pathname: '/editnote',
-              params: { noteId: note._id }
-            })}>
+            <TouchableOpacity onPress={() => router.push(`/editnote/${id}`)}>
               <Feather name="edit" size={24} color={colors.text} />
             </TouchableOpacity>
           </View>
