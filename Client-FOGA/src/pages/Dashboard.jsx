@@ -12,7 +12,6 @@ import DashEvents from '../components/DashEvents';
 import MembershipRequest from '../components/MembershipRequest';
 import DashAccountRecord from '../components/DashAccountRecord';
 import DashAnnouncement from '../components/DashAnnouncement';
-import Chat from '../components/Chat';
 import ChurchAccount from '../components/ChurchAccount';
 import DashBaptismApplication from '../components/DashBaptismApplication';
 import DashPoll from '../components/DashPoll';
@@ -87,7 +86,6 @@ export default function Dashboard() {
         {/* events */}
         {tab === 'events' && <DashEvents />}
         {tab === 'membership' && <MembershipRequest />}
-        {tab === 'message' && <Chat />}
         {/* tithe */}
         {tab === 'tithe' && <DashAccountRecord />}
         {/* account */}
@@ -97,7 +95,6 @@ export default function Dashboard() {
         {tab === 'poll' && <DashPoll />}
         {tab === 'book' && <DashBooking />}
         {tab === 'anonymous' && <DashAnonymous />}
-        {tab === 'bible' && <DashBible />}
         {tab === 'notepad' && <DashNotepad />}
         {tab === 'contact' && <DashContact />}
         {tab === 'birthday' && <DashBirthday />}

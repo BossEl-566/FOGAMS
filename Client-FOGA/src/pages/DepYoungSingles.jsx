@@ -258,9 +258,7 @@ export default function DepYoungSingles() {
                   </div>
                   <p className="italic text-purple-600 mb-4">"{topic.verse}"</p>
                   <p className="text-lg mb-6">{topic.description}</p>
-                  <button className="px-6 py-2 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition">
-                    Learn More
-                  </button>
+                  
                 </div>
                 <motion.div 
                   whileHover={{ scale: 1.02 }}

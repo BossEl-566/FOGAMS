@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from "../radux/user/userSlice";
-import { connectSocket } from "../radux/socket/socketSlice";
 import { Eye, EyeOff } from "lucide-react";
 import OAuth from "../components/OAuth";
 import toast from "react-hot-toast";
@@ -38,7 +37,6 @@ export default function SignIn() {
 
       if (res.ok) {
         dispatch(signInSuccess(data));
-        dispatch(connectSocket());
         navigate("/");
         toast.success("Successfully signed in");
       } else {

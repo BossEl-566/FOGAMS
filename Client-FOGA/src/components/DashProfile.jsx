@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Card, TextInput } from 'flowbite-react';
 import { Client, Storage } from 'appwrite';
-import { updateStart, updateSuccess, updateFailure, signoutSuccess } from '../radux/user/userSlice';
+import { updateStart, updateSuccess, updateFailure, signoutSuccess, signInSuccess } from '../radux/user/userSlice';
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -50,10 +50,12 @@ export default function DashProfile() {
         import.meta.env.VITE_APPWRITE_BUCKET_ID,
         response.$id
       ).href;
+      console.log(imageUrl);
 
       setImageFileUrl(imageUrl);
       setFormData({ ...formData, profilePicture: imageUrl });
       setUploadImageError(null);
+      dispatch(updateSuccess({ ...currentUser, profilePicture: imageUrl }));
       toast.success('Profile picture uploaded successfully');
     } catch (error) {
       setUploadImageError('Image upload failed. Image should be less than 5MB.');
@@ -67,6 +69,7 @@ export default function DashProfile() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+    console.log(formData);
   };
 
   const handleSubmit = async (e) => {
@@ -94,8 +97,9 @@ export default function DashProfile() {
       if (!res.ok) {
         throw new Error(data.message);
       }
-      
+      console.log(data);
       dispatch(updateSuccess(data));
+      dispatch(signInSuccess(data)); // Update local storage user data as well
       toast.success('Profile updated successfully');
     } catch (error) {
       dispatch(updateFailure(error.message));

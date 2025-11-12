@@ -112,11 +112,6 @@ export default function DashSidebar({ isOpen, onClose }) {
                   Announcement
                 </Sidebar.Item>
               </SidebarLink>
-              <SidebarLink to='/dashboard?tab=tithe' tabValue='tithe'>
-                <Sidebar.Item active={tab === 'tithe'} href="#" icon={ MdOutlineAttachMoney } as='div'>
-                  Account
-                </Sidebar.Item>
-              </SidebarLink>
               <SidebarLink to='/dashboard?tab=baptism' tabValue='baptism'>
                 <Sidebar.Item active={tab === 'baptism'} href="#" icon={FaPray} as='div'>
                   Baptism
@@ -185,11 +180,6 @@ export default function DashSidebar({ isOpen, onClose }) {
             )}
             {currentUser.isAdmin && (
               <>
-              <SidebarLink to='/dashboard?tab=account' tabValue='account'>
-                <Sidebar.Item active={tab === 'account'} href="#" icon={ FaMoneyBillTransfer } as='div'>
-                 Church Account
-                </Sidebar.Item>
-              </SidebarLink>
                 <SidebarLink to='/dashboard?tab=users' tabValue='users'>
                   <Sidebar.Item
                     active={tab === 'users'}

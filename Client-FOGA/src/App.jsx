@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { connectSocket } from './radux/socket/socketSlice'; // Import socket action
 import { signInSuccess } from './radux/user/userSlice'; // Import Redux action for setting user
 import Home from './pages/Home';
 import ContactUs from './pages/ContactUs';
@@ -53,6 +52,7 @@ import Gallery from './pages/Gallery';
 import PrayerGuide from './pages/PrayerGuide';
 import SendTestSMS from './pages/SendTestSMS';
 import Announcement from './pages/Announcement';
+import TopBar from './components/TopBar';
 
 export default function App() {
   const {currentUser} = useSelector((state) => state.user);
@@ -63,7 +63,6 @@ export default function App() {
     const storedUser = JSON.parse(localStorage.getItem("currentUser"));
     if (storedUser) {
         dispatch(signInSuccess(storedUser)); // Use correct Redux action
-        dispatch(connectSocket()); // Connect WebSocket
         setCurrentUsers(storedUser); // Update local state as well
     }
   }, [dispatch]);
@@ -71,6 +70,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <TopBar/>
       <Header />
       <Routes>
       <Route path="/" element={<Home />} />

@@ -2,14 +2,20 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
+// Import your images
+import churchProject from '/src/assets/church-project.jpg';
+import churchProject1 from '/src/assets/church-project1.jpg';
+import churchProject2 from '/src/assets/church-project2.jpg';
+import mrManu from '/src/assets/Mr-Manu.jpg';
+import karim from '/src/assets/Karim.jpg';
+
 const DepProject = () => {
-  // Sample project images (replace with your actual images)
+  // Use imported images
   const projectImages = [
-    "/src/assets/church-project.jpg",
-    "/src/assets/church-project1.jpg",
-    "/src/assets/church-project2.jpg"
+    churchProject,
+    churchProject1,
+    churchProject2
   ];
-  
 
   const teamMembers = [
     { 
@@ -18,7 +24,7 @@ const DepProject = () => {
       expertise: "Project Oversight & Fundraising",
       contact: "024-427-4915",
       quote: "Building God's house requires both faith and diligence",
-      img: "/src/assets/Mr-Manu.jpg"
+      img: mrManu
     },
     { 
       name: "MR ALEX MANU", 
@@ -26,7 +32,7 @@ const DepProject = () => {
       expertise: "Construction Coordination",
       contact: "",
       quote: "Strong foundations for future generations",
-      img: "/src/assets/Mr-Manu.jpg"
+      img: mrManu
     },
     { 
       name: "MR KARIM YUSSIF", 
@@ -34,7 +40,7 @@ const DepProject = () => {
       expertise: "Volunteer Mobilization",
       contact: "",
       quote: "Engaging young hands in kingdom building",
-      img: "/src/assets/Karim.jpg"
+      img: karim
     },
     { 
       name: "MRS OPHELIA BOATENG", 
@@ -42,7 +48,7 @@ const DepProject = () => {
       expertise: "Interior Design & Decor",
       contact: "",
       quote: "Creating a welcoming house of worship",
-      img: "/src/assets/Mr-Manu.jpg"
+      img: mrManu
     }
   ];
 
@@ -50,21 +56,21 @@ const DepProject = () => {
     {
       name: "Phase 1: Foundation",
       progress: 0,
-      amount: "₵500,000",
-      status: "Completed",
+      amount: "₵ 1,000,000",
+      status: "Pending",
       description: "Site preparation and foundation work completed"
     },
     {
       name: "Phase 2: Structure",
       progress: 0,
-      amount: "₵1,200,000",
-      status: "In Progress",
+      amount: "₵ 6,000,000",
+      status: "Pending",
       description: "Steel framework and roofing currently underway"
     },
     {
       name: "Phase 0: Finishes",
       progress: 0,
-      amount: "₵800,000",
+      amount: "₵ 1,000,000",
       status: "Pending",
       description: "Interior finishes and landscaping"
     }
@@ -74,8 +80,7 @@ const DepProject = () => {
     {
       name: "Mobile Money",
       details: [
-        { network: "MTN", number: "0244 274 915", name: "Joseph K Arthur" },
-        { network: "Vodafone", number: "020 123 4567", name: "Church Projects" }
+        { network: "MTN", number: "0240 395 732", name: "Assemblies of God Ghana(Fellowship of Grace)" },
       ],
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,8 +91,7 @@ const DepProject = () => {
     {
       name: "Bank Transfer",
       details: [
-        { bank: "Ghana Commercial Bank", account: "1234567890", name: "Church Building Fund" },
-        { bank: "Ecobank", account: "0987654321", name: "New Auditorium Project" }
+        { bank: "National Investment Bank (NIB)", account: "1311096930701", name: "Fellowship of Grace Ass. of God" },
       ],
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -142,15 +146,6 @@ const DepProject = () => {
           >
             Building a 3,000-seat worship center for generations to come
           </motion.p>
-          
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-    
-          </motion.div>
         </div>
       </div>
 
@@ -253,9 +248,11 @@ const DepProject = () => {
             className="bg-white p-1 rounded-xl shadow-2xl"
           >
             <div className="rounded-lg overflow-hidden">
-              <div className="bg-gray-200 h-96 flex items-center justify-center">
-                <span className="text-gray-500"><img src='/src/assets/church-project.jpg'/></span>
-              </div>
+              <img 
+                src={churchProject} 
+                alt="Church project overview"
+                className="w-full h-96 object-cover"
+              />
             </div>
           </motion.div>
         </div>
@@ -321,17 +318,27 @@ const DepProject = () => {
         </div>
       </section>
 
-      {/* Team Section */}
+      {/* Team Section - IMPROVED */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <motion.h2
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16"
+          className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4"
         >
           Project Committee
         </motion.h2>
+        
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto"
+        >
+          Meet the dedicated team overseeing the construction of our new auditorium
+        </motion.p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {teamMembers.map((member, index) => (
@@ -341,19 +348,37 @@ const DepProject = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group"
             >
-              <div className="h-48 bg-gradient-to-r from-gray-800 to-gray-700 flex items-center justify-center">
-                <div className="text-white text-4xl font-light">
-                  <img src={member.img} />
-                </div>
+              {/* Member Image */}
+              <div className="h-48 overflow-hidden bg-gray-100">
+                <img 
+                  src={member.img} 
+                  alt={member.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
+              
+              {/* Member Info */}
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
-                <p className="text-yellow-600 font-medium mb-1">{member.role}</p>
-                {member.contact && <p className="text-gray-600 text-sm mb-2">{member.contact}</p>}
-                <p className="text-gray-700 text-sm mb-4">{member.expertise}</p>
-                <blockquote className="text-gray-600 italic text-sm border-l-2 border-yellow-500 pl-4">
+                <h3 className="text-lg font-bold text-gray-900 mb-1 leading-tight">
+                  {member.name}
+                </h3>
+                <p className="text-yellow-600 font-semibold mb-2 text-sm">
+                  {member.role}
+                </p>
+                
+                {member.contact && (
+                  <p className="text-gray-600 text-sm mb-3 font-medium">
+                    📞 {member.contact}
+                  </p>
+                )}
+                
+                <p className="text-gray-700 text-sm mb-4 leading-relaxed">
+                  {member.expertise}
+                </p>
+                
+                <blockquote className="text-gray-600 italic text-sm border-l-3 border-yellow-500 pl-3 py-1 bg-yellow-50 rounded-r">
                   "{member.quote}"
                 </blockquote>
               </div>
@@ -416,9 +441,9 @@ const DepProject = () => {
               All donations are tax-deductible and will be acknowledged with official receipts.
             </p>
             <Link to="/contact-us" className="inline-block mb-4">
-            <button className="bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
-              Request Donation Information
-            </button>
+              <button className="bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                Request Donation Information
+              </button>
             </Link>
           </motion.div>
         </div>

@@ -99,7 +99,7 @@ const DepCounseling = () => {
                   {/* Placeholder for image */}
                   <div className="text-gray-500"><img src={member.img} /></div>
                 </div>
-                <div className="md:w-2/3 p-8">
+                <div className="md:w-2/3 p-8 sm:bg-white md:bg-white bg-white">
                   <div className="flex items-start">
                     <span className="text-4xl font-bold text-gray-300 mr-4">{index + 1}</span>
                     <div>
