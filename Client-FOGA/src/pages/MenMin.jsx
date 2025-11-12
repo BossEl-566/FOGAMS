@@ -1,45 +1,78 @@
 import React, { useState, useEffect } from 'react';
 import { FaQuoteLeft, FaChurch, FaCalendarAlt, FaHandsHelping, FaUsers, FaPrayingHands } from 'react-icons/fa';
 
+// Import available images
+import MenMinistry from '../assets/Men_ministry.jpg';
+import MenFriends from '../assets/Men-friends.jpg';
+import Action from '../assets/action.jpg';
+import SingingMen from '../assets/singing-men.jpg';
+import MenAtBeach from '../assets/men-at-beach.jpg';
+import MenAtBeach1 from '../assets/men-at-beach1.jpg';
+import MenWithMrs from '../assets/men-with-mrs.jpg';
+import MenEating from '../assets/men-eating.jpg';
+import MenPraying from '../assets/men-praying.jpg';
+import MrAddison from '../assets/Mr-Addison.jpg';
+import MrOffie from '../assets/mr-offie.jpg';
+import Bright from '../assets/bright.jpg';
+// import EmmanuelArthur from '../assets/emmanuel-arthur.jpg';
+
 export default function MenMin() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentHero, setCurrentHero] = useState(0);
 
-  // Image paths - replace with your actual images
+  // Image paths - using imported images
   const heroImages = [
-    "/src/assets/Men_ministry.jpg",
-    "/src/assets/Men-friends.jpg",
-    "/src/assets/action.jpg",
-    "/src/assets/singing-men.jpg"
+    MenMinistry,
+    MenFriends,
+    Action,
+    SingingMen
   ];
 
   const galleryImages = [
-    "/src/assets/men-at-beach.jpg", "/src/assets/men-at-beach1.jpg", "/src/assets/men-with-mrs.jpg",
-    "/src/assets/men-at-beach.jpg", "/src/assets/men-eating.jpg", "/src/assets/men-praying.jpg"
+    MenAtBeach, MenAtBeach1, MenWithMrs,
+    MenAtBeach, MenEating, MenPraying
   ];
 
   const leadership = [
     {
       name: "Mr. Andy Kojo Addison",
       position: "President",
-      image: "/src/assets/Mr-Addison.jpg"
+      image: MrAddison
     },
     {
       name: "L.P. Patrick Offei",
       position: "Vice President",
-      image: "/src/assets/mr-offie.jpg"
+      image: MrOffie
     }, 
     {
       name: "Mr. Bright Abeka Mensah",
       position: "Secretary",
-      image: "/src/assets/bright.jpg"
+      image: Bright
     },
     {
       name: "Mr. Emmanuel Arthur",
       position: "Treasurer",
-      image: "/src/assets/emmanuel-arthur.jpg"
+      image: null
     }
   ];
+
+  // Handle image error
+  const handleImageError = (e) => {
+    e.target.style.display = 'none';
+    // Create fallback background
+    e.target.parentElement.style.background = 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)';
+    e.target.parentElement.classList.add('flex', 'items-center', 'justify-center');
+    
+    const fallbackText = document.createElement('div');
+    fallbackText.className = 'text-white text-center p-4';
+    fallbackText.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+      <span class="text-sm">Image not available</span>
+    `;
+    e.target.parentElement.appendChild(fallbackText);
+  };
 
   // Auto-rotate hero images and gallery slides
   useEffect(() => {
@@ -71,8 +104,6 @@ export default function MenMin() {
             }}
           >
             <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center p-4">
-              
-              
               <div className="text-center px-4">
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">
                   MEN'S MINISTRY
@@ -83,7 +114,6 @@ export default function MenMin() {
                 <div className="text-3xl md:text-4xl font-bold text-blue-400 mb-4">
                   MEN.. <span className="text-red-500">ACTION!!!</span>
                 </div>
-                
               </div>
             </div>
           </div>
@@ -152,12 +182,24 @@ export default function MenMin() {
               key={index}
               className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-200"
             >
-              <div className="h-64 bg-gray-200 overflow-hidden">
-                <img 
-                  src={leader.image} 
-                  alt={leader.name}
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                />
+              <div className="h-64 bg-gray-200 overflow-hidden relative">
+                {leader.image ? (
+                  <img 
+                    src={leader.image} 
+                    alt={leader.name}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    onError={handleImageError}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-blue-800 to-blue-600 flex items-center justify-center text-white">
+                    <div className="text-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      <span className="text-sm">Image not available</span>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="p-6 text-center">
                 <h3 className="text-xl font-bold text-gray-900">{leader.name}</h3>
@@ -225,11 +267,12 @@ export default function MenMin() {
             >
               {galleryImages.map((img, index) => (
                 <div key={index} className="flex-shrink-0 w-full md:w-1/4 px-2">
-                  <div className="h-64 md:h-96 rounded-lg overflow-hidden shadow-md border-4 border-white">
+                  <div className="h-64 md:h-96 rounded-lg overflow-hidden shadow-md border-4 border-white relative">
                     <img 
                       src={img} 
                       alt={`Event ${index + 1}`}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                      onError={handleImageError}
                     />
                   </div>
                 </div>
@@ -280,9 +323,10 @@ export default function MenMin() {
             </div>
             <div className="md:w-1/2">
               <img 
-                src="/src/assets/Men_ministry.jpg" 
+                src={MenMinistry} 
                 alt="Men's Ministry Group"
                 className="w-full h-full object-cover"
+                onError={handleImageError}
               />
             </div>
           </div>

@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+// Import available images
+import DeaconAnsong from '../assets/Deacon-Ansong.jpg';
+import MrsAdomako from '../assets/Mrs-Adomako.jpg';
 
 const DepFundraising = () => {
   const leadershipTeam = [
@@ -10,7 +13,7 @@ const DepFundraising = () => {
       contact: "",
       expertise: "Financial Strategy & Investment Oversight",
       quote: "Stewarding resources wisely to advance God's kingdom",
-      image: '/src/assets/Deacon-Ansong.jpg'
+      image: DeaconAnsong
     },
     { 
       name: "MR JOSEPH KWEKU ARTHUR", 
@@ -18,7 +21,7 @@ const DepFundraising = () => {
       contact: "0244274915",
       expertise: "Fund Management & Financial Reporting",
       quote: "Every cedi invested in God's work yields eternal dividends",
-      image: 'josephArthur'
+      image: null // No image available
     },
     { 
       name: "MRS FELICIA ADOMAKO", 
@@ -26,7 +29,7 @@ const DepFundraising = () => {
       contact: "0243538690",
       expertise: "Capital Campaigns & Donor Relations",
       quote: "Generosity transforms both giver and receiver",
-      image: '/src/assets/Mrs-Adomako.jpg'
+      image: MrsAdomako
     },
     { 
       name: "MR EMMANUEL L. BILANDAM", 
@@ -34,7 +37,7 @@ const DepFundraising = () => {
       contact: "",
       expertise: "Business Development Initiatives",
       quote: "Building financial foundations for generational impact",
-      image: 'emmanuelBilandam'
+      image: null // No image available
     },
     { 
       name: "MISS BRIDGET MAWULI", 
@@ -42,7 +45,7 @@ const DepFundraising = () => {
       contact: "",
       expertise: "Next-Gen Financial Stewardship",
       quote: "Empowering young investors for kingdom business",
-      image: 'bridgetMawuli'
+      image: null // No image available
     },
     { 
       name: "MRS ABREFA", 
@@ -50,7 +53,7 @@ const DepFundraising = () => {
       contact: "",
       expertise: "Community Microfinance",
       quote: "Small investments grow mighty harvests",
-      image: 'abrefa'
+      image: null // No image available
     }
   ];
 
@@ -148,13 +151,22 @@ const DepFundraising = () => {
               viewport={{ once: true }}
               className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300"
             >
-              <div className="h-48 relative overflow-hidden">
-                <img 
-                  src={member.image} 
-                  alt={member.name}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+              <div className="h-48 relative overflow-hidden bg-gradient-to-br from-blue-100 to-green-100 flex items-center justify-center">
+                {member.image ? (
+                  <img 
+                    src={member.image} 
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="text-gray-400 flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span className="text-sm mt-2">No Image</span>
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
               </div>
               <div className="p-6">

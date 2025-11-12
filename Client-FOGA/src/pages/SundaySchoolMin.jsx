@@ -2,6 +2,22 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
+// Import available images
+import DrShibu from '../assets/Dr-Shibu.jpg';
+import Clarissa from '../assets/CLARISSA.jpg';
+import Khadija from '../assets/Khadija.jpg';
+import MrsAidoo from '../assets/mrs-Aidoo.jpg';
+import Stella from '../assets/Stella.jpg';
+import JustinaBaidoo from '../assets/justina-baidoo.jpg';
+import PastorAidoo from '../assets/Pastor-Aidoo.jpg';
+// import Linus from '../assets/Linus.jpg';
+// import Anthony from '../assets/Anthony.jpg';
+import MrAddison from '../assets/Mr-Addison.jpg';
+import MrManu from '../assets/Mr-Manu.jpg';
+import PastorEric from '../assets/pastor-Eric.jpg';
+import MrsAdomako from '../assets/Mrs-Adomako.jpg';
+import SundaySchoolTeachers from '../assets/Sunday_school-Teachers.jpg';
+
 export default function SundaySchoolMin() {
   const fadeIn = {
     hidden: { opacity: 0 },
@@ -13,26 +29,44 @@ export default function SundaySchoolMin() {
     visible: { y: 0, opacity: 1, transition: { duration: 0.8 } }
   };
 
+  // Handle image error
+  const handleImageError = (e) => {
+    e.target.style.display = 'none';
+    // Create fallback background
+    e.target.parentElement.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    e.target.parentElement.classList.add('flex', 'items-center', 'justify-center');
+    
+    const fallbackText = document.createElement('div');
+    fallbackText.className = 'text-white text-center p-4';
+    fallbackText.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+      <span class="text-sm">Image not available</span>
+    `;
+    e.target.parentElement.appendChild(fallbackText);
+  };
+
   const leadership = [
     {
       name: "DR. SHIABU ADAMS",
       role: "SUNDAY SCHOOL SUPERINTENDENT",
-      image: "/src/assets/Dr-Shibu.jpg"
+      image: DrShibu
     },
     {
       name: "MAD. CLARISSA BOADI MENDS",
       role: "SECRETARY",
-      image: "/src/assets/CLARISSA.jpg"
+      image: Clarissa
     },
     {
       name: "MAD KHADIJA",
       role: "SECRETARY",
-      image: "/src/assets/Khadija.jpg"
+      image: Khadija
     },
     {
       name: "MRS. BETTY OFORI AIDOO",
       role: "TREASURER",
-      image: "/src/assets/mrs-Aidoo.jpg"
+      image: MrsAidoo
     }
   ];
 
@@ -41,13 +75,13 @@ export default function SundaySchoolMin() {
       {
         name: "Teacher Stella",
         role: "English Class Teacher",
-        image: "/src/assets/Stella.jpg",
+        image: Stella,
         bio: "Teaching Sunday School for 5 years with a passion for making Bible stories come alive"
       },
       {
         name: "Teacher Justina",
         role: "English Class Teacher",
-        image: "/src/assets/justina-baidoo.jpg",
+        image: JustinaBaidoo,
         bio: "Specializes in creative teaching methods for all age groups"
       }
     ],
@@ -55,13 +89,13 @@ export default function SundaySchoolMin() {
       {
         name: "Teacher Betty",
         role: "Akan Class Teacher",
-        image: "/src/assets/mrs-Aidoo.jpg",
+        image: MrsAidoo,
         bio: "Bringing cultural heritage and faith together through language"
       },
       {
         name: "Teacher Geoge",
         role: "Akan Class Teacher",
-        image: "/src/assets/Pastor-Aidoo.jpg",
+        image: PastorAidoo,
         bio: "Dedicated to preserving our traditions while teaching God's word"
       }
     ],
@@ -69,13 +103,13 @@ export default function SundaySchoolMin() {
       {
         name: "Teacher Linus",
         role: "Youth Class Teacher",
-        image: "/src/assets/Linus.jpg",
+        image: null,
         bio: "Connecting with teenagers through relevant Bible teachings"
       },
       {
         name: "Teacher Anthony",
         role: "Youth Class Teacher",
-        image: "/src/assets/Anthony.jpg",
+        image: null,
         bio: "Mentoring young adults in their faith journey"
       }
     ],
@@ -83,13 +117,13 @@ export default function SundaySchoolMin() {
       {
         name: "Teacher Shibu",
         role: "Adult Class Teacher",
-        image: "/src/assets/Dr-Shibu.jpg",
+        image: DrShibu,
         bio: "Deep Bible study for mature believers"
       },
       {
         name: "Teacher Addison",
         role: "Adult Class Teacher",
-        image: "/src/assets/Mr-Addison.jpg",
+        image: MrAddison,
         bio: "Practical applications of Scripture for daily living"
       }
     ]
@@ -99,25 +133,25 @@ export default function SundaySchoolMin() {
     {
       name: "English Class",
       description: "Biblical teachings in English for all age groups - children, youth, and adults",
-      image: "/src/assets/Dr-Shibu.jpg",
+      image: DrShibu,
       time: "Saturday 5:00 PM"
     },
     {
       name: "Akan Class",
       description: "Traditional language instruction connecting faith with cultural heritage for all generations",
-      image: "/src/assets/Mr-Manu.jpg",
+      image: MrManu,
       time: "Saturday 5:00 PM"
     },
     {
       name: "Youth Class",
       description: "Engaging Bible study and discussions tailored for teenagers and young adults",
-      image: "/src/assets/pastor-Eric.jpg",
+      image: PastorEric,
       time: "Saturday 5:00 PM"
     },
     {
       name: "Adult Class",
       description: "In-depth Bible study and discussion for mature believers",
-      image: "/src/assets/Mrs-Adomako.jpg",
+      image: MrsAdomako,
       time: "Saturday 5:00 PM"
     }
   ];
@@ -208,9 +242,10 @@ export default function SundaySchoolMin() {
             </div>
             <div className="rounded-xl overflow-hidden shadow-md">
               <img 
-                src="/src/assets/Sunday_school-Teachers.jpg"
+                src={SundaySchoolTeachers}
                 alt="Sunday School for all ages"
                 className="w-full h-full object-cover"
+                onError={handleImageError}
               />
             </div>
           </div>
@@ -247,6 +282,7 @@ export default function SundaySchoolMin() {
                     src={cls.image} 
                     alt={cls.name}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    onError={handleImageError}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                   <h3 className="absolute bottom-4 left-4 text-white text-xl font-bold">
@@ -302,6 +338,7 @@ export default function SundaySchoolMin() {
                       src={teacher.image} 
                       alt={teacher.name}
                       className="w-full h-48 md:h-full object-cover"
+                      onError={handleImageError}
                     />
                   </div>
                   <div className="p-6 md:w-2/3">
@@ -340,6 +377,7 @@ export default function SundaySchoolMin() {
                       src={teacher.image} 
                       alt={teacher.name}
                       className="w-full h-48 md:h-full object-cover"
+                      onError={handleImageError}
                     />
                   </div>
                   <div className="p-6 md:w-2/3">
@@ -378,6 +416,7 @@ export default function SundaySchoolMin() {
                       src={teacher.image} 
                       alt={teacher.name}
                       className="w-full h-48 md:h-full object-cover"
+                      onError={handleImageError}
                     />
                   </div>
                   <div className="p-6 md:w-2/3">
@@ -415,6 +454,7 @@ export default function SundaySchoolMin() {
                       src={teacher.image} 
                       alt={teacher.name}
                       className="w-full h-48 md:h-full object-cover"
+                      onError={handleImageError}
                     />
                   </div>
                   <div className="p-6 md:w-2/3">
@@ -452,11 +492,12 @@ export default function SundaySchoolMin() {
               transition={{ delay: index * 0.1 }}
               className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
-              <div className="h-64 bg-gradient-to-r from-cyan-500 to-blue-500 overflow-hidden">
+              <div className="h-64 bg-gradient-to-r from-cyan-500 to-blue-500 overflow-hidden relative">
                 <img 
                   src={person.image} 
                   alt={person.name}
                   className="w-full h-full object-cover"
+                  onError={handleImageError}
                 />
               </div>
               <div className="p-6">
@@ -486,9 +527,9 @@ export default function SundaySchoolMin() {
               During this time, they study the curriculum, plan engaging activities for all age groups, and pray for their students.
             </p>
             <Link to="/contact-us" className="inline-block mb-4">
-            <button className="bg-white text-purple-600 font-bold px-8 py-3 rounded-full hover:bg-purple-100 transition-all duration-300 transform hover:scale-105">
-              Interested in Teaching? Join Us
-            </button>
+              <button className="bg-white text-purple-600 font-bold px-8 py-3 rounded-full hover:bg-purple-100 transition-all duration-300 transform hover:scale-105">
+                Interested in Teaching? Join Us
+              </button>
             </Link>
           </div>
         </motion.div>

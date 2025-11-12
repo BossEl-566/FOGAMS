@@ -4,18 +4,31 @@ import { Carousel } from 'flowbite-react';
 import { Modal, Timeline, Card } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 
+// Import available images
+import ChildrenEvangelism from '../assets/children-evengelism.jpg';
+import PastorWithChildren from '../assets/pastor-with-children.jpg';
+import Missiontte from '../assets/missiontte.jpg';
+import Poem from '../assets/Poem.jpg';
+import DancingChildren from '../assets/dancing-children.jpg';
+import RevPatrick from '../assets/rev-patrick.jpg';
+import SisBaaba from '../assets/sis-baaba.jpg';
+import MamaLee from '../assets/Mama-Lee.jpg';
+import JoyceTwentoh from '../assets/Joyce-twentoh.jpg';
+// Import video
+import MinistryVideo from '../assets/0429.mp4';
+
 export default function ChildrenMin() {
   const [activeTab, setActiveTab] = useState('about');
-  const [showVideo, setShowVideo] = useState(true); // Set to true for autoplay on load
+  const [showVideo, setShowVideo] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   const galleryImages = [
-    '/src/assets/children-evengelism.jpg',
-    '/src/assets/pastor-with-children.jpg',
-    '/src/assets/missiontte.jpg',
-    '/src/assets/Poem.jpg',
-    '/src/assets/dancing-children.jpg',
+    ChildrenEvangelism,
+    PastorWithChildren,
+    Missiontte,
+    Poem,
+    DancingChildren
   ];
 
   const events = [
@@ -26,32 +39,39 @@ export default function ChildrenMin() {
   ];
 
   const teamMembers = [
-    { name: "Rev Patrick", role: "Children's Ministry Director", image: "/src/assets/rev-patrick.jpg" },
-    { name: "Sister Baaba Koomson", role: "Sunday School Teacher", image: "/src/assets/sis-baaba.jpg" },
-    { name: "Mrs Lydia Atia", role: "Sunday School Teacher", image: "/src/assets/Mama-Lee.jpg" },
-    { name: "Mrs Baaba Twentoh", role: "Sunday School Teacher", image: "/src/assets/Joyce-twentoh.jpg" },
-    { name: "Mrs Emmanuella Donkor", role: "Sunday School Teacher", image: "/src/assets/.jpg" },
-    { name: "Sister Emily Chen", role: "Music Coordinator", image: "/src/assets/.jpg" },
+    { name: "Rev Patrick", role: "Children's Ministry Director", image: RevPatrick },
+    { name: "Sister Baaba Koomson", role: "Sunday School Teacher", image: SisBaaba },
+    { name: "Mrs Lydia Atia", role: "Sunday School Teacher", image: MamaLee },
+    { name: "Mrs Baaba Twentoh", role: "Sunday School Teacher", image: JoyceTwentoh },
+    { name: "Mrs Emmanuella Donkor", role: "Sunday School Teacher", image: null }, // No image available
+    { name: "Sister Emily Chen", role: "Music Coordinator", image: null }, // No image available
   ];
 
-  // Optional: Close video after certain time
+  // Handle image error for missing images
+  const handleImageError = (e) => {
+    e.target.style.display = 'none';
+    e.target.nextSibling.style.display = 'flex';
+  };
+
   useEffect(() => {
     if (showVideo) {
       const timer = setTimeout(() => {
         setShowVideo(false);
-      }, 30000); // Close after 30 seconds
+      }, 30000);
       return () => clearTimeout(timer);
     }
   }, [showVideo]);
 
   const handleImageClick = (image) => {
-    setSelectedImage(image);
-    setIsImageModalOpen(true);
+    if (image) {
+      setSelectedImage(image);
+      setIsImageModalOpen(true);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Video Modal - Now shows automatically */}
+      {/* Video Modal */}
       {showVideo && (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
           <div className="relative max-w-4xl w-full h-[70vh]">
@@ -68,7 +88,7 @@ export default function ChildrenMin() {
               controls
               playsInline
             >
-              <source src="/src/assets/0429.mp4" type="video/mp4" />
+              <source src={MinistryVideo} type="video/mp4" />
               Your browser does not support HTML5 video.
             </video>
           </div>
@@ -76,7 +96,7 @@ export default function ChildrenMin() {
       )}
 
       {/* Image Modal */}
-      {isImageModalOpen && (
+      {isImageModalOpen && selectedImage && (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
           <div className="relative max-w-4xl w-full">
             <button 
@@ -161,7 +181,7 @@ export default function ChildrenMin() {
               className="max-w-2xl mx-auto relative cursor-pointer rounded-xl overflow-hidden shadow-xl mb-12"
               onClick={() => setShowVideo(true)}
             >
-              <img src="/src/assets/pastor-with-children.jpg" alt="Children's ministry video" className="w-full" />
+              <img src={PastorWithChildren} alt="Children's ministry video" className="w-full" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-16 h-16 bg-white bg-opacity-80 rounded-full flex items-center justify-center">
                   <div className="w-0 h-0 border-t-8 border-b-8 border-l-12 border-t-transparent border-b-transparent border-l-red-500 ml-1"></div>
@@ -295,13 +315,13 @@ export default function ChildrenMin() {
               
               <p className="text-gray-700 mb-6">Three days of outdoor adventures, Bible stories, worship, and making new friends!</p>
               <Link to="/contact-us">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-red-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-red-600 transition-colors"
-              >
-                Learn More About Camp
-              </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-red-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-red-600 transition-colors"
+                >
+                  Learn More About Camp
+                </motion.button>
               </Link>
             </div>
           </motion.div>
@@ -325,8 +345,21 @@ export default function ChildrenMin() {
                   whileHover={{ scale: 1.03 }}
                   className="bg-white rounded-xl shadow-md p-6 text-center"
                 >
-                  <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-blue-100 mx-auto mb-4">
-                    <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                  <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-blue-100 mx-auto mb-4 relative">
+                    {member.image ? (
+                      <img 
+                        src={member.image} 
+                        alt={member.name} 
+                        className="w-full h-full object-cover"
+                        onError={handleImageError}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                    )}
                   </div>
                   <h3 className="text-xl font-bold mb-1">{member.name}</h3>
                   <p className="text-blue-600 italic mb-4">{member.role}</p>

@@ -1,6 +1,20 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 
+// Import available images
+import FrancisAnsah from '../assets/Francis-Ansah.jpg';
+import MDJosephine from '../assets/MD-josephine.jpg';
+import Benjamin from '../assets/benjamin.jpg';
+import Mottey from '../assets/mottey.jpg';
+import MusicMinistry from '../assets/Music-ministry.jpg';
+import Thelma from '../assets/thelma.jpg';
+import ActorsOfFaith from '../assets/Actors-of-Faith.jpg';
+import CreativeVisuals from '../assets/creative-visuals.jpg';
+import Trumpet from '../assets/trumpet.jpg';
+import Ministries31 from '../assets/Ministries31.jpg';
+import Voices from '../assets/voices.jpg';
+import ActorsDisplay from '../assets/actors-display.jpg';
+
 export default function DepCreativeArt() {
   const [activeTab, setActiveTab] = useState('music');
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -8,35 +22,49 @@ export default function DepCreativeArt() {
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(true);
 
+  // Handle image error
+  const handleImageError = (e) => {
+    e.target.style.display = 'none';
+    // Create fallback background
+    e.target.parentElement.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    e.target.parentElement.classList.add('flex', 'items-center', 'justify-center');
+    
+    const fallbackText = document.createElement('div');
+    fallbackText.className = 'text-white text-center p-4';
+    fallbackText.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+      <span class="text-sm">Image not available</span>
+    `;
+    e.target.parentElement.appendChild(fallbackText);
+  };
+
   // Team Members Data
   const teamMembers = [
     {
       name: 'MR. FRANCIS ANSAH',
       role: 'PRESIDENT',
-      image: '/src/assets/Francis-Ansah.jpg',
+      image: FrancisAnsah,
       bio: 'Visionary leader with 10+ years experience in creative arts ministry.',
-      
     },
     {
       name: 'MRS. JOSEPHINE ANNAN',
       role: 'MUSIC DIRECTOR',
-      image: '/src/assets/MD-josephine.jpg',
+      image: MDJosephine,
       bio: 'Classically trained musician who directs our Voices of Grace choir.',
-    
     },
     {
       name: 'MR. BENJAMIN KUMI OSEI',
       role: 'SECRETARY',
-      image: '/src/assets/benjamin.jpg',
+      image: Benjamin,
       bio: 'Keeps our creative operations running smoothly behind the scenes.',
-      
     },
     {
       name: 'MRS MABEL MORTTEY',
       role: 'TREASURER',
-      image: '/src/assets/mottey.jpg',
+      image: Mottey,
       bio: 'Ensures our creative visions are financially sustainable.',
-      
     }
   ];
 
@@ -47,7 +75,7 @@ export default function DepCreativeArt() {
       title: 'Voices of Grace',
       icon: '🎵',
       description: 'Our award-winning choir blends contemporary gospel with traditional hymns to create powerful worship experiences. With vocal ranges from soprano to bass, we minister through song at services and special events.',
-      image: '/src/assets/Music-ministry.jpg',
+      image: MusicMinistry,
       schedule: 'Tuesdays, 6:00 PM - 8:00 PM'
     },
     {
@@ -55,7 +83,7 @@ export default function DepCreativeArt() {
       title: 'Grace Motion',
       icon: '💃',
       description: 'Expressing worship through movement, our dance team incorporates liturgical, contemporary, and African dance styles. We believe the body is an instrument of praise and use choreography to tell God\'s stories.',
-      image: '/src/assets/thelma.jpg',
+      image: Thelma,
       schedule: 'Saturday, 6:00 PM - 8:00 PM'
     },
     {
@@ -63,7 +91,7 @@ export default function DepCreativeArt() {
       title: 'Actors of Faith',
       icon: '🎭',
       description: 'Through sketches, plays, and dramatic readings, we bring biblical truths to life. Our team specializes in improvisation, scripted performances, and interactive theater that engages congregations.',
-      image: '/src/assets/Actors-of-Faith.jpg',
+      image: ActorsOfFaith,
       schedule: 'Saturday, 6:00 PM - 8:30 PM'
     },
     {
@@ -71,18 +99,18 @@ export default function DepCreativeArt() {
       title: 'Creative Visuals',
       icon: '🎥',
       description: 'From stage design to video production, we enhance worship through visual arts. Our team handles lighting, projections, photography, and graphic design to create immersive worship environments.',
-      image: '/src/assets/creative-visuals.jpg',
+      image: CreativeVisuals,
       schedule: 'Saturdays, 6:00 PM - 8:00 PM'
     }
   ];
 
   // Gallery Images
   const galleryImages = [
-    '/src/assets/trumpet.jpg',
-    '/src/assets/Ministries31.jpg',
-    '/src/assets/voices.jpg',
-    '/src/assets/Actors-of-Faith.jpg',
-    '/src/assets/actors-display.jpg',
+    Trumpet,
+    Ministries31,
+    Voices,
+    ActorsOfFaith,
+    ActorsDisplay,
   ];
 
   // Rehearsal Schedule
@@ -95,9 +123,9 @@ export default function DepCreativeArt() {
 
   // Upcoming Events
   const upcomingEvents = [
-    { title: 'Ose Ayeyi', date: 'January, 6:00 PM', location: 'Main Sanctuary',  },
-    { title: 'Sacred Dance Workshop', date: 'January, 6:00 PM', location: 'Fellowship Hall',  },
-    { title: 'Drama Ministry Auditions', date: 'January, 6:00 PM', location: 'Creative Arts Center', },
+    { title: 'Ose Ayeyi', date: 'January, 6:00 PM', location: 'Main Sanctuary', icon: '🎵' },
+    { title: 'Sacred Dance Workshop', date: 'January, 6:00 PM', location: 'Fellowship Hall', icon: '💃' },
+    { title: 'Drama Ministry Auditions', date: 'January, 6:00 PM', location: 'Creative Arts Center', icon: '🎭' },
   ];
 
   // Toggle video mute
@@ -346,7 +374,12 @@ export default function DepCreativeArt() {
                   whileHover={{ scale: 1.02 }}
                   className="rounded-xl overflow-hidden shadow-2xl border-2 border-yellow-500"
                 >
-                  <img src={dept.image} alt={dept.title} className="w-full h-auto" />
+                  <img 
+                    src={dept.image} 
+                    alt={dept.title} 
+                    className="w-full h-auto"
+                    onError={handleImageError}
+                  />
                 </motion.div>
               </div>
             </motion.div>
@@ -378,6 +411,7 @@ export default function DepCreativeArt() {
               src={galleryImages[currentImageIndex]} 
               alt="Gallery" 
               className="w-full h-full object-cover"
+              onError={handleImageError}
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
               <h3 className="text-2xl font-bold">Ministry in Action</h3>
@@ -463,6 +497,7 @@ export default function DepCreativeArt() {
                   src={member.image} 
                   alt={member.name} 
                   className="w-full h-full object-cover"
+                  onError={handleImageError}
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                   <span className="text-3xl">{member.symbol}</span>

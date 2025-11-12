@@ -1,23 +1,31 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+// Import images
+// import EvansPaemuka from '../assets/.jpg';
+import Apeatse from '../assets/APEATSE.jpg';
+import Josephine from '../assets/maa-Josephine.jpg';
+// import EmmanuelArthur from '../assets/.jpg';
+import JoyceTwentoh from '../assets/Joyce-twentoh.jpg';
+import FrancisAnsah from '../assets/Francis-Ansah.jpg';
+
 const DepWelfare = () => {
   const welfareTeam = [
-    { name: "MR. EVANS PAEMUKA", role: "Head of Welfare", img: "/src/assets/.jpg" },
-    { name: "MRS ERNESTINA APEATSE", role: "Deputy Head", img: "/src/assets/APEATSE.jpg" },
-    { name: "MAD. JOSEPINE YAWSON", role: "Secretary", img: "/src/assets/maa-Josephine.jpg" },
-    { name: "MR EMMANUEL ARTHUR", role: "Treasurer", img: "/src/assets/.jpg" },
-    { name: "MRS JOYCE BAABA TWENTOH", role: "Events Coordinator", img: "/src/assets/Joyce-twentoh.jpg" },
-    { name: "MR. FRANCIS ANSAH", role: "Member Relations", img: "/src/assets/Francis-Ansah.jpg" },
+    { name: "MR. EVANS PAEMUKA", role: "Head of Welfare", img: FrancisAnsah },
+    { name: "MRS ERNESTINA APEATSE", role: "Deputy Head", img: Apeatse },
+    { name: "MAD. JOSEPINE YAWSON", role: "Secretary", img: Josephine },
+    { name: "MR EMMANUEL ARTHUR", role: "Treasurer", img: FrancisAnsah },
+    { name: "MRS JOYCE BAABA TWENTOH", role: "Events Coordinator", img: JoyceTwentoh },
+    { name: "MR. FRANCIS ANSAH", role: "Member Relations", img: FrancisAnsah },
   ];
 
   const services = [
-    { title: "Weddings", description: "Support and coordination for church weddings", icon: '' },
-    { title: "Funerals", description: "Assistance with funeral arrangements and bereavement support", icon: '' },
-    { title: "Child Naming", description: "Celebrating new life in our church family", icon: '' },
-    { title: "Financial Support", description: "Temporary assistance for members in need", icon: '' },
-    { title: "Monthly Contribution", description: "Collection of offerings every last week of the month", icon: '' },
-    { title: "Member Care", description: "Looking after the wellbeing of all members", icon: '' },
+    { title: "Weddings", description: "Support and coordination for church weddings", icon: '💒' },
+    { title: "Funerals", description: "Assistance with funeral arrangements and bereavement support", icon: '⚰️' },
+    { title: "Child Naming", description: "Celebrating new life in our church family", icon: '👶' },
+    { title: "Financial Support", description: "Temporary assistance for members in need", icon: '💰' },
+    { title: "Monthly Contribution", description: "Collection of offerings every last week of the month", icon: '📅' },
+    { title: "Member Care", description: "Looking after the wellbeing of all members", icon: '❤️' },
   ];
 
   const containerVariants = {
@@ -104,10 +112,11 @@ const DepWelfare = () => {
               className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300"
             >
               <div className="h-48 bg-purple-100 overflow-hidden">
-                {/* In a real implementation, replace with actual images */}
-                <div className="w-full h-full bg-gradient-to-r from-purple-300 to-blue-300 flex items-center justify-center text-white text-5xl">
-                  <img src={member.img} className="w-full h-full object-cover"/>
-                </div>
+                <img 
+                  src={member.img} 
+                  alt={member.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-purple-900">{member.name}</h3>

@@ -2,31 +2,35 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
+// Import only the images that exist
+import DeaconTwentoh from '../assets/Deacon-Twentoh.jpg';
+import MrsAdomako from '../assets/Mrs-Adomako.jpg';
+
 const DepGuest = () => {
   const leadershipTeam = [
     { 
       name: "DR. NANA ABEKA TWENTOH", 
       role: "Co-Chairperson", 
       description: "Overseeing all guest experience operations and strategic direction",
-      img: "/src/assets/Deacon-Twentoh.jpg"
+      img: DeaconTwentoh
     },
     { 
       name: "MRS FELICIA ADOMAKO", 
       role: "Co-Chairperson", 
       description: "Managing guest experience programs and volunteer coordination",
-      img: "/src/assets/Mrs-Adomako.jpg"
+      img: MrsAdomako
     },
     { 
       name: "L.P SAMUEL NUAMEH", 
       role: "Men's Representative", 
       description: "Ensuring men feel welcomed and connected to church activities",
-      img: "src/assets/.jpg"
+      img: null // No image available
     },
     { 
       name: "MISS MERCY ANNAN", 
       role: "Youth Representative", 
       description: "Creating engaging experiences for young visitors and youth integration",
-      img: "/src/assets/.jpg"
+      img: null // No image available
     }
   ];
 
@@ -124,9 +128,21 @@ const DepGuest = () => {
               whileHover={{ y: -5 }}
               className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
             >
-              <div className="h-48 bg-gray-200 overflow-hidden flex items-center justify-center">
-                {/* Placeholder for actual image */}
-                <div className="text-gray-500 text-xl"><img src={member.img}/></div>
+              <div className="h-48 bg-gray-100 overflow-hidden flex items-center justify-center">
+                {member.img ? (
+                  <img 
+                    src={member.img} 
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="text-gray-400 flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span className="text-sm mt-2">No Image</span>
+                  </div>
+                )}
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-800">{member.name}</h3>
@@ -209,9 +225,9 @@ const DepGuest = () => {
           Our Guest Experience team is always looking for welcoming faces to help newcomers feel at home.
         </p>
         <Link to="/contact-us" className="inline-block">
-        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow transition-all duration-300">
-          Join the Guest Experience Team
-        </button>
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow transition-all duration-300">
+            Join the Guest Experience Team
+          </button>
         </Link>
       </motion.div>
     </div>

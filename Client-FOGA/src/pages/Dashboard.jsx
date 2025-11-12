@@ -17,7 +17,6 @@ import DashBaptismApplication from '../components/DashBaptismApplication';
 import DashPoll from '../components/DashPoll';
 import DashBooking from '../components/DashBooking';
 import DashAnonymous from '../components/DashAnonymous';
-import DashBible from '../components/DashBible';
 import DashNotepad from '../components/DashNotepad';
 import DashContact from '../components/DashContact';
 import DashBirthday from '../components/DashBirthday';

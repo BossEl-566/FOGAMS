@@ -1,53 +1,61 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiZoomIn, FiHeart, FiShare2, FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
-import BaptismImage from '../assets/Baptism.jpg'; // adjust the path as needed
-import BaptismImage1 from '../assets/Baptism1.jpg'; // adjust the path as needed
-import BaptismImage2 from '../assets/Baptism2.jpg'; // adjust the path as needed
-import ChoirImage from '../assets/Choir.jpg'; // adjust the path as needed
-import Community from '../assets/Community.jpg'; // adjust the path as needed
-import Community1 from '../assets/Community1.jpg'; // adjust the path as needed
-import Community2 from '../assets/Community2.jpg'; // adjust the path as needed
-import Community4 from '../assets/Community4.jpg'; // adjust the path as needed
-import Event from '../assets/Events.jpg'; // adjust the path as needed
-import Family from '../assets/family.jpg'; // adjust the path as needed
-import Family1 from '../assets/family1.jpg'; // adjust the path as needed
-import Family2 from '../assets/family2.jpg'; // adjust the path as needed
-import Ministries from '../assets/Ministries.jpg'; // adjust the path as needed
-import Ministries1 from '../assets/Ministries1.jpg'; // adjust the path as needed
-import Ministries2 from '../assets/Ministries2.jpg'; // adjust the path as needed
-import Ministries3 from '../assets/Ministries3.jpg'; // adjust the path as needed
-import Services from '../assets/Services.jpg'; // adjust the path as needed
-import Services1 from '../assets/Services1.jpg'; // adjust the path as needed
-import Services2 from '../assets/Services2.jpg'; // adjust the path as needed
-import Services3 from '../assets/Services3.jpg'; // adjust the path as needed
 
+// Import all available images
+import BaptismImage from '../assets/Baptism.jpg';
+import BaptismImage1 from '../assets/Baptism1.jpg';
+import BaptismImage2 from '../assets/Baptism2.jpg';
+import ChoirImage from '../assets/Choir.jpg';
+import Community from '../assets/Community.jpg';
+import Community1 from '../assets/Community1.jpg';
+import Community2 from '../assets/Community2.jpg';
+import Community4 from '../assets/Community4.jpg';
+import Event from '../assets/Events.jpg';
+import Family from '../assets/family.jpg';
+import Family1 from '../assets/family1.jpg';
+import Family2 from '../assets/family2.jpg';
+import Ministries from '../assets/Ministries.jpg';
+import Ministries1 from '../assets/Ministries1.jpg';
+import Ministries2 from '../assets/Ministries2.jpg';
+import Ministries3 from '../assets/Ministries3.jpg';
+import Services from '../assets/Services.jpg';
+import Services1 from '../assets/Services1.jpg';
+import Services2 from '../assets/Services2.jpg';
+import Services3 from '../assets/Services3.jpg';
 
+// Import additional images that exist
+import WomenInPink from '../assets/women-in-pink.jpg';
+import YouthActing from '../assets/youth-acting.jpg';
+import WomenCelebration from '../assets/women-celebration.jpg';
+import YouthWithPatron from '../assets/youth-with-patron.jpg';
+import WomenAction from '../assets/women-action.jpg';
+import MenBeach from '../assets/men-beach.jpg';
+import Missiontte from '../assets/missiontte.jpg';
+import AsaafoMaamePastor from '../assets/AsaafoMaame-Pastor.jpg';
+import AidooFamily from '../assets/Aidoo-Family.jpg';
+import Pastors from '../assets/Pastors.jpg';
 
-
-
-// Sample images - replace with your actual image imports
+// Sample images - using imported images
 const churchImages = [
   { id: 1, src: Family, alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
   { id: 2, src: Services, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
   { id: 3, src: BaptismImage, alt: 'Baptism', category: 'Sacraments', description: 'Baptism service' },
   { id: 4, src: BaptismImage1, alt: 'Baptism', category: 'Sacraments', description: 'Holy Spirit Baptism' },
   { id: 5, src: ChoirImage, alt: 'Choir', category: 'Community', description: 'Church choir performance' },
-  { id: 6, src: '/src/assets/bible-studies.jpg', alt: 'Bible Study', category: 'Groups', description: 'Weekly bible study' },
+  { id: 6, src: Ministries, alt: 'Bible Study', category: 'Groups', description: 'Weekly bible study' },
   { id: 7, src: Event, alt: 'Wedding', category: 'Events', description: 'Church wedding ceremony' },
-  { id: 8, src: '/src/assets/community-service.jpg', alt: 'Community', category: 'Outreach', description: 'Community service day' },
-  { id: 9, src: '/src/assets/young-singles-4.jpg', alt: 'Community', category: 'Outreach', description: 'Young Singles Community outreach' },
-
-  
-  { id: 10, src: '/src/assets/women-in-pink.jpg', alt: 'Cross', category: 'Symbols', description: 'Women' },
+  { id: 8, src: Community, alt: 'Community', category: 'Outreach', description: 'Community service day' },
+  { id: 9, src: YouthActing, alt: 'Youth Group', category: 'Outreach', description: 'Young Singles Community outreach' },
+  { id: 10, src: WomenInPink, alt: 'Women in Pink', category: 'Symbols', description: 'Women fellowship' },
   { id: 11, src: BaptismImage2, alt: 'Baptism', category: 'Sacraments', description: 'Baptism service' },
   { id: 12, src: Community, alt: 'Community', category: 'Community', description: 'Community gathering' },
   { id: 13, src: Community1, alt: 'Community', category: 'Community', description: 'Community gathering' },
   { id: 14, src: Community2, alt: 'Community', category: 'Community', description: 'Community gathering' },
   { id: 15, src: Community4, alt: 'Community', category: 'Community', description: 'Community gathering' },
-  { id: 16, src: '/src/assets/women-celebration.jpg', alt: 'Celebration', category: 'Events', description: 'Women celebration' },
+  { id: 16, src: WomenCelebration, alt: 'Celebration', category: 'Events', description: 'Women celebration' },
   { id: 17, src: Ministries, alt: 'Service', category: 'Ministries', description: 'Church service' },
-  { id: 18, src: '/src/assets/youth-acting.jpg', alt: 'Youth Group', category: 'Community', description: 'Youth group acting' },
+  { id: 18, src: YouthActing, alt: 'Youth Group', category: 'Community', description: 'Youth group acting' },
   { id: 19, src: Family1, alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
   { id: 20, src: Family2, alt: 'Church Family', category: 'Family', description: 'Our beautiful church family' },
   { id: 21, src: Ministries1, alt: 'Service', category: 'Ministries', description: 'Church service' },
@@ -56,13 +64,13 @@ const churchImages = [
   { id: 24, src: Services1, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
   { id: 25, src: Services2, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' },
   { id: 26, src: Services3, alt: 'Worship Service', category: 'Services', description: 'Sunday morning worship' }, 
-  { id: 27, src: '/src/assets/youth-with-patron.jpg', alt: 'Worship Service', category: 'Ministries', description: 'Youth with Patron' },
-  { id: 28, src: '/src/assets/women-action.jpg', alt: 'Worship Service', category: 'Ministries', description: 'Women in action' },
-  { id: 29, src: '/src/assets/men-beach.jpg', alt: 'Worship Service', category: 'Ministries', description: 'Men Breakfast meeting at the beach' },
-  { id: 30, src: '/src/assets/missiontte.jpg', alt: 'Worship Service', category: 'Ministries', description: 'Church Missionette' },
-  { id: 31, src: '/src/assets/AsaafoMaame-Pastor.jpg', alt: 'Church Family', category: 'Family', description: 'Pastoral family' },
-  { id: 32, src: '/src/assets/Aidoo-Family.jpg', alt: 'Church Family', category: 'Family', description: 'Aidoo Family' },
-  { id: 33, src: '/src/assets/Pastors.jpg', alt: 'Church Family', category: 'Family', description: 'Pastors' },
+  { id: 27, src: YouthWithPatron, alt: 'Youth with Patron', category: 'Ministries', description: 'Youth with Patron' },
+  { id: 28, src: WomenAction, alt: 'Women in Action', category: 'Ministries', description: 'Women in action' },
+  { id: 29, src: MenBeach, alt: 'Men Beach Meeting', category: 'Ministries', description: 'Men Breakfast meeting at the beach' },
+  { id: 30, src: Missiontte, alt: 'Missionette', category: 'Ministries', description: 'Church Missionette' },
+  { id: 31, src: AsaafoMaamePastor, alt: 'Pastoral Family', category: 'Family', description: 'Pastoral family' },
+  { id: 32, src: AidooFamily, alt: 'Aidoo Family', category: 'Family', description: 'Aidoo Family' },
+  { id: 33, src: Pastors, alt: 'Pastors', category: 'Family', description: 'Pastors' },
 ];
 
 const GalleryCard = ({ image, onClick }) => {

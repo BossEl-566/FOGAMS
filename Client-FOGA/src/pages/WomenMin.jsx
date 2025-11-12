@@ -1,45 +1,82 @@
 import React, { useState, useEffect } from 'react';
 import { FaQuoteLeft, FaChurch, FaCalendarAlt, FaPrayingHands, FaUsers } from 'react-icons/fa';
 
+// Import available images
+import FriendsWomenMinistry from '../assets/Friends-Women-Ministry.jpg';
+import WomenMinistryFoga from '../assets/Women-Ministry-Foga.jpg';
+import WomenHero from '../assets/women-hero.jpg';
+import WomenAnd from '../assets/Women-and.jpg';
+import WomenCuttingCake from '../assets/women-cutting-cake.jpg';
+import WomenAction from '../assets/women-action.jpg';
+import WomenFriends from '../assets/women-friends.jpg';
+import WomenInWorship from '../assets/women-in-worship.jpg';
+import WomenCelebration from '../assets/women-celebration.jpg';
+import WomenAfricaDressed from '../assets/women-africa-dressed.jpg';
+import AsafoMameeYamoah from '../assets/asafo-mamee-yamoah.jpg';
+import SingingWomen from '../assets/singing-women.jpg';
+import MaaJosephine from '../assets/maa-Josephine.jpg';
+import JoyceTwentoh from '../assets/Joyce-twentoh.jpg';
+import JanetNuwame from '../assets/Janet-Nuwame.jpg';
+import OldLadyMary from '../assets/Old-Lady-Mary.jpg';
+import WomenInPink from '../assets/women-in-pink.jpg';
+
 export default function WomenMin() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentHero, setCurrentHero] = useState(0);
 
-  // Image paths - replace with your actual image paths
+  // Image paths - using imported images
   const heroImages = [
-    "../src/assets/Friends-Women-Ministry.jpg",
-    "../src/assets/Women-Ministry-Foga.jpg",
-    "../src/assets/women-hero.jpg",
-    "../src/assets/Women-and.jpg",
+    FriendsWomenMinistry,
+    WomenMinistryFoga,
+    WomenHero,
+    WomenAnd,
   ];
 
   const galleryImages = [
-    "/src/assets/women-cutting-cake.jpg", "/src/assets/women-action.jpg", "/src/assets/women-friends.jpg", "/src/assets/women-in-worship.jpg",
-    "/src/assets/women-celebration.jpg", "/src/assets/women-africa-dressed.jpg", "/src/assets/asafo-mamee-yamoah.jpg", "/src/assets/singing-women.jpg"
+    WomenCuttingCake, WomenAction, WomenFriends, WomenInWorship,
+    WomenCelebration, WomenAfricaDressed, AsafoMameeYamoah, SingingWomen
   ];
 
   const leadership = [
     {
       name: "Mad. Josephine Yawson",
       position: "President",
-      image: "../src/assets/maa-Josephine.jpg"
+      image: MaaJosephine
     },
     {
       name: "Mrs. Joyce Baaba Twentoh",
       position: "Vice President",
-      image: "../src/assets/Joyce-twentoh.jpg"
+      image: JoyceTwentoh
     },
     {
-      name: "Sec Mrs. Janet Nuwame ",
+      name: "Sec Mrs. Janet Nuwame",
       position: "Secretary",
-      image: "../src/assets/Janet-Nuwame.jpg"
+      image: JanetNuwame
     },
     {
       name: "Mad. Mary Blankson",
       position: "Treasurer",
-      image: "../src/assets/Old-Lady-Mary.jpg"
+      image: OldLadyMary
     }
   ];
+
+  // Handle image error
+  const handleImageError = (e) => {
+    e.target.style.display = 'none';
+    // Create fallback background
+    e.target.parentElement.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    e.target.parentElement.classList.add('flex', 'items-center', 'justify-center');
+    
+    const fallbackText = document.createElement('div');
+    fallbackText.className = 'text-white text-center p-4';
+    fallbackText.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+      <span class="text-sm">Image not available</span>
+    `;
+    e.target.parentElement.appendChild(fallbackText);
+  };
 
   // Auto-rotate hero images and gallery slides
   useEffect(() => {
@@ -71,8 +108,6 @@ export default function WomenMin() {
             }}
           >
             <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center p-4">
-              
-              
               <div className="text-center px-4">
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
                   Women's Ministry
@@ -185,12 +220,24 @@ export default function WomenMin() {
               key={index}
               className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
             >
-              <div className="h-64 bg-gray-100 overflow-hidden">
-                <img 
-                  src={leader.image} 
-                  alt={leader.name}
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                />
+              <div className="h-64 bg-gray-100 overflow-hidden relative">
+                {leader.image ? (
+                  <img 
+                    src={leader.image} 
+                    alt={leader.name}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    onError={handleImageError}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-pink-400 to-purple-600 flex items-center justify-center text-white">
+                    <div className="text-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      <span className="text-sm">Image not available</span>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="p-6 text-center bg-gradient-to-b from-white to-blue-50">
                 <h3 className="text-xl font-bold text-blue-900">{leader.name}</h3>
@@ -213,11 +260,12 @@ export default function WomenMin() {
             >
               {galleryImages.map((img, index) => (
                 <div key={index} className="flex-shrink-0 w-full md:w-1/4 px-2">
-                  <div className="h-64 md:h-96 rounded-lg overflow-hidden shadow-md border-4 border-white">
+                  <div className="h-64 md:h-96 rounded-lg overflow-hidden shadow-md border-4 border-white relative">
                     <img 
                       src={img} 
                       alt={`Gallery ${index + 1}`}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                      onError={handleImageError}
                     />
                   </div>
                 </div>
@@ -267,9 +315,10 @@ export default function WomenMin() {
             </div>
             <div className="md:w-1/2">
               <img 
-                src="/src/assets/women-in-pink.jpg" 
+                src={WomenInPink} 
                 alt="Women's Ministry Group"
                 className="w-full h-full object-cover"
+                onError={handleImageError}
               />
             </div>
           </div>

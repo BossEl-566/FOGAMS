@@ -2,6 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
+// Import available images
+import Daniel from '../assets/DANIEL.jpg';
+import Karim from '../assets/Karim.jpg';
+import EmmaMedia from '../assets/Emma-Media.jpg';
+
 const DepMedia = () => {
   // Media equipment images for hero section
   const heroImages = [
@@ -10,35 +15,34 @@ const DepMedia = () => {
     "https://images.unsplash.com/photo-1612043071344-94c20c4c837e?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "https://plus.unsplash.com/premium_photo-1683977922495-3ab3ce7ba4e6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fG1lZGlhfGVufDB8fDB8fHww"
   ];
-  
 
   const teamMembers = [
     {
       name: "DR. DANIEL OBENG - MENSAH",
       role: "Chairperson",
       expertise: "Media Strategy & Content Direction",
-      image: "/src/assets/DANIEL.jpg",
+      image: Daniel,
       quote: "We don't just share content, we spread the Gospel through digital means."
     }, 
     {
       name: "KARIM YUSSIF SAAMID",
       role: "Multimedia Producer",
       expertise: "Social Media Manager",
-      image: "/src/assets/Karim.jpg",
+      image: Karim,
       quote: "Every frame we capture tells a story of faith."
     },
     {
       name: "EMMANUEL P.K. OKYERE",
-      role: "Video Production & Live Streaming ",
+      role: "Video Production & Live Streaming",
       expertise: "Digital Engagement & Branding",
-      image: "/src/assets/Emma-Media.jpg",
+      image: EmmaMedia,
       quote: "Turning likes into spiritual connections."
     },
     {
       name: "ALBERT LEMAIRE",
       role: "Audio/Visual Technician",
       expertise: "Sound Engineering & Lighting",
-      image: "/media-av.jpg",
+      image: null, // No image available
       quote: "Perfect sound for perfect worship moments."
     }
   ];
@@ -178,14 +182,15 @@ const DepMedia = () => {
             className="mt-12 rounded-full"
           >
             <Link to="/gallery">
-            <button className="bg-white text-gray-900 hover:bg-gray-200 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-              Explore Our Work
-            </button>
+              <button className="bg-white text-gray-900 hover:bg-gray-200 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                Explore Our Work
+              </button>
             </Link>
           </motion.div>
         </div>
       </div>
-      {/* Rest of the sections remain exactly the same */}
+
+      {/* Team Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <motion.h2
           initial={{ opacity: 0 }}
@@ -202,36 +207,39 @@ const DepMedia = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {teamMembers.map((member, index) => (
             <motion.div
-            key={index}
-            className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
-          >
-            <div className="h-64 bg-gradient-to-br from-blue-900 to-purple-800 flex items-center justify-center relative overflow-hidden">
-              {/* Team member image */}
-              <img 
-                src={member.image} 
-                alt={member.name}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-
-              {/* Optional emoji badge */}
-              <div className="text-4xl z-10 opacity-80">
-              
+              key={index}
+              className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+            >
+              <div className="h-64 bg-gradient-to-br from-blue-900 to-purple-800 flex items-center justify-center relative overflow-hidden">
+                {member.image ? (
+                  <img 
+                    src={member.image} 
+                    alt={member.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="text-gray-400 flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span className="text-sm mt-2 text-white">No Image</span>
+                  </div>
+                )}
               </div>
-            </div>
-            {/* Rest of the card content */}
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-blue-400">{member.name}</h3>
-              <p className="text-purple-300 font-medium mb-2">{member.role}</p>
-              <p className="text-gray-300 text-sm mb-4">{member.expertise}</p>
-              <blockquote className="text-gray-400 italic text-sm border-l-2 border-blue-500 pl-4">
-                "{member.quote}"
-              </blockquote>
-            </div>
-          </motion.div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-blue-400">{member.name}</h3>
+                <p className="text-purple-300 font-medium mb-2">{member.role}</p>
+                <p className="text-gray-300 text-sm mb-4">{member.expertise}</p>
+                <blockquote className="text-gray-400 italic text-sm border-l-2 border-blue-500 pl-4">
+                  "{member.quote}"
+                </blockquote>
+              </div>
+            </motion.div>
           ))}
         </div>
       </section>
 
+      {/* Services Section */}
       <section className="py-20 bg-gradient-to-b from-gray-800 to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
@@ -271,6 +279,7 @@ const DepMedia = () => {
         </div>
       </section>
 
+      {/* Stats Section */}
       <section className="py-20 bg-gradient-to-r from-blue-900 to-purple-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -304,9 +313,10 @@ const DepMedia = () => {
         </div>
       </section>
 
+      {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto bg-gray-800 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/media-grid.png')] opacity-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20 opacity-50"></div>
           <div className="relative z-10">
             <motion.h2
               initial={{ opacity: 0 }}
@@ -333,9 +343,9 @@ const DepMedia = () => {
               viewport={{ once: true }}
             >
               <Link to="/contact-us">
-              <button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                Connect With Us
-              </button>
+                <button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  Connect With Us
+                </button>
               </Link>
             </motion.div>
           </div>

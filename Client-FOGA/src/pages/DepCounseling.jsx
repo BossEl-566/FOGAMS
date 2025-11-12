@@ -1,27 +1,31 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+// Import only the images that exist
+import Veronique from '../assets/Veronique.jpg';
+import Stella from '../assets/stella.jpg';
+
 const DepCounseling = () => {
   const leadershipTeam = [
     { 
       name: "Her Ladyship Veronique Praba Tetteh", 
       role: "Chairperson", 
       specialty: "Pastoral Care & Crisis Counseling",
-      img: "/src/assets/Veronique.jpg",
+      img: Veronique,
       quote: "Every visit is an opportunity to bring God's comfort to those in need."
     },
     { 
       name: "MRS. RHODA ACQUAAH", 
       role: "Senior Counselor", 
       specialty: "Marriage & Family Counseling",
-      img: "/src/assets/.jpg",
+      img: null, // No image available
       quote: "Strong families build a strong church community."
     },
     { 
       name: "MRS. STELLA KALU", 
       role: "Visitation Coordinator", 
       specialty: "Home Visits & Hospital Chaplaincy",
-      img: "/src/assets/stella.jpg",
+      img: Stella,
       quote: "We meet people where they are, physically and spiritually."
     }
   ];
@@ -95,11 +99,23 @@ const DepCounseling = () => {
                 viewport={{ once: true }}
                 className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200`}
               >
-                <div className="md:w-1/3 h-64 bg-gray-200 flex items-center justify-center">
-                  {/* Placeholder for image */}
-                  <div className="text-gray-500"><img src={member.img} /></div>
+                <div className="md:w-1/3 h-64 bg-gray-100 overflow-hidden flex items-center justify-center">
+                  {member.img ? (
+                    <img 
+                      src={member.img} 
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="text-gray-400 flex flex-col items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      <span className="text-sm mt-2">No Image</span>
+                    </div>
+                  )}
                 </div>
-                <div className="md:w-2/3 p-8 sm:bg-white md:bg-white bg-white">
+                <div className="md:w-2/3 p-8">
                   <div className="flex items-start">
                     <span className="text-4xl font-bold text-gray-300 mr-4">{index + 1}</span>
                     <div>

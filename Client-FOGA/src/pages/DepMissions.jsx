@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+// Import only the images that exist
+import MissionImage from '../assets/mission.jpg';
+import FrancisDorduno from '../assets/francis-dorduno.jpg';
+import MaryFoga from '../assets/Mary-foga.jpg';
+import PastorEric from '../assets/pastor-Eric.jpg';
+import Khadija from '../assets/Khadija.jpg';
+import MrsAdomako from '../assets/Mrs-Adomako.jpg';
+import DrShibu from '../assets/Dr-Shibu.jpg';
+
 export default function DepMissions() {
   // Gallery images data - replace placeholder divs with your actual images
   const galleryImages = [
@@ -58,14 +67,13 @@ export default function DepMissions() {
               <p className="text-xl mb-8">Bringing the light of God's word to schools, prisons, hospitals, and the streets at dawn.</p>
             </div>
             <div className="md:w-1/2 flex justify-center">
-            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-white bg-gray-300 overflow-hidden">
-  <img
-    src="/src/assets/mission.jpg"
-    alt="Head of Missions"
-    className="w-full h-full object-cover"
-  />
-</div>
-
+              <div className="w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-white bg-gray-300 overflow-hidden">
+                <img
+                  src={MissionImage}
+                  alt="Head of Missions"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -258,123 +266,124 @@ export default function DepMissions() {
           </div>
         </div>
       </div>
+
       {/* Leadership and Team Section */}
-<div className="py-16 bg-white">
-  <div className="container mx-auto px-6">
-    <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">Our Leadership & Team</h2>
-    
-    {/* Department Head */}
-    <div className="flex flex-col md:flex-row items-center justify-center mb-16 bg-blue-50 rounded-xl p-8">
-      <div className="md:w-1/3 mb-6 md:mb-0 flex justify-center">
-        <div className="w-48 h-48 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border-4 border-white shadow-lg">
-          <span className="text-gray-500"><img src='/src/assets/francis-dorduno.jpg'/></span>
+      <div className="py-16 bg-white">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">Our Leadership & Team</h2>
+          
+          {/* Department Head */}
+          <div className="flex flex-col md:flex-row items-center justify-center mb-16 bg-blue-50 rounded-xl p-8">
+            <div className="md:w-1/3 mb-6 md:mb-0 flex justify-center">
+              <div className="w-48 h-48 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border-4 border-white shadow-lg">
+                <img 
+                  src={FrancisDorduno} 
+                  alt="Lay Pastor Francis Dorduno"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            <div className="md:w-2/3 md:pl-10 text-center md:text-left">
+              <h3 className="text-2xl font-bold text-blue-800 mb-2">Lay Pastor Francis Dorduno</h3>
+              <p className="text-lg text-gray-600 mb-4">Head of Missions Department</p>
+              <p className="text-gray-700 mb-4">
+                With over 5 years of missionary experience, Lay Pastor Francis Dorduno leads our team with passion and dedication, 
+                ensuring we fulfill our calling to spread the Gospel to all corners of society.
+              </p>
+            </div>
+          </div>
+
+          {/* Team Members */}
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 py-8">
+            {[
+              { 
+                name: "Lay Pastor Mary Opoku", 
+                role: "Hospital Missions Coordinator", 
+                years: 5, 
+                image: MaryFoga 
+              },
+              { 
+                name: "Pastor Eric Botchwey", 
+                role: "Prison Ministry Leader", 
+                years: 5, 
+                image: PastorEric 
+              },
+              { 
+                name: "Madam Khadija", 
+                role: "Hospital Chaplain", 
+                years: 5, 
+                image: Khadija 
+              },
+              { 
+                name: "Lay Pastor Francis Dorduno", 
+                role: "Dawn Outreach Director", 
+                years: 5, 
+                image: FrancisDorduno 
+              },
+              { 
+                name: "Deaconess Felicia Adomako", 
+                role: "Dawn Outreach Director", 
+                years: 5, 
+                image: MrsAdomako 
+              },
+              { 
+                name: "Mr. Anothy", 
+                role: "Prayer Team Leader", 
+                years: 5, 
+                image: null // No image available
+              },
+              { 
+                name: "Dr. Shiabu Adams", 
+                role: "Prison Ministry Leader", 
+                years: 5, 
+                image: DrShibu 
+              },
+            ].map((member, index) => (
+              <div 
+                key={`${member.name.replace(/\s+/g, '-')}-${index}`} 
+                className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300 flex flex-col h-full"
+              >
+                <div className="h-60 bg-gray-100 flex items-center justify-center relative overflow-hidden">
+                  {member.image ? (
+                    <img 
+                      src={member.image} 
+                      alt={`Portrait of ${member.name}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="text-gray-400 flex items-center justify-center w-full h-full">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                <div className="p-4 text-center flex-grow">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-1">{member.name}</h3>
+                  <p className="text-gray-600 text-sm mb-2">{member.role}</p>
+                  <p className="text-gray-500 text-xs">
+                    Serving for {member.years} year{member.years !== 1 ? 's' : ''}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Join Team CTA */}
+          <div className="mt-16 text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 shadow-lg">
+            <h3 className="text-2xl font-bold mb-4">Join Our Missions Team</h3>
+            <p className="mb-6 max-w-2xl mx-auto">
+              We're always looking for passionate individuals to join us in spreading the Gospel. 
+              Whether you can commit to regular service or occasional volunteering, your gifts are needed.
+            </p>
+            <Link to='/contact-us'>
+              <button className="bg-white text-blue-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">
+                Apply to Serve
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
-      <div className="md:w-2/3 md:pl-10 text-center md:text-left">
-        <h3 className="text-2xl font-bold text-blue-800 mb-2">Lay Pastor Francis Dorduno</h3>
-        <p className="text-lg text-gray-600 mb-4">Head of Missions Department</p>
-        <p className="text-gray-700 mb-4">
-          With over 5 years of missionary experience, Lay Pastor Francis Dorduno leads our team with passion and dedication, 
-          ensuring we fulfill our calling to spread the Gospel to all corners of society.
-        </p>
-      </div>
-    </div>
-
-    {/* Team Members */}
-    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 py-8">
-  {[
-    { 
-      name: "Lay Pastor Mary Opoku", 
-      role: "Hospital Missions Coordinator", 
-      years: 5, 
-      image: "/src/assets/Mary-foga.jpg" 
-    },
-    { 
-      name: "Pastor Eric Botchwey", 
-      role: "Prison Ministry Leader", 
-      years: 5, 
-      image: "/src/assets/pastor-Eric.jpg" 
-    },
-    { 
-      name: "Madam Khadija", 
-      role: "Hospital Chaplain", 
-      years: 5, 
-      image: "/src/assets/Khadija.jpg" 
-    },
-    { 
-      name: "Lay Pastor Francis Dorduno", 
-      role: "Dawn Outreach Director", 
-      years: 5, 
-      image: "/src/assets/francis-dorduno.jpg" 
-    },
-    { 
-      name: "Deaconess Felicia Adomako", 
-      role: "Dawn Outreach Director", 
-      years: 5, 
-      image: "/src/assets/Mrs-Adomako.jpg" 
-    },
-    { 
-      name: "Mr. Anothy", 
-      role: "Prayer Team Leader", 
-      years: 5, 
-      image: "/src/assets/.jpg" 
-    },
-    { 
-      name: "Dr. Shiabu Adams", 
-      role: "Prison Ministry Leader", 
-      years: 5, 
-      image: "/src/assets/Dr-Shibu.jpg" 
-    },
-  ].map((member, index) => (
-    <div 
-      key={`${member.name.replace(/\s+/g, '-')}-${index}`} 
-      className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300 flex flex-col h-full"
-    >
-      <div className="h-60 bg-gray-100 flex items-center justify-center relative overflow-hidden">
-        {member.image && !member.image.endsWith('/.jpg') ? (
-          <img 
-            src={member.image} 
-            alt={`Portrait of ${member.name}`}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = '/src/assets/placeholder.jpg'; // Add a fallback image
-            }}
-          />
-        ) : (
-          <div className="text-gray-400 flex items-center justify-center w-full h-full">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </div>
-        )}
-      </div>
-      <div className="p-4 text-center flex-grow">
-        <h3 className="text-lg font-semibold text-gray-800 mb-1">{member.name}</h3>
-        <p className="text-gray-600 text-sm mb-2">{member.role}</p>
-        <p className="text-gray-500 text-xs">
-          Serving for {member.years} year{member.years !== 1 ? 's' : ''}
-        </p>
-      </div>
-    </div>
-  ))}
-</div>
-
-    {/* Join Team CTA */}
-    <div className="mt-16 text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 shadow-lg">
-      <h3 className="text-2xl font-bold mb-4">Join Our Missions Team</h3>
-      <p className="mb-6 max-w-2xl mx-auto">
-        We're always looking for passionate individuals to join us in spreading the Gospel. 
-        Whether you can commit to regular service or occasional volunteering, your gifts are needed.
-      </p>
-      <Link to='/contact-us'>
-      <button className="bg-white text-blue-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">
-        Apply to Serve
-      </button>
-      </Link>
-    </div>
-  </div>
-</div>
     </div>
   );
 }

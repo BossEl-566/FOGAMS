@@ -24,7 +24,7 @@ const DepProject = () => {
       expertise: "Project Oversight & Fundraising",
       contact: "024-427-4915",
       quote: "Building God's house requires both faith and diligence",
-      img: mrManu
+      img: null
     },
     { 
       name: "MR ALEX MANU", 
@@ -48,7 +48,7 @@ const DepProject = () => {
       expertise: "Interior Design & Decor",
       contact: "",
       quote: "Creating a welcoming house of worship",
-      img: mrManu
+      img: null
     }
   ];
 

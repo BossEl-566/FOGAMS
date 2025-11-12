@@ -1,36 +1,40 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const DepCommunity = () => {
+// Import available images
+import DeaconTwentoh from '../assets/Deacon-Twentoh.jpg';
+import Daniel from '../assets/DANIEL.jpg';
+import MrsAidoo from '../assets/mrs-Aidoo.jpg';
 
+const DepCommunity = () => {
   const leadershipTeam = [
     { 
       name: "DR. NANA ABEKA TWENTOH", 
       role: "Chairperson", 
       expertise: "Community Development Strategy",
       quote: "Real change happens when we empower people to transform their own communities",
-      img: "/src/assets/Deacon-Twentoh.jpg"
+      img: DeaconTwentoh
     },
     { 
       name: "DR. DANIEL OBENG-MENSAH", 
       role: "Men's Representative", 
       expertise: "Entrepreneurship Training",
       quote: "Teaching a man to fish creates generational change",
-      img: "/src/assets/DANIEL.jpg"
+      img: Daniel
     },
     { 
       name: "MISS CYNTHIA BAWA", 
       role: "Youth Representative", 
       expertise: "Education Initiatives",
       quote: "Investing in youth is investing in our collective future",
-      img: "/src/assets/Cynthia.jpg"
+      img: null // No image available
     },
     { 
       name: "MRS BETTY OFORI AIDOO", 
       role: "Women's Representative", 
       expertise: "Microfinance Programs",
       quote: "Small seeds grow mighty trees when nurtured properly",
-      img: "/src/assets/mrs-Aidoo.jpg"
+      img: MrsAidoo
     }
   ];
 
@@ -72,7 +76,7 @@ const DepCommunity = () => {
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50">
       {/* Hero Section */}
       <div className="relative h-screen overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/src/assets/community-event.jpg')] bg-cover bg-center"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-blue-600"></div>
         <div className="absolute inset-0 bg-green-900/70"></div>
         
         <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8">
@@ -207,10 +211,21 @@ const DepCommunity = () => {
               viewport={{ once: true }}
               className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
             >
-              <div className="h-64 bg-gradient-to-r from-green-600 to-blue-600 flex items-center justify-center">
-                <div className="text-white text-4xl font-light">
-                  <img src={member.img}/>
-                </div>
+              <div className="h-64 bg-gradient-to-r from-green-600 to-blue-600 flex items-center justify-center relative overflow-hidden">
+                {member.img ? (
+                  <img 
+                    src={member.img} 
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="text-white flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span className="text-sm mt-2">No Image</span>
+                  </div>
+                )}
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-green-900">{member.name}</h3>

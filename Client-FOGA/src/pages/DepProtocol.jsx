@@ -1,69 +1,76 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+// Import only the images that exist
+import BraCann from '../assets/Bra-Cann.jpg';
+import Savina from '../assets/savina.jpg';
+import Hawa from '../assets/Hawa.jpg';
+import MrManu from '../assets/Mr-Manu.jpg';
+import Rejoyce from '../assets/rejoyce.jpg';
+
 const DepProtocol = () => {
   const teamMembers = [
     {
       name: "Brother Elliot Datsomor",
       role: "Head Usher",
       department: "Sanctuary",
-      image: "/src/assets/.jpg",
+      image: null, // No image available
       quote: "We create the first impression of God's house"
     },
     {
       name: "Brother Linus Datsomor",
       role: "Cleaning Coordinator",
       department: "Sanctuary Care",
-      image: "/src/assets/.jpg",
+      image: null, // No image available
       quote: "A clean temple honors our holy God"
     },
     {
       name: "Mr. Amos Botchway",
       role: "Parking Team Lead",
       department: "Logistics",
-      image: "/src/assets/Bra-Cann.jpg",
+      image: BraCann,
       quote: "Order reflects the nature of our God"
     },
     {
       name: "Sister Savina",
       role: "Treasurer",
       department: "Intercession",
-      image: "/src/assets/savina.jpg",
+      image: Savina,
       quote: "Prayer prepares the spiritual atmosphere"
     },
     {
       name: "Miss Hawawu Kassim",
       role: "Welcome Team",
       department: "First Impressions",
-      image: "/src/assets/Hawa.jpg",
+      image: Hawa,
       quote: "Every smile can open a heart to the Gospel"
     },
     {
       name: "Miss Bridget Mawuli",
       role: "Welcome Team",
       department: "First Impressions",
-      image: "/src/assets/.jpg",
+      image: null, // No image available
       quote: "Every smile can open a heart to the Gospel"
     },
     {
       name: "Brother Dickson",
       role: "Welcome Team",
       department: "First Impressions",
-      image: "/src/assets/.jpg",
+      image: null, // No image available
       quote: "Every smile can open a heart to the Gospel"
     },
     {
       name: "Mr Alexanda Manu",
       role: "Security Lead",
       department: "Safety & Time keeper",
-      image: "/src/assets/Mr-Manu.jpg",
+      image: MrManu,
       quote: "Protecting God's people is sacred work"
     },
     {
       name: "Sister Rejoice",
       role: "Prayer Coordinator",
       department: "Intercession",
-      image: "/src/assets/rejoyce.jpg",
+      image: Rejoyce,
       quote: "Prayer prepares the spiritual atmosphere"
     }
   ];
@@ -247,12 +254,21 @@ const DepProtocol = () => {
               viewport={{ once: true }}
               className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
             >
-              <div className="h-64 overflow-hidden">
-                <img 
-                  src={member.image} 
-                  alt={member.name}
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
+              <div className="h-64 bg-gray-100 overflow-hidden flex items-center justify-center">
+                {member.image ? (
+                  <img 
+                    src={member.image} 
+                    alt={member.name}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                ) : (
+                  <div className="text-gray-400 flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span className="text-sm mt-2">No Image</span>
+                  </div>
+                )}
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-purple-900">{member.name}</h3>
