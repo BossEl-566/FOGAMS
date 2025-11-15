@@ -7,6 +7,7 @@ import DeaconBoateng from '../assets/Deacon-Boateng.jpg';
 import DeaconAnsong from '../assets/Deacon-Ansong.jpg';
 import MrsAdomako from '../assets/Mrs-Adomako.jpg';
 import JoyceTwentoh from '../assets/Joyce-twentoh.jpg';
+import Bright from '../assets/bright.jpg';
 
 const DepAnniversary = () => {
   const teamMembers = [
@@ -43,7 +44,7 @@ const DepAnniversary = () => {
       role: "Men's Representative", 
       responsibility: "Men's Fellowship Activities",
       quote: "Strong foundations for future generations",
-      img: null // No image available
+      img: Bright // No image available
     },
     { 
       name: "MRS CHARLOTTE SYBIL DANSO", 

@@ -11,10 +11,10 @@ import FrancisAnsah from '../assets/Francis-Ansah.jpg';
 
 const DepWelfare = () => {
   const welfareTeam = [
-    { name: "MR. EVANS PAEMUKA", role: "Head of Welfare", img: FrancisAnsah },
+    { name: "MR. EVANS PAEMUKA", role: "Head of Welfare", img: null },
     { name: "MRS ERNESTINA APEATSE", role: "Deputy Head", img: Apeatse },
     { name: "MAD. JOSEPINE YAWSON", role: "Secretary", img: Josephine },
-    { name: "MR EMMANUEL ARTHUR", role: "Treasurer", img: FrancisAnsah },
+    { name: "MR EMMANUEL ARTHUR", role: "Treasurer", img: null },
     { name: "MRS JOYCE BAABA TWENTOH", role: "Events Coordinator", img: JoyceTwentoh },
     { name: "MR. FRANCIS ANSAH", role: "Member Relations", img: FrancisAnsah },
   ];

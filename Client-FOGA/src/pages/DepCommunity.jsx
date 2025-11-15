@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import DeaconTwentoh from '../assets/Deacon-Twentoh.jpg';
 import Daniel from '../assets/DANIEL.jpg';
 import MrsAidoo from '../assets/mrs-Aidoo.jpg';
+import Cynthia from '../assets/Cynthia.jpg';
 
 const DepCommunity = () => {
   const leadershipTeam = [
@@ -27,7 +28,7 @@ const DepCommunity = () => {
       role: "Youth Representative", 
       expertise: "Education Initiatives",
       quote: "Investing in youth is investing in our collective future",
-      img: null // No image available
+      img: Cynthia // No image available
     },
     { 
       name: "MRS BETTY OFORI AIDOO", 
@@ -310,68 +311,28 @@ const DepCommunity = () => {
                   <div className="space-y-4">
                     <div>
                       <p className="text-green-100 font-medium">Bank Name:</p>
-                      <p className="text-white">Ghana Commercial Bank</p>
+                      <p className="text-white">National Investment Bank (NIB)</p>
                     </div>
                     <div>
                       <p className="text-green-100 font-medium">Account Name:</p>
-                      <p className="text-white">DEP COMMUNITY IMPACT FUND</p>
+                      <p className="text-white">Fellowship of Grace Ass. of God</p>
                     </div>
                     <div>
                       <p className="text-green-100 font-medium">Account Number:</p>
-                      <p className="text-white">6011134567890</p>
-                    </div>
-                    <div>
-                      <p className="text-green-100 font-medium">Branch:</p>
-                      <p className="text-white">Kasoa Main Branch</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-xl font-semibold mb-4 text-yellow-300">International Transfers (USD)</h4>
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-green-100 font-medium">Bank Name:</p>
-                      <p className="text-white">Standard Chartered Bank Ghana</p>
-                    </div>
-                    <div>
-                      <p className="text-green-100 font-medium">Account Name:</p>
-                      <p className="text-white">DEP COMMUNITY IMPACT FUND</p>
-                    </div>
-                    <div>
-                      <p className="text-green-100 font-medium">Account Number:</p>
-                      <p className="text-white">0213456789012</p>
-                    </div>
-                    <div>
-                      <p className="text-green-100 font-medium">SWIFT Code:</p>
-                      <p className="text-white">SCBLGHAC</p>
+                      <p className="text-white">1311096930701</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <h3 className="text-2xl font-bold mb-6 text-center mt-12">Mobile Money Options</h3>
+              <h3 className="text-2xl font-bold mb-6 text-center mt-12">Mobile Money</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white/5 rounded-lg p-6 text-center">
-                  <div className="text-4xl mb-4">📱</div>
+                  <div className="text-4xl mb-4"></div>
                   <h4 className="font-bold mb-2">MTN Mobile Money</h4>
-                  <p className="text-green-100 mb-1">Number: 0244 123 4567</p>
-                  <p className="text-sm text-green-200">Name: DEP COMMUNITY FUND</p>
-                </div>
-                
-                <div className="bg-white/5 rounded-lg p-6 text-center">
-                  <div className="text-4xl mb-4">📱</div>
-                  <h4 className="font-bold mb-2">Vodafone Cash</h4>
-                  <p className="text-green-100 mb-1">Number: 0200 123 4567</p>
-                  <p className="text-sm text-green-200">Name: DEP COMMUNITY FUND</p>
-                </div>
-                
-                <div className="bg-white/5 rounded-lg p-6 text-center">
-                  <div className="text-4xl mb-4">📱</div>
-                  <h4 className="font-bold mb-2">AirtelTigo Money</h4>
-                  <p className="text-green-100 mb-1">Number: 0277 123 4567</p>
-                  <p className="text-sm text-green-200">Name: DEP COMMUNITY FUND</p>
+                  <p className="text-green-100 mb-1">Number: 0240 395 732</p>
+                  <p className="text-sm text-green-200">Name: Assemblies of God Ghana(Fellowship of Grace)</p>
                 </div>
               </div>
 
