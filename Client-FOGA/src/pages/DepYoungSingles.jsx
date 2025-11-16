@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 // Import all images
-import StellaImage from '../assets/stella.jpg';
+import StellaImage from '../assets/Stella.jpg';
 // import SandraImage from '../assets/sandra.jpg';
 // import BridgetImage from '../assets/bridget.jpg';
 // import EmmaImage from '../assets/emma.jpg';
