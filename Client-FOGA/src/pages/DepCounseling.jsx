@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 // Import only the images that exist
 import Veronique from '../assets/Veronique.jpg';
-import Stella from '../assets/stella.jpg';
+import Stella from '../assets/Stella.jpg';
 
 const DepCounseling = () => {
   const leadershipTeam = [
