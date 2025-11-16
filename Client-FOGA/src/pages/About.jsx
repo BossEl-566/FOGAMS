@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 // Import all images
 import PastorImage from '../assets/pastor.jpg';
 import CharlesAtia from '../assets/charles-atia.jpg';
-import JustinaBaidoo from '../assets/Justina-baidoo.jpg';
+import JustinaBaidoo from '../assets/justina-baidoo.jpg';
 import DeaconBoateng from '../assets/Deacon-Boateng.jpg';
 import DeaconTwentoh from '../assets/Deacon-Twentoh.jpg';
 import DeaconAnsong from '../assets/Deacon-Ansong.jpg';
