@@ -161,9 +161,9 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ success: false, statusCode, message }); // Send error response
 });
 
-app.use(express.static(path.join(__dirname, 'client-foga', 'dist')));
+app.use(express.static(path.join(__dirname, 'Client-FOGA', 'dist')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client-foga', 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'Client-FOGA', 'dist', 'index.html'));
 });
 // Start the server
 server.listen(3000, () => {
