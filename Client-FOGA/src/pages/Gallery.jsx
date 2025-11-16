@@ -14,7 +14,7 @@ import Community4 from '../assets/Community4.jpg';
 import Event from '../assets/Events.jpg';
 import Family from '../assets/family.jpg';
 import Family1 from '../assets/family1.jpg';
-import Family2 from '../assets/family2.jpg';
+import Family2 from '../assets/Family2.jpg';
 import Ministries from '../assets/Ministries.jpg';
 import Ministries1 from '../assets/Ministries1.jpg';
 import Ministries2 from '../assets/Ministries2.jpg';
