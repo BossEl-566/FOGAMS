@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 // Import available images
 import FrancisAnsah from '../assets/Francis-Ansah.jpg';
 import MDJosephine from '../assets/MD-josephine.jpg';
-import Benjamin from '../assets/benjamin.jpg';
+import Benjamin from '../assets/Benjamin.jpg';
 import Mottey from '../assets/mottey.jpg';
 import MusicMinistry from '../assets/Music-ministry.jpg';
 import Thelma from '../assets/thelma.jpg';
