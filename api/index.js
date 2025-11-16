@@ -29,6 +29,7 @@ import { getVerse, BOOK } from 'bible-kjv';
 import cron from 'node-cron';
 import { sendBirthdaySMS } from './controllers/membership.controller.js'; // Adjust path if needed
 import { sendScheduledMessages } from './controllers/broadcastMessage.controller.js'; // Adjust path if needed
+import path from 'path';
 
 
 
@@ -42,6 +43,8 @@ mongoose.connect(process.env.MONGO)
   .catch((error) => {   
     console.log('Error:', error); // Log errors if connection fails
   });
+
+  const __dirname = path.resolve(); // Get the directory name of the current module
 
 const app = express(); // Initialize Express application
 app.use(express.json()); // Middleware to parse JSON requests
@@ -157,7 +160,11 @@ app.use((err, req, res, next) => {
   const message = err.message || 'Internal Server Error'; // Default to generic error message
   res.status(statusCode).json({ success: false, statusCode, message }); // Send error response
 });
-app.use('/api/momo', momoRoute)
+
+app.use(express.static(path.join(__dirname, 'client-foga', 'dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client-foga', 'dist', 'index.html'));
+});
 // Start the server
 server.listen(3000, () => {
   console.log('Server running on port 3000'); // Log that the server is running
