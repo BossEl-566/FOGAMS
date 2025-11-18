@@ -2,6 +2,7 @@ import React from 'react';
 import { Footer } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { BsFacebook, BsInstagram, BsTwitterX, BsYoutube, BsTelegram, BsEnvelope, BsPhone } from 'react-icons/bs';
+import logo from "../assets/assembliesOfGodLogo.png"
 
 export default function FooterCom() {
   return (
@@ -11,8 +12,7 @@ export default function FooterCom() {
           {/* Brand Column */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center">
-              <img 
-                src="/src/assets/assembliesOfGodLogo.png" 
+              <img src={logo}
                 alt="Assemblies of God Logo" 
                 className="w-10 h-10 object-contain"
               />

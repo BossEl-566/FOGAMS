@@ -31,21 +31,21 @@ export default function DepYoungSingles() {
     {
       name: 'MRS. SANDRA COBBINAH',
       role: 'SECRETARY',
-      image: StellaImage,
+      image: null,
       bio: 'Organizes events and keeps our ministry running smoothly with grace and efficiency.',
       symbol: '📝'
     },
     {
       name: 'MISS BRIDGET MAWULI',
       role: 'TREASURER',
-      image: StellaImage,
+      image: null,
       bio: 'Manages our resources wisely to further our mission of purity and purpose.',
       symbol: '💰'
     },
     {
       name: 'MISS EMMA ESSIEN',
       role: 'ORGANIZER',
-      image: StellaImage,
+      image: null,
       bio: 'Creates meaningful fellowship opportunities that build sisterhood in Christ.',
       symbol: '🎯'
     }

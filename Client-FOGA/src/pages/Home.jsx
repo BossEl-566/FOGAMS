@@ -10,6 +10,15 @@ import slide1 from '../assets/slide1.jpg';
 import slide2 from '../assets/slide2.jpg';
 import slide3 from '../assets/slide3.jpg';
 import slide4 from '../assets/slide4.jpg';
+import themeflier from "../assets/theme-flier.jpg"
+import dailybible from "../assets/daily-bible.jpg"
+import dawn from "../assets/dawn-service.jpg"
+import family from "../assets/family-service.jpg"
+import youth from "../assets/youth-service.jpg"
+import midweekdawn from "../assets/dawn-prayers.jpg"
+import biblestudy from "../assets/bible-study.jpg"
+import helpline from "../assets/help-line.jpg"
+import prayerservice from "../assets/prayer-service.jpg"
 import { Link } from 'react-router-dom';
 import { HiLocationMarker } from 'react-icons/hi';
 
@@ -301,7 +310,7 @@ export default function Home() {
                 className="relative overflow-hidden rounded-2xl shadow-lg border border-gray-100"
               >
                 <img 
-                  src="/src/assets/theme-flier.jpg"
+                  src={themeflier}
                   alt="2025 Church Theme: Pray Without Ceasing"
                   className="w-full h-auto object-cover"
                 />
@@ -539,7 +548,7 @@ export default function Home() {
             <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 h-fit sticky top-6">
               <div className="relative">
                 <img
-                  src={message.image || "/src/assets/daily-bible.jpg"}
+                  src={message.image || dailybible}
                   alt="Daily Bible Message"
                   className="w-full h-48 object-cover"
                 />
@@ -609,7 +618,7 @@ export default function Home() {
               >
                 <div className="relative h-48">
                   <img 
-                    src="/src/assets/dawn-service.jpg" 
+                    src={dawn} 
                     alt="Dawn Service"
                     className="w-full h-full object-cover"
                   />
@@ -638,7 +647,7 @@ export default function Home() {
               >
                 <div className="relative h-48">
                   <img 
-                    src="/src/assets/family-service.jpg" 
+                    src={family} 
                     alt="Family Service"
                     className="w-full h-full object-cover"
                   />
@@ -667,7 +676,7 @@ export default function Home() {
               >
                 <div className="relative h-48">
                   <img 
-                    src="/src/assets/youth-service.jpg" 
+                    src={youth} 
                     alt="Youth & Teens Service"
                     className="w-full h-full object-cover"
                   />
@@ -706,7 +715,7 @@ export default function Home() {
               >
                 <div className="relative h-48">
                   <img 
-                    src="/src/assets/dawn-prayers.jpg" 
+                    src={midweekdawn} 
                     alt="Midweek Dawn Prayers"
                     className="w-full h-full object-cover"
                   />
@@ -735,7 +744,7 @@ export default function Home() {
               >
                 <div className="relative h-48">
                   <img 
-                    src="/src/assets/bible-study.jpg" 
+                    src={biblestudy} 
                     alt="Bible Study"
                     className="w-full h-full object-cover"
                   />
@@ -764,7 +773,7 @@ export default function Home() {
               >
                 <div className="relative h-48">
                   <img 
-                    src="/src/assets/help-line.jpg" 
+                    src={helpline} 
                     alt="Help Line"
                     className="w-full h-full object-cover"
                   />
@@ -803,7 +812,7 @@ export default function Home() {
               >
                 <div className="relative h-48">
                   <img 
-                    src="/src/assets/prayer-service.jpg" 
+                    src={prayerservice} 
                     alt="Friday Prayer Service"
                     className="w-full h-full object-cover"
                   />

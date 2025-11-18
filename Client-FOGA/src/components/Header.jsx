@@ -8,6 +8,7 @@ import { HiLogout, HiViewGrid, HiChevronDown } from "react-icons/hi";
 import { toggleTheme } from '../radux/theme/themeSlice.js';
 import { signoutSuccess } from '../radux/user/userSlice.js';
 import toast from 'react-hot-toast';
+import logo from "../assets/assembliesOfGodLogo.png"
 
 export default function Header() {
   const path = useLocation().pathname;
@@ -96,7 +97,7 @@ export default function Header() {
       <div className='flex items-center justify-between w-full md:w-auto'>
         <Link to='/' className='self-center whitespace-nowrap'>
           <div className='flex items-center'>
-            <img src='/src/assets/assembliesOfGodLogo.png' alt='Assemblies of God Logo' width='30' height='20' />
+            <img src={logo} alt='Assemblies of God Logo' width='30' height='20' />
             <div className='w-px h-8 bg-gradient-to-b from-blue-500 to-blue-700 ml-2 dark:from-gray-300 dark:to-gray-100'></div>
             <div className='ml-2 hidden md:block md:text-sm lg:text-base font-bold dark:text-white text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-300 dark:to-blue-100'>Fellowship of Grace A/G</div>
             <div className='ml-1 block md:hidden font-bold dark:text-white text-blue-950'>FOGA</div>
