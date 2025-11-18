@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 // Import only the images that exist
 import Veronique from '../assets/Veronique.jpg';
 import Stella from '../assets/Stella.jpg';
+import rouda from "../assets/rouda-foga.png";
 
 const DepCounseling = () => {
   const leadershipTeam = [
@@ -18,7 +19,7 @@ const DepCounseling = () => {
       name: "MRS. RHODA ACQUAAH", 
       role: "Senior Counselor", 
       specialty: "Marriage & Family Counseling",
-      img: null, // No image available
+      img: rouda, // No image available
       quote: "Strong families build a strong church community."
     },
     { 

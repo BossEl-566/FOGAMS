@@ -33,6 +33,7 @@ import AsaafoMaamePastor from '../assets/AsaafoMaame-Pastor.jpg';
 import CommunityEvent from '../assets/community-event.jpg';
 import CongregationWorship from '../assets/congregation-worship.jpg';
 import RevKoomson from '../assets/rev-koomson.jpg';
+import MrAurthur from "../assets/aurthur.png"
 
 export default function About() {
   const leadershipCategories = [
@@ -72,7 +73,7 @@ export default function About() {
           name: "Deacon Joseph Arthur",
           role: "Project Committee Chair",
           bio: "Accomplished auditor and Regional Manager at EGNL. Founding member of FOGA with expertise in church projects.",
-          image: "/images/joseph-arthur.jpg" // This one wasn't imported
+          image: MrAurthur // This one wasn't imported
         },
         {
           name: "Deacon Prof. Abraham Ansong",

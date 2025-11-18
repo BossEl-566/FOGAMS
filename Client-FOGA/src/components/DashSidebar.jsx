@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Sidebar } from "flowbite-react";
 import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser, HiAnnotation, HiChartPie, HiFolderDownload, HiX } from "react-icons/hi";
 import { BiMessageRounded, BiChat } from "react-icons/bi";
-import { FaBookBible } from "react-icons/fa6";
 import { BsCalendarCheck } from "react-icons/bs"; 
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { FaPray } from "react-icons/fa";
@@ -150,11 +149,6 @@ export default function DashSidebar({ isOpen, onClose }) {
                     Resources
                   </Sidebar.Item>
                 </SidebarLink>
-              <SidebarLink to='/dashboard?tab=bible' tabValue='bible'>
-                <Sidebar.Item active={tab === 'bible'} href="#" icon={FaBookBible} as='div'>
-                Bible
-                </Sidebar.Item>
-              </SidebarLink>
               <SidebarLink to='/dashboard?tab=notepad' tabValue='notepad'>
                 <Sidebar.Item active={tab === 'notepad'} href="#" icon={BiNotepad} as='div'>
                 Notepad

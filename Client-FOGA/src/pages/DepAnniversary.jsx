@@ -8,6 +8,7 @@ import DeaconAnsong from '../assets/Deacon-Ansong.jpg';
 import MrsAdomako from '../assets/Mrs-Adomako.jpg';
 import JoyceTwentoh from '../assets/Joyce-twentoh.jpg';
 import Bright from '../assets/bright.jpg';
+import MrAurthur from '../assets/aurthur.png';
 
 const DepAnniversary = () => {
   const teamMembers = [
@@ -23,7 +24,7 @@ const DepAnniversary = () => {
       role: "Finance Coordinator", 
       responsibility: "Budget Management & Sponsorships",
       quote: "Honoring our past through wise stewardship",
-      img: null // No image available
+      img: MrAurthur // No image available
     },
     { 
       name: "PROF. ABRAHAM ANSONG", 

@@ -8,6 +8,8 @@ import churchProject1 from '/src/assets/church-project1.jpg';
 import churchProject2 from '/src/assets/church-project2.jpg';
 import mrManu from '/src/assets/Mr-Manu.jpg';
 import karim from '/src/assets/Karim.jpg';
+import MrAurthur from "/src/assets/aurthur.png";  
+import mrsBoateng from "/src/assets/boateng.png";
 
 const DepProject = () => {
   // Use imported images
@@ -24,7 +26,7 @@ const DepProject = () => {
       expertise: "Project Oversight & Fundraising",
       contact: "024-427-4915",
       quote: "Building God's house requires both faith and diligence",
-      img: null
+      img: MrAurthur
     },
     { 
       name: "MR ALEX MANU", 
@@ -48,7 +50,7 @@ const DepProject = () => {
       expertise: "Interior Design & Decor",
       contact: "",
       quote: "Creating a welcoming house of worship",
-      img: null
+      img: mrsBoateng
     }
   ];
 

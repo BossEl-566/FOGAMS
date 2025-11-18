@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 // Import available images
 import DeaconAnsong from '../assets/Deacon-Ansong.jpg';
 import MrsAdomako from '../assets/Mrs-Adomako.jpg';
+import mraurthur from '../assets/aurthur.png';
 
 const DepFundraising = () => {
   const leadershipTeam = [
@@ -21,7 +22,7 @@ const DepFundraising = () => {
       contact: "0244274915",
       expertise: "Fund Management & Financial Reporting",
       quote: "Every cedi invested in God's work yields eternal dividends",
-      image: null // No image available
+      image: mraurthur // No image available
     },
     { 
       name: "MRS FELICIA ADOMAKO", 
