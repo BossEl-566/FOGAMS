@@ -17,6 +17,7 @@ import MrManu from '../assets/Mr-Manu.jpg';
 import PastorEric from '../assets/pastor-Eric.jpg';
 import MrsAdomako from '../assets/Mrs-Adomako.jpg';
 import SundaySchoolTeachers from '../assets/Sunday_school-Teachers.jpg';
+import veronique from '../assets/Veronique.jpg';
 
 export default function SundaySchoolMin() {
   const fadeIn = {
@@ -83,6 +84,18 @@ export default function SundaySchoolMin() {
         role: "English Class Teacher",
         image: JustinaBaidoo,
         bio: "Specializes in creative teaching methods for all age groups"
+      },
+      {
+        name: "Teacher Clarissa",
+        role: "English Class Teacher",
+        image: Clarissa,
+        bio: "Dedicated to nurturing faith through engaging lessons and activities"
+      },
+      {
+        name: "Teacher Veronique",
+        role: "English Class Teacher",
+        image: veronique,
+        bio: "Committed to helping students grow spiritually and academically"
       }
     ],
     akan: [
@@ -111,6 +124,12 @@ export default function SundaySchoolMin() {
         role: "Youth Class Teacher",
         image: null,
         bio: "Mentoring young adults in their faith journey"
+      },
+      {
+        name: "Teacher Khadija",
+        role: "Youth Class Teacher",
+        image: Khadija,
+        bio: "Passionate about youth ministry and spiritual growth"
       }
     ],
     adult: [

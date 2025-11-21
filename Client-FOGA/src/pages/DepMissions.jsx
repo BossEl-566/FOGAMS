@@ -2,46 +2,64 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Import only the images that exist
-import MissionImage from '../assets/mission.jpg';
+import MissionImage from '../assets/missions4.jpg';
 import FrancisDorduno from '../assets/francis-dorduno.jpg';
-import MaryFoga from '../assets/Mary-foga.jpg';
 import PastorEric from '../assets/pastor-Eric.jpg';
 import Khadija from '../assets/Khadija.jpg';
 import MrsAdomako from '../assets/Mrs-Adomako.jpg';
 import DrShibu from '../assets/Dr-Shibu.jpg';
+import mission1 from "../assets/young-singles-3.jpg";
+import mission2 from "../assets/missions2.jpg";
+import mission3 from "../assets/missions3.jpg";
+import mission4 from "../assets/missions4.jpg";
+import mission5 from "../assets/missions5.jpg";
+import mission6 from "../assets/missions6.jpg";
+import mission7 from "../assets/missions7.jpg";
 
 export default function DepMissions() {
-  // Gallery images data - replace placeholder divs with your actual images
+  // Gallery images data - using actual imported images
   const galleryImages = [
     { 
       id: 1, 
       category: 'school', 
-      placeholder: 'School Outreach - Sharing Bible stories with students' 
+      placeholder: 'School Outreach - Sharing Bible stories with students', 
+      image: mission1
     },
     { 
       id: 2, 
       category: 'prison', 
-      placeholder: 'Prison Ministry - Worship service with inmates' 
+      placeholder: 'Prison Ministry - Worship service with inmates',
+      image: mission2
     },
     { 
       id: 3, 
       category: 'hospital', 
-      placeholder: 'Hospital Visit - Praying with patients' 
+      placeholder: 'Hospital Visit - Praying with patients',
+      image: mission3
     },
     { 
       id: 4, 
       category: 'dawn', 
-      placeholder: 'Dawn Outreach - Preaching at information center' 
+      placeholder: 'Dawn Outreach - Preaching at information center',
+      image: mission4
     },
     { 
       id: 5, 
       category: 'school', 
-      placeholder: 'School Assembly - Gospel presentation' 
+      placeholder: 'School Assembly - Gospel presentation',
+      image: mission5
     },
     { 
       id: 6, 
       category: 'prison', 
-      placeholder: 'Prison Counseling - One-on-one sessions' 
+      placeholder: 'Prison Counseling - One-on-one sessions',
+      image: mission6
+    },
+    { 
+      id: 7, 
+      category: 'community', 
+      placeholder: 'Community Outreach - Sharing God\'s love',
+      image: mission7
     },
   ];
 
@@ -70,7 +88,7 @@ export default function DepMissions() {
               <div className="w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-white bg-gray-300 overflow-hidden">
                 <img
                   src={MissionImage}
-                  alt="Head of Missions"
+                  alt="Missions Department"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -101,8 +119,12 @@ export default function DepMissions() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* School Missions */}
             <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
-              <div className="h-48 bg-blue-100 flex items-center justify-center">
-                <span className="text-blue-800">School Mission Photo</span>
+              <div className="h-48 bg-blue-100 flex items-center justify-center overflow-hidden">
+                <img 
+                  src={mission1} 
+                  alt="School Missions" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">Schools Outreach</h3>
@@ -119,8 +141,12 @@ export default function DepMissions() {
 
             {/* Prison Missions */}
             <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
-              <div className="h-48 bg-purple-100 flex items-center justify-center">
-                <span className="text-purple-800">Prison Mission Photo</span>
+              <div className="h-48 bg-purple-100 flex items-center justify-center overflow-hidden">
+                <img 
+                  src={mission2} 
+                  alt="Prison Ministry" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">Prison Ministry</h3>
@@ -137,8 +163,12 @@ export default function DepMissions() {
 
             {/* Hospital Missions */}
             <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
-              <div className="h-48 bg-green-100 flex items-center justify-center">
-                <span className="text-green-800">Hospital Mission Photo</span>
+              <div className="h-48 bg-green-100 flex items-center justify-center overflow-hidden">
+                <img 
+                  src={mission3} 
+                  alt="Hospital Visits" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">Hospital Visits</h3>
@@ -157,8 +187,12 @@ export default function DepMissions() {
           {/* Dawn Outreach - Full width */}
           <div className="mt-12 bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
             <div className="md:flex">
-              <div className="md:w-1/2 h-64 bg-orange-100 flex items-center justify-center">
-                <span className="text-orange-800">Dawn Outreach Photo</span>
+              <div className="md:w-1/2 h-64 bg-orange-100 flex items-center justify-center overflow-hidden">
+                <img 
+                  src={mission4} 
+                  alt="Dawn Outreach" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="md:w-1/2 p-8">
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">Dawn Information Center Outreach</h3>
@@ -202,11 +236,16 @@ export default function DepMissions() {
                     key={image.id} 
                     className="w-full flex-shrink-0 relative"
                   >
-                    <div className="h-96 bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-600 text-center p-4">{image.placeholder}</span>
+                    <div className="h-96 bg-gray-200 flex items-center justify-center overflow-hidden">
+                      <img 
+                        src={image.image} 
+                        alt={image.placeholder}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
                       <p className="text-sm uppercase tracking-wider">{image.category} Outreach</p>
+                      <p className="text-xs mt-1">{image.placeholder}</p>
                     </div>
                   </div>
                 ))}
@@ -250,16 +289,27 @@ export default function DepMissions() {
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">Impact Stories</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="bg-white p-6 rounded-lg shadow-md">
+            {[
+              { image: mission5, name: "School Outreach Beneficiary", story: "The mission team brought hope when I needed it most. Their words and prayers changed my life forever." },
+              { image: mission6, name: "Prison Ministry Participant", story: "Through the prison ministry, I found redemption and a new purpose in Christ. My life has been transformed." },
+              { image: mission7, name: "Community Member", story: "The dawn outreach team met me at my lowest point and showed me God's love in a practical way." }
+            ].map((testimony, index) => (
+              <div key={index} className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+                    <img 
+                      src={testimony.image} 
+                      alt={testimony.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                   <div>
-                    <h4 className="font-semibold">Testifier {item}</h4>
+                    <h4 className="font-semibold">{testimony.name}</h4>
                     <p className="text-sm text-gray-500">Mission Beneficiary</p>
                   </div>
                 </div>
                 <p className="text-gray-600 italic">
-                  "The mission team brought hope when I needed it most. Their words and prayers changed my life forever."
+                  "{testimony.story}"
                 </p>
               </div>
             ))}
@@ -297,12 +347,6 @@ export default function DepMissions() {
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 py-8">
             {[
               { 
-                name: "Lay Pastor Mary Opoku", 
-                role: "Hospital Missions Coordinator", 
-                years: 5, 
-                image: MaryFoga 
-              },
-              { 
                 name: "Pastor Eric Botchwey", 
                 role: "Prison Ministry Leader", 
                 years: 5, 
@@ -330,7 +374,7 @@ export default function DepMissions() {
                 name: "Mr. Anothy", 
                 role: "Prayer Team Leader", 
                 years: 5, 
-                image: null // No image available
+                image: null // Using mission image as placeholder
               },
               { 
                 name: "Dr. Shiabu Adams", 
@@ -344,19 +388,11 @@ export default function DepMissions() {
                 className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300 flex flex-col h-full"
               >
                 <div className="h-60 bg-gray-100 flex items-center justify-center relative overflow-hidden">
-                  {member.image ? (
-                    <img 
-                      src={member.image} 
-                      alt={`Portrait of ${member.name}`}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="text-gray-400 flex items-center justify-center w-full h-full">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                    </div>
-                  )}
+                  <img 
+                    src={member.image} 
+                    alt={`Portrait of ${member.name}`}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="p-4 text-center flex-grow">
                   <h3 className="text-lg font-semibold text-gray-800 mb-1">{member.name}</h3>
