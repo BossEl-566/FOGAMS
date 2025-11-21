@@ -1,23 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiDocument, HiDocumentText, HiOutlineUserGroup, HiTable, HiUser, HiAnnotation, HiChartPie, HiFolderDownload, HiX } from "react-icons/hi";
-import { BiMessageRounded, BiChat } from "react-icons/bi";
+import { HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiUser, HiAnnotation, HiChartPie, HiFolderDownload, HiX } from "react-icons/hi";
+import { BiMessageRounded, BiNotepad } from "react-icons/bi";
 import { BsCalendarCheck } from "react-icons/bs"; 
-import { FaMoneyBillTransfer } from "react-icons/fa6";
-import { FaPray } from "react-icons/fa";
-import { MdOutlineContactSupport } from "react-icons/md";
-import { FaPollH } from "react-icons/fa";
-import { MdEventAvailable, MdOutlineAttachMoney } from "react-icons/md";
-import { FaBirthdayCake } from "react-icons/fa";
+import { FaPray, FaPollH, FaUserPlus, FaBullhorn, FaBirthdayCake } from "react-icons/fa";
+import { MdOutlineContactSupport, MdEventAvailable } from "react-icons/md";
 import { Link, useLocation } from 'react-router-dom';
 import { signoutSuccess } from '../radux/user/userSlice';
-import { FaBullhorn } from "react-icons/fa";
-import { BiNotepad } from "react-icons/bi";
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { FaUserPlus } from "react-icons/fa";
-import { HiMenuAlt2 } from "react-icons/hi";
 import { TfiAnnouncement } from "react-icons/tfi";
 
 export default function DashSidebar({ isOpen, onClose }) {
@@ -35,10 +26,10 @@ export default function DashSidebar({ isOpen, onClose }) {
     }
   }, [location.search]);
 
-  // Close sidebar when clicking outside
+  // Close sidebar when clicking outside on mobile
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+      if (isOpen && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
         onClose();
       }
     };
@@ -47,7 +38,7 @@ export default function DashSidebar({ isOpen, onClose }) {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]);
+  }, [isOpen, onClose]);
 
   const handleSignout = async () => {
     try {
@@ -67,7 +58,7 @@ export default function DashSidebar({ isOpen, onClose }) {
     }
   };
 
-  // Wrapper function for sidebar items that closes the sidebar
+  // Enhanced SidebarLink component with better styling
   const SidebarLink = ({ to, tabValue, children, ...props }) => (
     <Link 
       to={to} 
@@ -75,174 +66,210 @@ export default function DashSidebar({ isOpen, onClose }) {
         setTab(tabValue);
         onClose();
       }}
+      className="block w-full"
       {...props}
     >
       {children}
     </Link>
   );
 
-  return (
-    <div 
-      ref={sidebarRef}
-      className={`fixed md:relative z-40 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out`}
-      style={{ height: 'calc(100vh - 60px)', overflowY: 'auto' }}
+  // Custom Sidebar Item with enhanced styling
+  const CustomSidebarItem = ({ active, icon: Icon, children, ...props }) => (
+    <div
+      className={`
+        flex items-center p-3 rounded-lg transition-all duration-200 cursor-pointer
+        ${active 
+          ? 'bg-blue-50 border border-blue-200 text-blue-700 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300' 
+          : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700/50'
+        }
+      `}
+      {...props}
     >
-      <Sidebar className='w-64 md:w-56'>
-        <Sidebar.Items>
-          {currentUser && currentUser.isAdmin && (
-            <Sidebar.ItemGroup className='flex flex-col gap-1'>
-              <SidebarLink to='/dashboard?tab=dash' tabValue='dash'>
-                <Sidebar.Item active={tab === 'dash' || !tab} href="#" icon={HiChartPie} as='div'>
-                  Dashboard
-                </Sidebar.Item>
-              </SidebarLink>
-            </Sidebar.ItemGroup>
-          )}
-          <Sidebar.ItemGroup className='flex flex-col gap-1'>
-            <SidebarLink to='/dashboard?tab=profile' tabValue='profile'>
-              <Sidebar.Item active={tab === 'profile'} href="#" icon={HiUser} label={currentUser.isAdmin ? 'Admin' : 'User'} labelColor='dark' as='div'>
-                Profile
-              </Sidebar.Item>
-            </SidebarLink>
-            {currentUser.isMember && (
-              <>
-              <SidebarLink to='/dashboard?tab=announcement' tabValue='announcement'>
-                <Sidebar.Item active={tab === 'announcement'} href="#" icon={TfiAnnouncement} as='div'>
-                  Announcement
-                </Sidebar.Item>
-              </SidebarLink>
-              <SidebarLink to='/dashboard?tab=baptism' tabValue='baptism'>
-                <Sidebar.Item active={tab === 'baptism'} href="#" icon={FaPray} as='div'>
-                  Baptism
-                </Sidebar.Item>
-              </SidebarLink>
-              <SidebarLink to='/dashboard?tab=poll' tabValue='poll'>
-                <Sidebar.Item active={tab === 'poll'} href="#" icon={FaPollH} as='div'>
-                  Poll
-                </Sidebar.Item>
-              </SidebarLink>
-              <SidebarLink to='/dashboard?tab=book' tabValue='book'>
-                <Sidebar.Item active={tab === 'book'} href="#" icon={BsCalendarCheck} as='div'>
-                Appointments
-                </Sidebar.Item>
-              </SidebarLink>
-              <SidebarLink to='/dashboard?tab=anonymous' tabValue='anonymous'>
-                <Sidebar.Item active={tab === 'anonymous'} href="#" icon={BiMessageRounded} as='div'>
-                Message Box
-                </Sidebar.Item>
-              </SidebarLink>
-              <SidebarLink to='/dashboard?tab=events' tabValue='events'>
-                  <Sidebar.Item
-                    active={tab === 'events'}
-                    icon={MdEventAvailable}
-                    as='div'
-                  >
-                    Events
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=resources' tabValue='resources'>
-                  <Sidebar.Item
-                    active={tab === 'resources'}
-                    icon={HiFolderDownload}
-                    as='div'
-                  >
-                    Resources
-                  </Sidebar.Item>
-                </SidebarLink>
-              <SidebarLink to='/dashboard?tab=notepad' tabValue='notepad'>
-                <Sidebar.Item active={tab === 'notepad'} href="#" icon={BiNotepad} as='div'>
-                Notepad
-                </Sidebar.Item>
-              </SidebarLink>
-              </>
-            )}
-            {!currentUser.isMember && (
-              <SidebarLink to='/dashboard?tab=join' tabValue='join'>
-                <Sidebar.Item active={tab === 'join'} href="#" icon={HiTable}>
-                  Join Church
-                </Sidebar.Item>
-              </SidebarLink>
-            )}
-            {currentUser.isAdmin && (
-              <>
-              <SidebarLink to='/dashboard?tab=daily-bible-message' tabValue='daily-bible-message'>
-                <Sidebar.Item active={tab === 'daily-bible-message'} href="#" icon={HiDocumentText} as='div'>
-                  Daily Message
-                </Sidebar.Item>
-              </SidebarLink>
-              </>
-            )}
-            {currentUser.isAdmin && (
-              <>
-                <SidebarLink to='/dashboard?tab=users' tabValue='users'>
-                  <Sidebar.Item
-                    active={tab === 'users'}
-                    icon={HiOutlineUserGroup}
-                    as='div'
-                  >
-                    Users
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=birthday' tabValue='birthday'>
-                  <Sidebar.Item
-                    active={tab === 'birthday'}
-                    icon={FaBirthdayCake}
-                    as='div'
-                  >
-                    Birthday  
-                </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=comments' tabValue='comments'>
-                  <Sidebar.Item
-                    active={tab === 'comments'}
-                    icon={HiAnnotation}
-                    as='div'
-                  >
-                    Comments
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=membership' tabValue='membership'>
-                  <Sidebar.Item
-                    active={tab === 'membership'}
-                    icon={FaUserPlus}
-                    as='div'
-                  >
-                    Requests
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=contact' tabValue='contact'>
-                  <Sidebar.Item
-                    active={tab === 'contact'}
-                    icon={MdOutlineContactSupport}
-                    as='div'
-                  >
-                    Contact
-                  </Sidebar.Item>
-                </SidebarLink>
-                <SidebarLink to='/dashboard?tab=broadcast' tabValue='broadcast'>
-                  <Sidebar.Item
-                    active={tab === 'broadcast'}
-                    icon={FaBullhorn}
-                    as='div'
-                  >
-                    Broadcast
-                  </Sidebar.Item>
-                </SidebarLink>
-              </>
-            )}
-            <Sidebar.Item 
-              onClick={() => {
-                handleSignout();
-                onClose();
-              }} 
-              icon={HiArrowSmRight} 
-              as='div'
-            >
-              Sign Out
-            </Sidebar.Item>
-          </Sidebar.ItemGroup>
-        </Sidebar.Items>
-      </Sidebar>
+      <Icon className={`w-5 h-5 mr-3 ${active ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`} />
+      <span className="font-medium">{children}</span>
     </div>
+  );
+
+  return (
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden backdrop-blur-sm transition-opacity duration-300"
+          onClick={onClose}
+        />
+      )}
+      
+      {/* Sidebar Container */}
+      <div 
+        ref={sidebarRef}
+        className={`
+          fixed md:relative 
+          top-0 left-0 
+          h-screen
+          w-80
+          transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
+          md:translate-x-0 
+          transition-all duration-300 ease-in-out
+          z-50
+          bg-white dark:bg-gray-800
+          shadow-xl md:shadow-lg
+          border-r border-gray-200 dark:border-gray-700
+          overflow-y-auto
+        `}
+      >
+        {/* Mobile Header */}
+        <div className="md:hidden flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-sm">C</span>
+            </div>
+            <div>
+              <h2 className="font-bold text-gray-800 dark:text-white">Dashboard</h2>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                {currentUser?.isAdmin ? 'Admin Panel' : 'User Panel'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors duration-200 shadow-sm"
+          >
+            <HiX className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          </button>
+        </div>
+
+        {/* Sidebar Content */}
+        <div className="p-4 h-full flex flex-col">
+          <Sidebar className="w-full border-none bg-transparent">
+            <Sidebar.Items>
+              {/* Admin Dashboard */}
+              {currentUser && currentUser.isAdmin && (
+                <Sidebar.ItemGroup className="mb-6">
+                  <div className="px-3 mb-3">
+                    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                      Admin
+                    </span>
+                  </div>
+                  <SidebarLink to='/dashboard?tab=dash' tabValue='dash'>
+                    <CustomSidebarItem active={tab === 'dash' || !tab} icon={HiChartPie}>
+                      Dashboard
+                    </CustomSidebarItem>
+                  </SidebarLink>
+                </Sidebar.ItemGroup>
+              )}
+
+              {/* Main Navigation */}
+              <Sidebar.ItemGroup className="mb-6">
+                <div className="px-3 mb-3">
+                  <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                    Main
+                  </span>
+                </div>
+                
+                {/* Profile */}
+                <SidebarLink to='/dashboard?tab=profile' tabValue='profile'>
+                  <CustomSidebarItem active={tab === 'profile'} icon={HiUser}>
+                    Profile
+                    {currentUser.isAdmin && (
+                      <span className="ml-2 px-2 py-1 text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full">
+                        Admin
+                      </span>
+                    )}
+                  </CustomSidebarItem>
+                </SidebarLink>
+
+                {/* Member Features */}
+                {currentUser.isMember && (
+                  <>
+                    {[
+                      { to: 'announcement', icon: TfiAnnouncement, label: 'Announcement' },
+                      { to: 'baptism', icon: FaPray, label: 'Baptism' },
+                      { to: 'poll', icon: FaPollH, label: 'Poll' },
+                      { to: 'book', icon: BsCalendarCheck, label: 'Appointments' },
+                      { to: 'anonymous', icon: BiMessageRounded, label: 'Message Box' },
+                      { to: 'events', icon: MdEventAvailable, label: 'Events' },
+                      { to: 'resources', icon: HiFolderDownload, label: 'Resources' },
+                      { to: 'notepad', icon: BiNotepad, label: 'Notepad' },
+                    ].map((item) => (
+                      <SidebarLink key={item.to} to={`/dashboard?tab=${item.to}`} tabValue={item.to}>
+                        <CustomSidebarItem active={tab === item.to} icon={item.icon}>
+                          {item.label}
+                        </CustomSidebarItem>
+                      </SidebarLink>
+                    ))}
+                  </>
+                )}
+
+                {/* Join Church for non-members */}
+                {!currentUser.isMember && (
+                  <SidebarLink to='/dashboard?tab=join' tabValue='join'>
+                    <CustomSidebarItem active={tab === 'join'} icon={HiUser}>
+                      Join Church
+                    </CustomSidebarItem>
+                  </SidebarLink>
+                )}
+              </Sidebar.ItemGroup>
+
+              {/* Admin Management */}
+              {currentUser.isAdmin && (
+                <Sidebar.ItemGroup className="mb-6">
+                  <div className="px-3 mb-3">
+                    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                      Management
+                    </span>
+                  </div>
+                  {[
+                    { to: 'daily-bible-message', icon: HiDocumentText, label: 'Daily Message' },
+                    { to: 'users', icon: HiOutlineUserGroup, label: 'Users' },
+                    { to: 'birthday', icon: FaBirthdayCake, label: 'Birthdays' },
+                    { to: 'comments', icon: HiAnnotation, label: 'Comments' },
+                    { to: 'membership', icon: FaUserPlus, label: 'Requests' },
+                    { to: 'contact', icon: MdOutlineContactSupport, label: 'Contact' },
+                    { to: 'broadcast', icon: FaBullhorn, label: 'Broadcast' },
+                  ].map((item) => (
+                    <SidebarLink key={item.to} to={`/dashboard?tab=${item.to}`} tabValue={item.to}>
+                      <CustomSidebarItem active={tab === item.to} icon={item.icon}>
+                        {item.label}
+                      </CustomSidebarItem>
+                    </SidebarLink>
+                  ))}
+                </Sidebar.ItemGroup>
+              )}
+
+              {/* Sign Out */}
+              <Sidebar.ItemGroup>
+                <div
+                  onClick={handleSignout}
+                  className="flex items-center p-3 rounded-lg cursor-pointer text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-all duration-200 mt-4 border border-transparent hover:border-red-200 dark:hover:border-red-800"
+                >
+                  <HiArrowSmRight className="w-5 h-5 mr-3" />
+                  <span className="font-medium">Sign Out</span>
+                </div>
+              </Sidebar.ItemGroup>
+            </Sidebar.Items>
+          </Sidebar>
+
+          {/* User Info Footer */}
+          <div className="mt-auto p-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-sm">
+                  {currentUser?.username?.charAt(0)?.toUpperCase() || 'U'}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                  {currentUser?.username || 'User'}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                  {currentUser?.email || 'email@example.com'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
