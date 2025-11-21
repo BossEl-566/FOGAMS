@@ -103,11 +103,6 @@ export default function About() {
           image: FrancisDorduno
         },
         {
-          name: "Lay Pastor Mary Opoku",
-          role: "Missions Ministry",
-          image: MaryOpoku
-        },
-        {
           name: "Lay Pastor Asiedu Ompong",
           role: "School Ministry",
           image: KwekuAsiedu
