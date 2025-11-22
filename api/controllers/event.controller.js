@@ -114,3 +114,24 @@ export const getEvent = async (req, res, next) => {
         next(error);
     }
 };
+
+export const editEvent = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, 'You are not authorized to perform this action'));
+    }
+    try {
+        const { title, description, date, location, imageUrl } = req.body;
+        const updatedData = { title, description, date, location, imageUrl };
+        const event = await Event.findByIdAndUpdate(
+            req.params.eventId,
+            { $set: updatedData },
+            { new: true }
+        );
+        if (!event) {
+            return next(errorHandler(404, 'Event not found'));
+        }
+        res.status(200).json(event);
+    } catch (error) {
+        next(error);
+    }
+};

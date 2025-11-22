@@ -34,17 +34,24 @@ import CommunityEvent from '../assets/community-event.jpg';
 import CongregationWorship from '../assets/congregation-worship.jpg';
 import RevKoomson from '../assets/rev-koomson.jpg';
 import MrAurthur from "../assets/aurthur.png"
+import Mamalee from "../assets/Mama-Lee.jpg"
 
 export default function About() {
   const leadershipCategories = [
       {
-        title: "Senior Pastor",
+        title: "Senior Pastor and Wife",
         members: [
           {
             name: "Reverend Charles Atia",
             role: "Senior Pastor",
             bio: "Rev. Charles Atia is the Senior Pastor of Fellowship of Grace Assemblies of God, Pedu, Cape Coast. He is gifted in preaching and inspiring revival, and has impacted churches and youth groups across Ghana. He also serves as Sunday School Director for Central Region A and teaches at the Assemblies of God Theological Seminary. He holds degrees from Global University and UCC. Rev. Atia is married to Lydia Atia, a Scripture Union officer, and they have two children, Wineloyah and Winepanga",
             image: CharlesAtia
+          },
+          {
+            name: "Mrs Lydia Atia",
+            role: "Advisor to the Women's Ministry",
+            bio: "Pastor's Wife, Regional Finance and Admin Officer, SU - Central Region",
+            image: Mamalee
           }
         ]
       },
@@ -90,7 +97,7 @@ export default function About() {
       ]
     },
     {
-      title: "Lay Pastors",
+      title: "Pastoral Team",
       members: [
         {
           name: "Lay Pastor Samuel Nuwameh",
