@@ -50,7 +50,7 @@ export default function About() {
           {
             name: "Mrs Lydia Atia",
             role: "Advisor to the Women's Ministry",
-            bio: "Pastor's Wife, Regional Finance and Admin Officer, SU - Central Region",
+            bio: "Mrs. Lydia Atia is a key leader serving alongside her husband. As the pastor's wife, she serves as the advisor to the Women's Ministry. In that capacity, she provides spiritual mentorship and drives community engagement within FOGA. Professionally, she functions as the Regional Finance and Administration Officer for SU - Central Region.Mama Lydia is passionate about ministering to those into drugs and other addictions, and other social vices. She also loves ministering to the kids in our children's church (FOGA Kids). She holds a certificate in ministry, a degree in Accounting, and an HND in Accounting.",
             image: Mamalee
           }
         ]

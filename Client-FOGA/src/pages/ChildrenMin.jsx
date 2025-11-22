@@ -43,8 +43,7 @@ export default function ChildrenMin() {
     { name: "Sister Baaba Koomson", role: "Sunday School Teacher", image: SisBaaba },
     { name: "Mrs Lydia Atia", role: "Sunday School Teacher", image: MamaLee },
     { name: "Mrs Baaba Twentoh", role: "Sunday School Teacher", image: JoyceTwentoh },
-    { name: "Mrs Emmanuella Donkor", role: "Sunday School Teacher", image: null }, // No image available
-    { name: "Sister Emily Chen", role: "Music Coordinator", image: null }, // No image available
+    { name: "Mrs Emmanuella Donkor", role: "Sunday School Teacher", image: null }
   ];
 
   // Handle image error for missing images
