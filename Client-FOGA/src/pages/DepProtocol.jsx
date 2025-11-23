@@ -25,7 +25,7 @@ const DepProtocol = () => {
       quote: "A clean temple honors our holy God"
     },
     {
-      name: "Mr. Amos Botchway",
+      name: "Mr. Amos Yaw Botchway",
       role: "Parking Team Lead",
       department: "Logistics",
       image: BraCann,
@@ -60,7 +60,7 @@ const DepProtocol = () => {
       quote: "Every smile can open a heart to the Gospel"
     },
     {
-      name: "Mr Alexanda Manu",
+      name: "Mr Alexander Osei Manu",
       role: "Security Lead",
       department: "Safety & Time keeper",
       image: MrManu,

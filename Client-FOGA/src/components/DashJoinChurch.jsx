@@ -130,6 +130,7 @@ export default function MembershipForm() {
     } catch (error) {
       console.error("Error submitting membership:", error);
       toast.error(error.message || "Request has already been submitted");
+      window.location.href = '/re-authenticate';
     } finally {
       setIsSubmitting(false);
     }

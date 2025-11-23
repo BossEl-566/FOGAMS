@@ -25,6 +25,8 @@ export default function DashAnonymous() {
           setMessages(data);
         } catch (error) {
           console.error(error);
+          toast.error('Error fetching messages');
+          window.location.href = '/re-authenticate';
         } finally {
           setIsLoading(false);
         }

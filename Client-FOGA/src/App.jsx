@@ -53,6 +53,7 @@ import PrayerGuide from './pages/PrayerGuide';
 import SendTestSMS from './pages/SendTestSMS';
 import Announcement from './pages/Announcement';
 import TopBar from './components/TopBar';
+import ReAuthenticateUser from './pages/ReAuthenticateUser';
 
 export default function App() {
   const {currentUser} = useSelector((state) => state.user);
@@ -93,6 +94,7 @@ export default function App() {
         <Route path="/departments/missions" element={<DepMissions />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/prayer-guide" element={<PrayerGuide />} />
+        <Route path="/re-authenticate" element={<ReAuthenticateUser />} />
 
         <Route path="/departments/community-impact" element={<DepCommunity />} />
         

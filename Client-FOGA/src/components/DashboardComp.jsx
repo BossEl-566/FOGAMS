@@ -14,6 +14,7 @@ import { Button, Table } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { Doughnut, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
+import { toast } from 'react-hot-toast';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
@@ -44,7 +45,9 @@ export default function DashboardComp() {
                 setUserGrowth(((data.totalLastMonthUsers / (data.totalUsers - data.totalLastMonthUsers)) * 100).toFixed(2));
               }
             } catch (error) {
+                toast.error('Error fetching users. Please re-authenticate.');
               console.log(error.message);
+              window.location.href = '/re-authenticate';
             }
         };
         const fetchPosts = async () => {
@@ -58,7 +61,9 @@ export default function DashboardComp() {
                 setPostGrowth(((data.lastMonthDailyMessage / (data.totalDailyMessage - data.lastMonthDailyMessage)) * 100).toFixed(2));
               }
             } catch (error) {
+                toast.error('Error fetching posts. Please re-authenticate.');
               console.log(error.message);
+                window.location.href = '/re-authenticate';
             }
         };
         const fetchComments = async () => {
@@ -72,7 +77,9 @@ export default function DashboardComp() {
                 setCommentGrowth(((data.lastMonthComments / (data.totalComments - data.lastMonthComments)) * 100).toFixed(2));
               }
             } catch (error) {
+                toast.error('Error fetching comments. Please re-authenticate.');
               console.log(error.message);
+                window.location.href = '/re-authenticate';
             }
         };
         if (currentUser.isAdmin) {

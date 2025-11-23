@@ -21,7 +21,9 @@ export default function DashBroadcast() {
         setMembers(filtered);
         setFilteredMembers(filtered);
       } catch (err) {
+        toast.error('Error fetching members. Please re-authenticate.');
         console.error('Error fetching members:', err);
+        window.location.href = '/re-authenticate';
       }
     };
 

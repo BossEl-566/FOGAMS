@@ -22,6 +22,7 @@ export default function DashContact() {
       } catch (error) {
         console.error('Error fetching messages:', error);
         toast.error('Failed to load messages');
+        window.location.href = '/re-authenticate';
         setLoading(false);
       }
     };
@@ -61,6 +62,7 @@ export default function DashContact() {
     } catch (error) {
       toast.error('Failed to delete message');
       console.error('Error deleting message:', error);
+      window.location.href = '/re-authenticate';
     }
   };
 

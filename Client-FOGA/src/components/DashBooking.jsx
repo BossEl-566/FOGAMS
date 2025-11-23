@@ -27,6 +27,8 @@ export default function DashBooking() {
             } catch (error) {
                 toast.error(error.message);
                 setBookings([]);
+                console.error(error);
+                window.location.href = '/re-authenticate';
             } finally {
                 setIsLoading(false);
             }
@@ -103,6 +105,8 @@ export default function DashBooking() {
             }
         } catch (error) {
             toast.error(error.message);
+            console.log(error);
+            window.location.href = '/re-authenticate';
         } finally {
             setIsSubmitting(false);
         }
@@ -143,6 +147,8 @@ export default function DashBooking() {
             }
         } catch (error) {
             toast.error(error.message);
+            console.error(error);
+            window.location.href = '/re-authenticate';
         } finally {
             setIsLoading(false);
             setShowConfirmationModal(false);
@@ -204,6 +210,8 @@ export default function DashBooking() {
             }
         } catch (error) {
             toast.error(error.message);
+            console.error(error);
+            window.location.href = '/re-authenticate';
         } finally {
             setIsLoading(false);
         }

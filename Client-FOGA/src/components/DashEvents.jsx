@@ -44,6 +44,7 @@ export default function DashEvents() {
         console.error('Error fetching events:', err);
         setError(err);
         setLoading(false);
+        window.location.href = '/re-authenticate';
       }
     };
 
@@ -70,6 +71,7 @@ export default function DashEvents() {
     } catch (err) {
       console.error('Error deleting event:', err);
       toast.error('An error occurred while deleting the event');
+
     }
   };
 
@@ -160,6 +162,7 @@ export default function DashEvents() {
     } catch (err) {
       console.error('Error updating event:', err);
       toast.error('An error occurred while updating the event');
+      window.location.href = '/re-authenticate';
     } finally {
       setIsSaving(false);
     }

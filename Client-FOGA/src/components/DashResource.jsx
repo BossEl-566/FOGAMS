@@ -45,6 +45,7 @@ export default function DashResource() {
     } catch (error) {
       console.error('Error fetching resources:', error);
       toast.error('Failed to fetch resources');
+      window.location.href = '/re-authenticate';
     } finally {
       setLoading(false);
     }

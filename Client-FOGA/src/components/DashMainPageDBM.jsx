@@ -26,6 +26,7 @@ export default function DashMainPageDBM() {
       } catch (error) {
         console.error(error.message)
         toast.error('Failed to load messages')
+        window.location.href = '/re-authenticate';
       }
     }
 
@@ -48,6 +49,7 @@ export default function DashMainPageDBM() {
     } catch (error) {
       console.error(error.message)
       toast.error('Failed to load more messages')
+      window.location.href = '/re-authenticate';
     }
   }
 
@@ -67,6 +69,7 @@ export default function DashMainPageDBM() {
     } catch (error) {
       console.error(error.message)
       toast.error('Error deleting message')
+      window.location.href = '/re-authenticate';
     }
   }
 

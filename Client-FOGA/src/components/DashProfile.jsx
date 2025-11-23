@@ -122,6 +122,8 @@ export default function DashProfile() {
       toast.success('Signed out successfully');
     } catch (error) {
       toast.error(error.message);
+      console.error(error.message);
+      window.location.href = '/re-authenticate';
     }
   };
 

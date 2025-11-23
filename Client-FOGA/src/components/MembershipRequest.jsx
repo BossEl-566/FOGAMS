@@ -221,6 +221,7 @@ export default function MembershipRequest() {
                       onClick={() => {
                         setUserIdToUpdate(user._id);
                         setMemberIdToUpdate(user.userId);
+                        setSelectedUser(user);
                         setShowAcceptModal(true);
                       }}
                       className="p-1.5 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-colors"
@@ -231,6 +232,7 @@ export default function MembershipRequest() {
                     <button
                       onClick={() => {
                         setUserIdToUpdate(user._id);
+                        setSelectedUser(user);
                         setShowRejectModal(true);
                       }}
                       className="p-1.5 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
@@ -338,7 +340,7 @@ export default function MembershipRequest() {
         </div>
       )}
 
-      {/* Accept Confirmation Modal */}
+      {/* Accept Confirmation Modal with User Details */}
       <Modal show={showAcceptModal} onClose={() => setShowAcceptModal(false)} popup size="sm">
         <Modal.Header />
         <Modal.Body>
@@ -346,9 +348,34 @@ export default function MembershipRequest() {
             <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-3">
               <FiCheck className="w-5 h-5 text-green-600 dark:text-green-400" />
             </div>
-            <h3 className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
+            <h3 className="mb-3 text-base font-semibold text-gray-800 dark:text-white">
               Accept Membership?
             </h3>
+            
+            {/* User Details */}
+            {selectedUser && (
+              <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-left">
+                <div className="flex items-center space-x-2 mb-2">
+                  <FiUser className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm font-medium text-gray-800 dark:text-white">
+                    {selectedUser.fullname}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2 mb-2">
+                  <FiPhone className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    {selectedUser.contact}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <FiMail className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300 truncate">
+                    {selectedUser.email}
+                  </span>
+                </div>
+              </div>
+            )}
+            
             <p className="mb-4 text-xs text-gray-500 dark:text-gray-400">
               This will grant membership access to the user for member-only features.
             </p>
@@ -364,15 +391,40 @@ export default function MembershipRequest() {
         </Modal.Body>
       </Modal>
 
-      {/* Reject Confirmation Modal */}
+      {/* Reject Confirmation Modal with User Details */}
       <Modal show={showRejectModal} onClose={() => setShowRejectModal(false)} popup size="sm">
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
             <HiOutlineExclamationCircle className="h-10 w-10 text-gray-400 mb-3 mx-auto" />
-            <h3 className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
+            <h3 className="mb-3 text-base font-semibold text-gray-800 dark:text-white">
               Reject Application?
             </h3>
+            
+            {/* User Details */}
+            {selectedUser && (
+              <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-left">
+                <div className="flex items-center space-x-2 mb-2">
+                  <FiUser className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm font-medium text-gray-800 dark:text-white">
+                    {selectedUser.fullname}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2 mb-2">
+                  <FiPhone className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    {selectedUser.contact}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <FiMail className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300 truncate">
+                    {selectedUser.email}
+                  </span>
+                </div>
+              </div>
+            )}
+            
             <p className="mb-4 text-xs text-gray-500 dark:text-gray-400">
               This will delete the membership request. User will need to reapply.
             </p>

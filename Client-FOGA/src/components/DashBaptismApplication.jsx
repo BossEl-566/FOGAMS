@@ -24,6 +24,7 @@ export default function DashBaptismApplication() {
       setApplicants(applicantsData.filter(applicant => !applicant.isBaptized)); 
     } catch (error) {
       toast.error("Failed to fetch data. Please try again.");
+      window.location.href = '/re-authenticate';
     } finally {
       setIsLoading(false);
     }
@@ -60,6 +61,7 @@ export default function DashBaptismApplication() {
       toast.success("Application submitted successfully!");
     } catch {
       toast.error("Failed to submit application. Please try again.");
+      window.location.href = '/re-authenticate';
     } finally {
       setIsSubmitting(false);
     }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FiCalendar, FiUser, FiMail, FiPhone, FiGift } from 'react-icons/fi';
+import toast from 'react-hot-toast';
 
 export default function DashBirthday() {
   const [celebrants, setCelebrants] = useState([]);
@@ -12,7 +13,9 @@ export default function DashBirthday() {
         const data = await res.json();
         setCelebrants(data);
       } catch (error) {
+        toast.error("Error fetching birthdays. Please re-authenticate.");
         console.error("Error fetching birthdays:", error);
+        window.location.href = '/re-authenticate';
       } finally {
         setLoading(false);
       }

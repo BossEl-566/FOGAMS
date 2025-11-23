@@ -53,6 +53,7 @@ export default function MembersDashboard() {
       } catch (error) {
         toast.error("Failed to fetch data!");
         console.error(error.message);
+        window.location.href = '/re-authenticate';
       }
     };
 

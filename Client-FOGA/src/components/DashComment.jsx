@@ -28,6 +28,7 @@ export default function DashComment() {
       } catch (error) {
         toast.error('Failed to fetch comments');
         console.error(error.message);
+        window.location.href = '/re-authenticate';
       } finally {
         setIsLoading(false);
       }
@@ -54,6 +55,7 @@ export default function DashComment() {
     } catch (error) {
       toast.error('Failed to load more comments');
       console.error(error.message);
+      window.location.href = '/re-authenticate';
     }
   };
 
@@ -78,6 +80,7 @@ export default function DashComment() {
     } catch (error) {
       toast.error('Failed to delete comment');
       console.error(error.message);
+      window.location.href = '/re-authenticate';
     }
   };
 

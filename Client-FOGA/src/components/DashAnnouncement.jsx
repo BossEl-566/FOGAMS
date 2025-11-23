@@ -77,6 +77,8 @@ export default function DashAnnouncement() {
         }
       } catch (error) {
         toast.error(error.message);
+        window.location.href = '/re-authenticate';
+        
       } finally {
         setLoading(false);
       }

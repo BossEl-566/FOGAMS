@@ -42,7 +42,7 @@ const YouthMin = () => {
   // Leadership team
   const leadership = [
     { name: "Miss Hawawu Kassim", position: "President", image: Hawa },
-    { name: "Mr. Amos Botchway", position: "Vice President", image: BraCann },
+    { name: "Mr. Amos Yaw Botchway", position: "Vice President", image: BraCann },
     { name: "Miss Cynthia Bawa", position: "Secretary", image: Cynthia },
     { name: "Miss Bridget Mawuli", position: "Treasurer", image: null }, // No image available
   ];

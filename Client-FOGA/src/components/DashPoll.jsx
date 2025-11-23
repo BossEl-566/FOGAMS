@@ -32,6 +32,8 @@ export default function DashPoll() {
         setPolls(data);
       } catch (err) {
         toast.error(`Error fetching polls: ${err.message}`);
+        console.error(err.message);
+        window.location.href = '/re-authenticate';
       }
     };
     fetchPolls();
@@ -48,6 +50,8 @@ export default function DashPoll() {
         setVisualData(data);
       } catch (err) {
         toast.error(`Error fetching visual data: ${err.message}`);
+        console.error(err.message);
+        window.location.href = '/re-authenticate';
       }
     };
     fetchVisualData();
@@ -97,6 +101,7 @@ export default function DashPoll() {
         setActiveTab('polls');
       } else {
         throw new Error('Failed to create poll');
+        window.location.href = '/re-authenticate';
       }
     } catch (err) {
       toast.error(`Error creating poll: ${err.message}`);

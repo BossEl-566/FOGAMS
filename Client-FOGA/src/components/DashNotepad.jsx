@@ -17,6 +17,8 @@ export default function DashNotepad() {
         setNotes(data);
       } catch (error) {
         toast.error('Failed to fetch notes');
+        console.error(error.message);
+        window.location.href = '/re-authenticate';
       } finally {
         setLoading(false);
       }
