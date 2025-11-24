@@ -225,6 +225,7 @@ export default function DashSidebar({ isOpen, onClose }) {
                     { to: 'birthday', icon: FaBirthdayCake, label: 'Birthdays' },
                     { to: 'comments', icon: HiAnnotation, label: 'Comments' },
                     { to: 'membership', icon: FaUserPlus, label: 'Requests' },
+                    { to: 'sign-in-users', icon: HiFolderDownload, label: 'Signed Users' },
                     { to: 'contact', icon: MdOutlineContactSupport, label: 'Contact' },
                     { to: 'broadcast', icon: FaBullhorn, label: 'Broadcast' },
                   ].map((item) => (

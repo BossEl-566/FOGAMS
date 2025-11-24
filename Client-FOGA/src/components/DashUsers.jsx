@@ -82,11 +82,15 @@ export default function MembersDashboard() {
 
   const handleDeleteUser = async () => {
     try {
-      const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+      const res1 = await fetch(`/api/user/delete/${userIdToDelete}`, {
         method: 'DELETE',
       });
-      const data = await res.json();
-      if (res.ok) {
+      const res2 = await fetch(`/api/membership/delete-by-user/${userIdToDelete}`, { 
+        method: 'DELETE',
+      });
+      const data = await res1.json();
+      
+      if (res1.ok && res2.ok)  {
         setMembers(prev => prev.filter(member => member.userId !== userIdToDelete));
         setShowDeleteModal(false);
         toast.success("User deleted successfully!");

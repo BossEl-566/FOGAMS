@@ -85,16 +85,11 @@ export default function FooterCom() {
           <div>
             <Footer.Title title="Resources" className="text-blue-800 dark:text-blue-300 text-lg font-semibold mb-4 uppercase tracking-wider"/>
             <Footer.LinkGroup col className="space-y-3">
-              <Footer.Link href="#" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-300 transition-colors">
-                Sermons
-              </Footer.Link>
-              <Footer.Link href="#" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-300 transition-colors">
-                Bible Studies
-              </Footer.Link>
-              <Footer.Link href="#" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-300 transition-colors">
+      
+              <Footer.Link href="https://ag.org/beliefs/statement-of-fundamental-truths" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-300 transition-colors">
                 Fundamental Truths
               </Footer.Link>
-              <Footer.Link href="#" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-300 transition-colors">
+              <Footer.Link href="/giving" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-300 transition-colors">
                 Giving
               </Footer.Link>
             </Footer.LinkGroup>

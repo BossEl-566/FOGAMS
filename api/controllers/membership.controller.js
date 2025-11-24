@@ -142,4 +142,16 @@ export const getTodayBirthdays = async (req, res, next) => {
         res.status(500).json({ message: "Internal server error" });
     }
   };
+
+export const deleteByUserId = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, "You are not authorized to perform this action"));
+    }
+    try {
+        const result = await Membership.deleteMany({ userId: req.params.userId });
+        res.status(200).json({ message: "Memberships deleted", deletedCount: result.deletedCount });
+    } catch (error) {
+        next(error);
+    }   
+};
   

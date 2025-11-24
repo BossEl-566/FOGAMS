@@ -21,6 +21,7 @@ import DashNotepad from '../components/DashNotepad';
 import DashContact from '../components/DashContact';
 import DashBirthday from '../components/DashBirthday';
 import DashBroadcast from '../components/DashBroadcast';
+import JustSignedUp from '../components/JustSignedUp';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -134,6 +135,7 @@ export default function Dashboard() {
             {tab === 'birthday' && <DashBirthday />}
             {tab === 'broadcast' && <DashBroadcast />}
             {tab === 'announcement' && <DashAnnouncement />}
+            {tab === 'sign-in-users' && <JustSignedUp />}
           </div>
         </div>
       </div>

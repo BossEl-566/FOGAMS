@@ -144,3 +144,19 @@ export const updateMemberUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllUsers = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(errorHandler(403, 'You are not authorized to see all users'));
+  } 
+  try {
+    const users = await User.find();
+    const userWithoutPassword = users.map(user => {
+      const { password, ...rest } = user._doc;
+      return rest;
+    });
+    res.status(200).json(userWithoutPassword);
+  } catch (error) {
+    next(error);
+  }
+};
