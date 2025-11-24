@@ -2,7 +2,7 @@
 
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
-import { sitemap } from 'vite-plugin-sitemap' // <--- 1. Import the sitemap plugin
+import sitemap from 'vite-plugin-sitemap';// <--- 1. Import the sitemap plugin
 
 // Define all the public routes/paths that the sitemap needs to include.
 // IMPORTANT: Adjust this list to match your agfogapedu.org routes!
