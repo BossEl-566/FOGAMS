@@ -36,7 +36,8 @@
     "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.8.1",
-    "swiper": "^11.2.6"
+    "swiper": "^11.2.6",
+    "vite-plugin-sitemap": "^0.8.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

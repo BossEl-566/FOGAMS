@@ -258,7 +258,7 @@ export default function ContactUs() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800">Service Times</h3>
-                    <p className="text-gray-600">Sunday: 6:00 AM & 7:00 AM & 10:45 AM</p>
+                    <p className="text-gray-600">Sunday: 6:30 AM & 8:00 AM & 10:45 AM</p>
                     <p className="text-gray-600">Wednesday Bible Study: 6:00 PM</p>
                     <p className="text-gray-600">Friday Prayer Meeting: 6:00 PM</p>
                   </div>
