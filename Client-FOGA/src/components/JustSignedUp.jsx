@@ -8,6 +8,8 @@ export default function JustSignedUp() {
   const [filter, setFilter] = useState('');
   const [deleteModal, setDeleteModal] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     fetchUsers();
@@ -70,6 +72,26 @@ export default function JustSignedUp() {
     user.email?.toLowerCase().includes(filter.toLowerCase())
   );
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentUsers = filteredUsers.slice(0, endIndex);
+  const hasMore = endIndex < filteredUsers.length;
+
+  const loadMore = () => {
+    setCurrentPage(prev => prev + 1);
+  };
+
+  const resetPagination = () => {
+    setCurrentPage(1);
+  };
+
+  // Reset pagination when filter changes
+  useEffect(() => {
+    resetPagination();
+  }, [filter]);
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -109,10 +131,26 @@ export default function JustSignedUp() {
         {/* Stats and Search */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center">
+            <div className="flex items-center gap-4">
               <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
                 {filteredUsers.length} {filteredUsers.length === 1 ? 'user' : 'users'}
               </span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">Show:</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => {
+                    setItemsPerPage(Number(e.target.value));
+                    resetPagination();
+                  }}
+                  className="border border-gray-300 rounded px-2 py-1 text-sm"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                </select>
+              </div>
             </div>
             
             <div className="flex-1 sm:max-w-xs">
@@ -156,99 +194,130 @@ export default function JustSignedUp() {
               <p className="text-gray-500 text-sm">No users found</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      User
-                    </th>
-                    <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
-                      Role
-                    </th>
-                    <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden xs:table-cell">
-                      Signed Up
-                    </th>
-                    <th scope="col" className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredUsers.map((user) => (
-                    <tr key={user._id} className="hover:bg-gray-50">
-                      <td className="px-3 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-8 w-8">
-                            {user.profilePicture ? (
-                              <img
-                                className="h-8 w-8 rounded-full"
-                                src={user.profilePicture}
-                                alt={user.username}
-                              />
-                            ) : (
-                              <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center">
-                                <span className="text-white text-sm font-medium">
-                                  {getInitials(user.username)}
-                                </span>
+            <>
+              <div className="overflow-x-auto max-h-[600px]"> {/* Added max height for scroll */}
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50 sticky top-0 z-10">
+                    <tr>
+                      <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        User
+                      </th>
+                      <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
+                        Role
+                      </th>
+                      <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden xs:table-cell">
+                        Signed Up
+                      </th>
+                      <th scope="col" className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {currentUsers.map((user) => (
+                      <tr key={user._id} className="hover:bg-gray-50">
+                        <td className="px-3 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 h-8 w-8">
+                              {user.profilePicture ? (
+                                <img
+                                  className="h-8 w-8 rounded-full"
+                                  src={user.profilePicture}
+                                  alt={user.username}
+                                />
+                              ) : (
+                                <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center">
+                                  <span className="text-white text-sm font-medium">
+                                    {getInitials(user.username)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="ml-3">
+                              <div className="text-sm font-medium text-gray-900">
+                                {user.username}
                               </div>
+                              <div className="text-sm text-gray-500 truncate max-w-[120px] sm:max-w-none">
+                                {user.email}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+                          <div className="flex flex-wrap gap-1">
+                            {user.isAdmin && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+                                Admin
+                              </span>
+                            )}
+                            {user.isPastor && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                                Pastor
+                              </span>
+                            )}
+                            {user.isDeptHead && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                Dept Head
+                              </span>
+                            )}
+                            {user.isMember && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                Member
+                              </span>
+                            )}
+                            {!user.isAdmin && !user.isPastor && !user.isDeptHead && !user.isMember && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                                Visitor
+                              </span>
                             )}
                           </div>
-                          <div className="ml-3">
-                            <div className="text-sm font-medium text-gray-900">
-                              {user.username}
-                            </div>
-                            <div className="text-sm text-gray-500 truncate max-w-[120px] sm:max-w-none">
-                              {user.email}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
-                        <div className="flex flex-wrap gap-1">
-                          {user.isAdmin && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
-                              Admin
-                            </span>
-                          )}
-                          {user.isPastor && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
-                              Pastor
-                            </span>
-                          )}
-                          {user.isDeptHead && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                              Dept Head
-                            </span>
-                          )}
-                          {user.isMember && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                              Member
-                            </span>
-                          )}
-                          {!user.isAdmin && !user.isPastor && !user.isDeptHead && !user.isMember && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
-                              Visitor
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 hidden xs:table-cell">
-                        {formatDate(user.createdAt)}
-                      </td>
-                      <td className="px-3 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          onClick={() => openDeleteModal(user)}
-                          className="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1 rounded text-sm transition-colors duration-200"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                        </td>
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 hidden xs:table-cell">
+                          {formatDate(user.createdAt)}
+                        </td>
+                        <td className="px-3 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <button
+                            onClick={() => openDeleteModal(user)}
+                            className="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1 rounded text-sm transition-colors duration-200"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Load More Button */}
+              {hasMore && (
+                <div className="border-t border-gray-200 px-4 py-3 bg-gray-50">
+                  <div className="flex justify-center">
+                    <button
+                      onClick={loadMore}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-2"
+                    >
+                      <span>Load More</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="text-center mt-2 text-sm text-gray-500">
+                    Showing {currentUsers.length} of {filteredUsers.length} users
+                  </div>
+                </div>
+              )}
+
+              {/* Show All Users Message when all are loaded */}
+              {!hasMore && filteredUsers.length > 0 && (
+                <div className="border-t border-gray-200 px-4 py-3 bg-gray-50">
+                  <div className="text-center text-sm text-gray-500">
+                    Showing all {filteredUsers.length} users
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
 
