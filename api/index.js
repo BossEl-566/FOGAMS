@@ -20,6 +20,7 @@ import pollRoute from './routes/poll.route.js'; // Poll-related routes
 import broadcastMessageRoute from './routes/broadcastMessage.route.js'; // Broadcast message routes
 import anonymousRoute from './routes/anonymous.route.js'; // Anonymouse-related routes
 import announcementRoute from './routes/announcement.route.js'; // Announcement-related routes
+import newmemberRoute from './routes/newmember.route.js'; // New member-related routes
 import momoRoute from './routes/momo.route.js'; // Momo-related routes
 import cookieParser from 'cookie-parser'; // Middleware to parse cookies
 import jwt from 'jsonwebtoken'; // JWT for authentication
@@ -155,6 +156,7 @@ app.use('/api/anonymous', anonymousRoute); // Routes for anonymouse
 app.use('/api/notepad', notepadRoute); // Routes for notepad
 app.use('/api/contact', contactRoute); // Routes for contact
 app.use('/api/announcement', announcementRoute); // Routes for announcements
+app.use('/api/new-members', newmemberRoute); // Routes for new members
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500; // Default to 500 if no status code is set
   const message = err.message || 'Internal Server Error'; // Default to generic error message

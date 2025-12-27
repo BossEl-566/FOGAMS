@@ -223,6 +223,7 @@ export default function DashSidebar({ isOpen, onClose }) {
                     { to: 'daily-bible-message', icon: HiDocumentText, label: 'Daily Message' },
                     { to: 'users', icon: HiOutlineUserGroup, label: 'Users' },
                     { to: 'birthday', icon: FaBirthdayCake, label: 'Birthdays' },
+                    { to: 'new-member', icon: HiUser, label: 'New Member' },
                     { to: 'comments', icon: HiAnnotation, label: 'Comments' },
                     { to: 'membership', icon: FaUserPlus, label: 'Requests' },
                     { to: 'sign-in-users', icon: HiFolderDownload, label: 'Signed Users' },

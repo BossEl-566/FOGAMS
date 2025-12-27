@@ -17,7 +17,7 @@ import DeaconAnsong from '../assets/Deacon-Ansong.jpg';
 import MrsAdomako from '../assets/Mrs-Adomako.jpg';
 import FrancisDorduno from '../assets/francis-dorduno.jpg';
 import MaryOpoku from '../assets/Mary-foga.jpg';
-import KwekuAsiedu from '../assets/kweku-Asiedu.jpg';
+import KwekuAsiedu from '../assets/Kweku-new.jpg';
 import MrOffie from '../assets/mr-offie.jpg';
 import PastorEric from '../assets/pastor-Eric.jpg';
 import PastorAidoo from '../assets/Pastor-Aidoo.jpg';
