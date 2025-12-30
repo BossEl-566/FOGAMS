@@ -120,22 +120,27 @@ export default function NewMembersPage() {
         headers: { 
           'Content-Type': 'application/json'
         },
-        credentials: 'include', // If using cookies/sessions
+        credentials: 'include',
         body: JSON.stringify(memberData)
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to add member');
       }
-
+  
       const data = await response.json();
-      toast.success(data.message);
-      fetchMembers(); // Refresh the list
-      setIsModalOpen(false);
+      
+      // Return the new member data so modal can use it
+      return { 
+        success: true, 
+        message: data.message,
+        memberData 
+      };
+      
     } catch (error) {
       console.error('Error adding member:', error);
-      toast.error(error.message);
+      throw error;
     }
   };
 
@@ -150,20 +155,20 @@ export default function NewMembersPage() {
         credentials: 'include',
         body: JSON.stringify(memberData)
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to update member');
       }
-
+  
       const data = await response.json();
       toast.success(data.message);
       fetchMembers(); // Refresh the list
-      setIsModalOpen(false);
-      setEditingMember(null);
+      
+      return { success: true, message: data.message };
     } catch (error) {
       console.error('Error updating member:', error);
-      toast.error(error.message);
+      throw error;
     }
   };
 
@@ -521,16 +526,17 @@ export default function NewMembersPage() {
 
       {/* Modals */}
       <NewMemberModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setEditingMember(null);
-        }}
-        onSubmit={handleSubmit}
-        member={editingMember}
-        hearAboutUsOptions={HEAR_ABOUT_US_OPTIONS}
-        maritalStatusOptions={MARITAL_STATUS_OPTIONS}
-      />
+  isOpen={isModalOpen}
+  onClose={() => {
+    setIsModalOpen(false);
+    setEditingMember(null);
+    fetchMembers(); // Refresh when modal closes
+  }}
+  onSubmit={handleSubmit}
+  member={editingMember}
+  hearAboutUsOptions={HEAR_ABOUT_US_OPTIONS}
+  maritalStatusOptions={MARITAL_STATUS_OPTIONS}
+/>
 
       <DeleteModal
         isOpen={deleteModal.isOpen}
