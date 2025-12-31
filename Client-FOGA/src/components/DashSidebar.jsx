@@ -90,6 +90,9 @@ export default function DashSidebar({ isOpen, onClose }) {
     </div>
   );
 
+  // Check if user can access New Member
+  const canAccessNewMember = currentUser.isAdmin || currentUser.isDeptHead;
+
   return (
     <>
       {/* Mobile Overlay */}
@@ -127,7 +130,7 @@ export default function DashSidebar({ isOpen, onClose }) {
             <div>
               <h2 className="font-bold text-gray-800 dark:text-white">Dashboard</h2>
               <p className="text-xs text-gray-600 dark:text-gray-400">
-                {currentUser?.isAdmin ? 'Admin Panel' : 'User Panel'}
+                {currentUser?.isAdmin ? 'Admin Panel' : currentUser?.isDeptHead ? 'Dept Head Panel' : 'User Panel'}
               </p>
             </div>
           </div>
@@ -176,6 +179,11 @@ export default function DashSidebar({ isOpen, onClose }) {
                         Admin
                       </span>
                     )}
+                    {currentUser.isDeptHead && !currentUser.isAdmin && (
+                      <span className="ml-2 px-2 py-1 text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full">
+                        Dept Head
+                      </span>
+                    )}
                   </CustomSidebarItem>
                 </SidebarLink>
 
@@ -211,7 +219,7 @@ export default function DashSidebar({ isOpen, onClose }) {
                 )}
               </Sidebar.ItemGroup>
 
-              {/* Admin Management */}
+              {/* Admin Management (Admin only except New Member) */}
               {currentUser.isAdmin && (
                 <Sidebar.ItemGroup className="mb-6">
                   <div className="px-3 mb-3">
@@ -239,6 +247,23 @@ export default function DashSidebar({ isOpen, onClose }) {
                 </Sidebar.ItemGroup>
               )}
 
+              {/* Department Head Management (Only New Member) */}
+              {currentUser.isDeptHead && (
+                <Sidebar.ItemGroup className="mb-6">
+                  <div className="px-3 mb-3">
+                    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                      Department Head
+                    </span>
+                  </div>
+                  {/* Only show New Member for Dept Head */}
+                  <SidebarLink to='/dashboard?tab=new-member' tabValue='new-member'>
+                    <CustomSidebarItem active={tab === 'new-member'} icon={HiUser}>
+                      New Member
+                    </CustomSidebarItem>
+                  </SidebarLink>
+                </Sidebar.ItemGroup>
+              )}
+
               {/* Sign Out */}
               <Sidebar.ItemGroup>
                 <div
@@ -263,6 +288,16 @@ export default function DashSidebar({ isOpen, onClose }) {
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
                   {currentUser?.username || 'User'}
+                  {currentUser.isDeptHead && !currentUser.isAdmin && (
+                    <span className="ml-2 px-2 py-0.5 text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full">
+                      Dept Head
+                    </span>
+                  )}
+                  {currentUser.isAdmin && (
+                    <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full">
+                      Admin
+                    </span>
+                  )}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                   {currentUser?.email || 'email@example.com'}

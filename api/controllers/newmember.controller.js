@@ -4,8 +4,8 @@ import { errorHandler } from "../utils/error.js";
 
 // Add new member
 export const addNewMember = async (req, res, next) => {
-    if (!req.user.isAdmin) {
-        return res.status(403).json({ message: "Access denied. Admins only." });
+    if (!req.user.isAdmin && !req.user.isDeptHead) {
+        return res.status(403).json({ message: "Access denied. Admins or Department Heads only." });
     }
     try {
         const { 
@@ -36,13 +36,6 @@ export const addNewMember = async (req, res, next) => {
             return res.status(400).json({ message: "Invalid email format" });
         }
         
-        // Validate Ghana phone number format
-        const phoneRegex = /^(0|\+233)[235]\d{8}$/;
-        if (!phoneRegex.test(phone)) {
-            return res.status(400).json({ 
-                message: "Invalid Ghana phone number. Format: 0XXXXXXXXX or +233XXXXXXXXX" 
-            });
-        }
         
         // Check if email already exists
         const existingMember = await NewMember.findOne({ email });
@@ -74,8 +67,8 @@ export const addNewMember = async (req, res, next) => {
 
 // Get all new members with optional filtering
 export const getNewMembers = async (req, res, next) => {    
-    if (!req.user.isAdmin) {
-        return res.status(403).json({ message: "Access denied. Admins only." });
+    if (!req.user.isAdmin && !req.user.isDeptHead) {
+        return res.status(403).json({ message: "Access denied. Admins or Department Heads only." });
     }
     try {
         const { month, year, search } = req.query;
@@ -118,8 +111,8 @@ export const getNewMembers = async (req, res, next) => {
 
 // Get single member by ID
 export const getNewMemberById = async (req, res, next) => {
-    if (!req.user.isAdmin) {
-        return res.status(403).json({ message: "Access denied. Admins only." });
+    if (!req.user.isAdmin && !req.user.isDeptHead) {
+        return res.status(403).json({ message: "Access denied. Admins or Department Heads only." });
     }
     try {
         const { id } = req.params;
@@ -137,8 +130,8 @@ export const getNewMemberById = async (req, res, next) => {
 
 // Update member
 export const updateNewMember = async (req, res, next) => {
-    if (!req.user.isAdmin) {
-        return res.status(403).json({ message: "Access denied. Admins only." });
+    if (!req.user.isAdmin && !req.user.isDeptHead) {
+        return res.status(403).json({ message: "Access denied. Admins or Department Heads only." });
     }
     try {
         const { id } = req.params;
@@ -211,7 +204,7 @@ export const updateNewMember = async (req, res, next) => {
 
 // Delete member
 export const deleteNewMember = async (req, res, next) => {
-    if (!req.user.isAdmin) {
+    if (!req.user.isAdmin) {  // Only admin can delete
         return res.status(403).json({ message: "Access denied. Admins only." });
     }
     try {
@@ -232,8 +225,8 @@ export const deleteNewMember = async (req, res, next) => {
 
 // Get member statistics
 export const getNewMemberStats = async (req, res, next) => {
-    if (!req.user.isAdmin) {
-        return res.status(403).json({ message: "Access denied. Admins only." });
+    if (!req.user.isAdmin && !req.user.isDeptHead) {
+        return res.status(403).json({ message: "Access denied. Admins or Department Heads only." });
     }
     try {
         const stats = await NewMember.aggregate([
@@ -280,8 +273,8 @@ export const getNewMemberStats = async (req, res, next) => {
 
 // Export members to Excel (returns JSON data for frontend to convert)
 export const exportNewMembers = async (req, res, next) => {
-    if (!req.user.isAdmin) {
-        return res.status(403).json({ message: "Access denied. Admins only." });
+    if (!req.user.isAdmin && !req.user.isDeptHead) {
+        return res.status(403).json({ message: "Access denied. Admins or Department Heads only." });
     }
     try {
         const { month, year } = req.query;

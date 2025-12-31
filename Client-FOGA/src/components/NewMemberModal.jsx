@@ -71,7 +71,7 @@ export default function NewMemberModal({
   const sendWelcomeSms = async () => {
     try {
       const firstName = getFirstName(formData.name);
-      const message = `Hello ${firstName}\nGod bless you, for fellowshiping with us today\nYou're always welcome\n0246290280`;
+      const message = `Hello ${firstName}\nGod bless you, for fellowshipping with us today\nYou're always welcome\n0246290280`;
 
       const response = await fetch('https://sms.arkesel.com/api/v2/sms/send', {
         method: 'POST',
